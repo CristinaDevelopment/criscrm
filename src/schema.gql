@@ -1,0 +1,399 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Product {
+  _id: ID!
+  article: Article!
+  site: String!
+  children: String!
+}
+
+type Article {
+  name: String!
+  slug: String!
+  mark: String!
+  inStock: Float!
+  price: Float!
+  discountPrice: Float!
+  description: String!
+  route: String!
+  featured: Featured!
+  details: Detail
+  specs: [SpecsProduct!]!
+  tags: [TagsProduct!]!
+  image: [ImageProduct!]
+  seo: Seo!
+}
+
+type Featured {
+  name: String!
+  href: String!
+}
+
+type Detail {
+  material: String!
+  color: String!
+  finishing: String!
+  logo: String!
+  accessories: String!
+  dimensions: [String!]!
+}
+
+type Image {
+  uid: String!
+  src: String!
+  alt: String!
+}
+
+type ImageProduct {
+  uid: String!
+  src: String!
+  alt: String!
+}
+
+type Seo {
+  name: String!
+  href: String!
+  description: String!
+  icon: Image!
+  image: Image!
+}
+
+type TagsProduct {
+  uid: String!
+  text: String!
+}
+
+type SpecsProduct {
+  uid: String!
+  text: String!
+}
+
+type BlogV3 {
+  _id: ID!
+  data: DataBlogV3!
+  site: String!
+  category: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type DataBlogV3 {
+  title: String!
+  slug: String!
+  content: String!
+  description: String!
+  meta: String!
+  tags: [TagsV3!]!
+  author: String!
+  thumbnail: ImageV3Blog!
+  seo: SeoV3Blog!
+}
+
+type SeoV3Blog {
+  name: String!
+  href: String!
+  description: String!
+  image: ImageV3Blog!
+}
+
+type TagsV3 {
+  uid: String!
+  text: String!
+}
+
+type ImageV3Blog {
+  src: String!
+  alt: String!
+}
+
+type SiteV3 {
+  _id: ID!
+  data: DataV3!
+  children: [ChildrenV3!]!
+  register: [RegisterV3!]!
+  client: String!
+  url: String!
+  product(type: String!): [Product!]!
+  blog: [BlogV3!]!
+}
+
+type RegisterV3 {
+  uid: String!
+  name: String!
+  change: String!
+  role: String!
+  date: String!
+}
+
+type DataV3 {
+  name: String!
+  numberPhone: Float!
+  address: String!
+  type: String!
+  users: [String!]!
+  location: String
+  dataBase: [DataBaseV3!]!
+  description: String!
+  domain: DomainV3!
+  image: ImageV3!
+  logo: ImageV3!
+  icon: ImageV3!
+}
+
+type ChildrenV3 {
+  uid: String!
+  seo: SeoV3!
+  children: [ChildrenV3!]
+  icon: ImageV3!
+  type: String!
+  slug: String!
+  section: [ComponentV3!]
+  product: [Product!]
+}
+
+type ComponentV3 {
+  uid: String!
+  component: String!
+  html: String!
+}
+
+type SeoV3 {
+  name: String!
+  href: String!
+  description: String!
+  image: ImageV3!
+}
+
+type DataBaseV3 {
+  uid: String!
+  name: String!
+  type: String!
+  image: ImageV3!
+}
+
+type ImageV3 {
+  src: String!
+  alt: String!
+}
+
+type DomainV3 {
+  name: String!
+  dlt: String!
+}
+
+type Blog {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type User {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Comment {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Upload {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Query {
+  getSiteV3(_id: ID!): SiteV3!
+  getSitesV3: [SiteV3!]!
+  getChildrenV3(_id: ID!, children_uid_0: String, children_uid_1: String, children_uid_2: String, children_uid_3: String, children_uid_4: String, children_uid_5: String, children_uid_6: String): ChildrenV3!
+  getChildrensV3(_id: ID!, children_uid_0: String, children_uid_1: String, children_uid_2: String, children_uid_3: String, children_uid_4: String, children_uid_5: String, children_uid_6: String): [ChildrenV3!]!
+  getProduct(_id: ID!, type: String!): Product!
+  getProducts(site: String!, type: String!): [Product!]!
+  blog(id: Int!): Blog!
+  user(id: Int!): User!
+  comment(id: Int!): Comment!
+  upload(id: Int!): Upload!
+}
+
+type Mutation {
+  createSiteV3(input: CreateSiteV3!): SiteV3!
+  updateSiteV3(_id: ID!, input: UpdateSiteV3!): SiteV3!
+  deleteSiteV3(_id: ID!): String!
+  deleteSitesV3: String!
+  addChildrenV3(_id: ID!, input: AddChildrenV3!): SiteV3!
+  updateChildrenV3(_id: ID!, input: UpdateChildrenV3!): SiteV3!
+  deleteChildrenV3(_id: ID!, input: DeleteChildrenV3!): SiteV3!
+  createProduct(input: CreateProductInput!, type: String!): Product!
+  deleteProduct(_id: ID!, type: String!): String!
+  deleteProducts(site: String!, type: String!): String!
+  addBlogV3(input: CreateBlogV3!): BlogV3!
+  createBlogs(createBlogInput: CreateBlogInput!): Blog!
+  updateBlog(updateBlogInput: UpdateBlogInput!): Blog!
+  removeBlog(id: Int!): Blog!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Int!): User!
+  createComment(createCommentInput: CreateCommentInput!): Comment!
+  updateComment(updateCommentInput: UpdateCommentInput!): Comment!
+  removeComment(id: Int!): Comment!
+  createUpload(createUploadInput: CreateUploadInput!): Upload!
+  updateUpload(updateUploadInput: UpdateUploadInput!): Upload!
+  removeUpload(id: Int!): Upload!
+}
+
+input CreateSiteV3 {
+  name: String!
+  domain: String!
+  numberPhone: Float!
+  address: String!
+  description: String!
+  type: String!
+  client: String!
+  userName: String!
+  change: String!
+  role: String!
+  uid: String!
+}
+
+input UpdateSiteV3 {
+  name: String!
+  domain: String!
+  numberPhone: Float!
+  address: String!
+  description: String!
+  type: String!
+  userName: String!
+  change: String!
+  role: String!
+  uid: String!
+}
+
+input AddChildrenV3 {
+  name: String!
+  description: String!
+  icon: String
+  src: String!
+  alt: String!
+  type: String!
+  children_uid_0: String
+  children_uid_1: String
+  children_uid_2: String
+  children_uid_3: String
+  children_uid_4: String
+  children_uid_5: String
+  children_uid_6: String
+  children_uid_7: String
+  children_uid_8: String
+  children_uid_9: String
+  children_uid_10: String
+}
+
+input UpdateChildrenV3 {
+  name: String
+  description: String
+  icon: String
+  src: String
+  alt: String
+  type: String
+  children_uid_0: String
+  children_uid_1: String
+  children_uid_2: String
+  children_uid_3: String
+  children_uid_4: String
+  children_uid_5: String
+  children_uid_6: String
+  children_uid_7: String
+  children_uid_8: String
+  children_uid_9: String
+  children_uid_10: String
+}
+
+input DeleteChildrenV3 {
+  children_uid_0: String
+  children_uid_1: String
+  children_uid_2: String
+  children_uid_3: String
+  children_uid_4: String
+  children_uid_5: String
+  children_uid_6: String
+  children_uid_7: String
+  children_uid_8: String
+  children_uid_9: String
+  children_uid_10: String
+}
+
+input CreateProductInput {
+  name: String!
+  mark: String!
+  description: String!
+  featured: String!
+  inStock: Float!
+  price: Float!
+  discountPrice: Float!
+  site: String!
+  children: String!
+  route: String!
+}
+
+input CreateBlogV3 {
+  title: String!
+  content: String!
+  meta: String!
+  tags: [String!]!
+  author: String!
+  description: String!
+  site: String!
+  category: String!
+  src: String!
+  alt: String!
+}
+
+input CreateBlogInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateBlogInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateCommentInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateCommentInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateUploadInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateUploadInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
