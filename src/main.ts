@@ -9,9 +9,11 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'https://crisjs.vercel.app',
+      'https://criscrm.vercel.app',
       'https://terrakota.vercel.app',
       'https://regalosterrakota.vercel.app',
       'http://localhost:3001',
+      'http://localhost:3000',
     ],
   });
   const configService = app.get(ConfigService);
