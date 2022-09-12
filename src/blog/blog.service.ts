@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { uuidv3 } from 'src/utils';
 import { slug } from 'src/utils/function';
-import { BlogV3Repository } from './blog.repository';
-import { CreateBlogV3 } from './dto/blog.input';
+import { BlogRepository } from './blog.repository';
+import { CreateBlog } from './dto/blog.input';
 import { CreateBlogInput } from './dto/create-blog.input';
 import { UpdateBlogInput } from './dto/update-blog.input';
-import { BlogV3 } from './entities/blog.model';
-import { BlogV3Document } from './entities/blog.schema';
+import { Blog } from './entities/blog.model';
+import { BlogDocument } from './entities/blog.schema';
 
 @Injectable()
 export class BlogService {
-  constructor(private readonly blogRepository: BlogV3Repository) {}
+  constructor(private readonly blogRepository: BlogRepository) {}
   create(createBlogInput: CreateBlogInput) {
     return 'This action adds a new blog';
   }
 
-  async createBlog(input: CreateBlogV3) {
+  async createBlog(input: CreateBlog) {
     // await this.validateDomain(input);
     const {
       title,
@@ -76,7 +76,7 @@ export class BlogService {
     return `This action removes a #${id} blog`;
   }
 
-  private toModel(blogDocument: BlogV3Document): BlogV3 {
+  private toModel(blogDocument: BlogDocument): Blog {
     return {
       _id: blogDocument._id.toHexString(),
       data: blogDocument.data,

@@ -1,19 +1,21 @@
 import { Module } from '@nestjs/common';
-import { SiteV3Repository } from './site.repository';
-import { SiteV3Resolver } from './site.resolver';
-import { SiteV3Service } from './site.service';
+import { SiteRepository } from './site.repository';
+import { SiteResolver } from './site.resolver';
+import { SiteService } from './site.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { SiteV3 } from './entities/site.model';
-import { SiteV3Schema } from './entities/site.schema';
+import { Site } from './entities/site.model';
+import { SiteSchema } from './entities/site.schema';
 import { ProductModule } from 'src/product/product.module';
 import { BlogModule } from 'src/blog/blog.module';
+import { PageModule } from 'src/page/page.module';
 
 @Module({
   imports: [
     ProductModule,
+    PageModule,
     BlogModule,
-    MongooseModule.forFeature([{ name: SiteV3.name, schema: SiteV3Schema }]),
+    MongooseModule.forFeature([{ name: Site.name, schema: SiteSchema }]),
   ],
-  providers: [SiteV3Repository, SiteV3Resolver, SiteV3Service],
+  providers: [SiteRepository, SiteResolver, SiteService],
 })
 export class SiteModule {}

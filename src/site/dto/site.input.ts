@@ -1,32 +1,32 @@
 import { InputType, Field, PartialType, OmitType } from '@nestjs/graphql';
 
 @InputType()
-export class CreateSiteV3 {
+export class CreateSite {
   @Field()
   readonly name: string;
   @Field()
   readonly domain: string;
-  @Field()
-  readonly numberPhone: number;
-  @Field()
-  readonly address: string;
+  // @Field()
+  // readonly numberPhone: number;
+  // @Field()
+  // readonly address: string;
   @Field()
   readonly description: string;
   @Field()
   readonly type: string;
   @Field()
   readonly client: string;
-  @Field()
-  readonly userName: string;
+  // @Field()
+  // readonly userName: string;
   @Field()
   readonly change: string;
-  @Field()
-  readonly role: string;
+  // @Field()
+  // readonly role: string;
   @Field()
   readonly uid: string;
 }
 @InputType()
-export class UpdateDataBaseV3 {
+export class UpdateDataBase {
   @Field()
   readonly name: string;
   @Field()
@@ -38,7 +38,7 @@ export class UpdateDataBaseV3 {
 }
 
 @InputType()
-export class ChildrenV3 {
+export class Children {
   @Field({ nullable: true })
   readonly children_uid_0?: string;
   @Field({ nullable: true })
@@ -63,10 +63,10 @@ export class ChildrenV3 {
   readonly children_uid_10?: string;
 }
 @InputType()
-export class UpdateSiteV3 extends OmitType(CreateSiteV3, ['client'] as const) {}
+export class UpdateSite extends OmitType(CreateSite, ['client'] as const) {}
 
 @InputType()
-export class AddChildrenV3 {
+export class AddChildren {
   @Field()
   readonly name: string;
   @Field()
@@ -104,7 +104,7 @@ export class AddChildrenV3 {
 }
 
 @InputType()
-export class UpdateChildrenV3 {
+export class UpdateChildren {
   @Field({ nullable: true })
   readonly name?: string;
   @Field({ nullable: true })
@@ -141,7 +141,7 @@ export class UpdateChildrenV3 {
   readonly children_uid_10?: string;
 }
 @InputType()
-export class DeleteChildrenV3 {
+export class DeleteChildren {
   @Field({ nullable: true })
   readonly children_uid_0?: string;
   @Field({ nullable: true })

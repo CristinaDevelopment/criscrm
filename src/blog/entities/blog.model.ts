@@ -2,9 +2,9 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { AbstractModel } from 'src/common/abstract';
 
 @ObjectType()
-export class BlogV3 extends AbstractModel {
-  @Field(() => DataBlogV3)
-  readonly data: DataBlogV3 | string;
+export class Blog extends AbstractModel {
+  @Field(() => DataBlog)
+  readonly data: DataBlog | string;
   @Field()
   readonly site: string;
   @Field()
@@ -16,7 +16,7 @@ export class BlogV3 extends AbstractModel {
 }
 
 @ObjectType()
-export class DataBlogV3 {
+export class DataBlog {
   @Field()
   readonly title: string;
   @Field()
@@ -27,22 +27,22 @@ export class DataBlogV3 {
   readonly description: string;
   @Field()
   readonly meta: string;
-  @Field(() => [TagsV3])
-  readonly tags: TagsV3[];
+  @Field(() => [Tags])
+  readonly tags: Tags[];
   @Field()
   readonly author: string;
-  @Field(() => ImageV3Blog)
-  readonly thumbnail: ImageV3Blog | string;
+  @Field(() => ImageBlog)
+  readonly thumbnail: ImageBlog | string;
   // @Field(() => Timestamps)
   // readonly timestamps: Timestamps | number;
-  @Field(() => SeoV3Blog)
-  readonly seo: SeoV3Blog | string;
+  @Field(() => SeoBlog)
+  readonly seo: SeoBlog | string;
 }
 
 
 
 @ObjectType()
-class SeoV3Blog {
+class SeoBlog {
   @Field()
   readonly name: string;
   @Field()
@@ -50,11 +50,11 @@ class SeoV3Blog {
   @Field()
   readonly description: string;
 
-  @Field(() => ImageV3Blog)
-  readonly image: ImageV3Blog | string;
+  @Field(() => ImageBlog)
+  readonly image: ImageBlog | string;
 }
 @ObjectType()
-export class TagsV3 {
+export class Tags {
   @Field()
   readonly uid: string;
   @Field()
@@ -62,7 +62,7 @@ export class TagsV3 {
 }
 
 @ObjectType()
-export class ImageV3Blog {
+export class ImageBlog {
   @Field()
   readonly src: string;
   @Field()

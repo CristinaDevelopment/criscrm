@@ -7,107 +7,116 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { ProductService } from 'src/product/product.service';
-import { GetChildrenV3, GetSiteArgsV3 } from './dto/site.args';
+import { GetChildren, GetSiteArgs } from './dto/site.args';
 import {
-  AddChildrenV3,
-  CreateSiteV3,
-  DeleteChildrenV3,
-  UpdateChildrenV3,
-  UpdateSiteV3,
+  AddChildren,
+  CreateSite,
+  DeleteChildren,
+  UpdateChildren,
+  UpdateSite,
 } from './dto/site.input';
-import { ChildrenV3, SiteV3 } from './entities/site.model';
-import { SiteV3Service } from './site.service';
+import { Site } from './entities/site.model';
+import { SiteService } from './site.service';
 import { Product } from '../product/entities/product.model';
-import { BlogV3 } from 'src/blog/entities/blog.model';
+// import { Blog } from 'src/blog/entities/blog.model';
 import { BlogService } from 'src/blog/blog.service';
+import { Page0Service } from 'src/page/service/page0.service';
+import { Page0 } from '../page/entities/page.model';
 
-@Resolver(() => SiteV3)
-export class SiteV3Resolver {
+@Resolver(() => Site)
+export class SiteResolver {
   constructor(
-    private readonly siteService: SiteV3Service,
+    private readonly siteService: SiteService,
     private readonly productService: ProductService,
     private readonly blogService: BlogService,
+    private readonly pageService: Page0Service,
   ) {}
 
-  @Mutation(() => SiteV3, { name: 'createSiteV3' })
-  createSite(@Args('input') input: CreateSiteV3) {
+  @Mutation(() => Site, { name: 'createSite' })
+  createSite(@Args('input') input: CreateSite) {
     return this.siteService.createSite(input);
   }
 
-  @Mutation(() => SiteV3, { name: 'updateSiteV3' })
-  updateSite(@Args() id: GetSiteArgsV3, @Args('input') input: UpdateSiteV3) {
+  @Mutation(() => Site, { name: 'updateSite' })
+  updateSite(@Args() id: GetSiteArgs, @Args('input') input: UpdateSite) {
     return this.siteService.updateSite(id, input);
   }
-  @Mutation(() => String, { name: 'deleteSiteV3' })
-  deleteSite(@Args() id: GetSiteArgsV3) {
+  @Mutation(() => String, { name: 'deleteSite' })
+  deleteSite(@Args() id: GetSiteArgs) {
     return this.siteService.deleteSite(id);
   }
 
-  @Mutation(() => String, { name: 'deleteSitesV3' })
+  @Mutation(() => String, { name: 'deleteSites' })
   deleteSites() {
     return this.siteService.deleteSites();
   }
 
-  @Query(() => SiteV3, { name: 'getSiteV3' })
-  getSite(@Args() id: GetSiteArgsV3) {
+  @Query(() => Site, { name: 'getSite' })
+  getSite(@Args() id: GetSiteArgs) {
     return this.siteService.getSite(id);
   }
-  @Query(() => [SiteV3], { name: 'getSitesV3' })
+  @Query(() => [Site], { name: 'getSites' })
   getSites() {
     return this.siteService.getSites();
   }
 
-  @Query(() => ChildrenV3, { name: 'getChildrenV3' })
-  getChildren(@Args() input: GetChildrenV3) {
-    return this.siteService.getChildren(input);
-  }
-  @Query(() => [ChildrenV3], { name: 'getChildrensV3' })
-  getChildrens(@Args() input: GetChildrenV3) {
-    return this.siteService.getChildrens(input);
-  }
+  // @Query(() => Children, { name: 'getChildren' })
+  // getChildren(@Args() input: GetChildren) {
+  //   return this.siteService.getChildren(input);
+  // }
+  // @Query(() => [Children], { name: 'getChildrens' })
+  // getChildrens(@Args() input: GetChildren) {
+  //   return this.siteService.getChildrens(input);
+  // }
 
-  @Mutation(() => SiteV3, { name: 'addChildrenV3' })
-  addChildren(@Args() id: GetSiteArgsV3, @Args('input') input: AddChildrenV3) {
-    return this.siteService.addChildren(id, input);
-  }
+  // @Mutation(() => Site, { name: 'addChildren' })
+  // addChildren(@Args() id: GetSiteArgs, @Args('input') input: AddChildren) {
+  //   return this.siteService.addChildren(id, input);
+  // }
 
-  @Mutation(() => SiteV3, { name: 'updateChildrenV3' })
-  updateChildren(
-    @Args() id: GetSiteArgsV3,
-    @Args('input') input: UpdateChildrenV3,
-  ) {
-    return this.siteService.updateChildren(id, input);
-  }
+  // @Mutation(() => Site, { name: 'updateChildren' })
+  // updateChildren(
+  //   @Args() id: GetSiteArgs,
+  //   @Args('input') input: UpdateChildren,
+  // ) {
+  //   return this.siteService.updateChildren(id, input);
+  // }
 
-  @Mutation(() => SiteV3, { name: 'deleteChildrenV3' })
-  deleteChildren(
-    @Args() id: GetSiteArgsV3,
-    @Args('input') input: DeleteChildrenV3,
-  ) {
-    return this.siteService.deleteChildren(id, input);
+  // @Mutation(() => Site, { name: 'deleteChildren' })
+  // deleteChildren(
+  //   @Args() id: GetSiteArgs,
+  //   @Args('input') input: DeleteChildren,
+  // ) {
+  //   return this.siteService.deleteChildren(id, input);
+  // }
+
+  @ResolveField('page', () => [Page0])
+  getPage(@Parent() site: Site) {
+    const { _id } = site;
+    return this.pageService.findPage0(_id);
   }
 
   @ResolveField('product', () => [Product])
-  getProduct(@Parent() site: SiteV3, @Args('type') type: string) {
+  getProduct(@Parent() site: Site, @Args('type') type: string) {
     const { _id } = site;
     return this.productService.findBySiteId(_id, type);
   }
 
-  @ResolveField('blog', () => [BlogV3])
-  getBlog(@Parent() input: SiteV3) {
-    return this.blogService.findBySiteId(input._id);
-  }
+  // @ResolveField('blog', () => [Blog])
+  // getBlog(@Parent() input: Site) {
+  //   return this.blogService.findBySiteId(input._id);
+  // }
 }
 
-// @Resolver('SiteV3')
+// @Resolver('Site')
 // export class SiteResolver {
 //   constructor(
-//     private readonly siteService: SiteV3Service,
+//     private readonly siteService: SiteService,
 //     private readonly productService: ProductService,
 //     private readonly blogService: BlogService,
 //   ) {}
 //   @ResolveField('product', () => [Product])
-//   products(@Parent() site: SiteV3, @Args('type') type: string) {
+//   products(@Parent() site: Site, @Args('type') type: string) {
 //     const { _id } = site;
 //     return this.productService.findBySiteId(_id, type);
 //   }

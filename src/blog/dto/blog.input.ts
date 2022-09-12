@@ -2,7 +2,7 @@ import { InputType, Field, PartialType } from '@nestjs/graphql';
 
 
 @InputType()
-export class CreateBlogV3 {
+export class CreateBlog {
   @Field()
   readonly title: string;
   @Field()
@@ -26,4 +26,4 @@ export class CreateBlogV3 {
 }
 
 @InputType()
-export class UpdateBlogV3 extends PartialType(CreateBlogV3) {}
+export class UpdateBlog extends PartialType(CreateBlog) {}

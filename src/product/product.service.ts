@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { capitalizar, slug } from 'src/utils/function';
 import { CreateProductInput } from './dto/product.input';
 import { ProductDocument } from './entities/product.schema';
 import {
   ProductRepositoryClothing,
   ProductRepositoryFurniture,
 } from './product.repository';
-import { uuidv3 } from '../utils/index';
 import { GetProductArgs, GetSiteArgs } from './dto/product.args';
+import { capitalizar, slug } from 'src/utils/function';
+import { uuidv3 } from 'src/utils';
 
 @Injectable()
 export class ProductService {

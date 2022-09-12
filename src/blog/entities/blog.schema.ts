@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AbstractDocument } from 'src/common/abstract';
-import { DataBlogV3 } from './blog.model';
+import { DataBlog } from './blog.model';
 
 @Schema({ timestamps: true, versionKey: false })
 
-export class BlogV3Document extends AbstractDocument {
-  @Prop({ type: DataBlogV3 })
-  data: DataBlogV3;
+export class BlogDocument extends AbstractDocument {
+  @Prop({ type: DataBlog })
+  data: DataBlog;
   
   @Prop({ trim: true })
   site: string;
@@ -16,4 +16,4 @@ export class BlogV3Document extends AbstractDocument {
 
 }
 
-export const BlogV3Schema = SchemaFactory.createForClass(BlogV3Document);
+export const BlogSchema = SchemaFactory.createForClass(BlogDocument);

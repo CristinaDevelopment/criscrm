@@ -1,8 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { AbstractModel } from 'src/common/abstract';
-import { SiteV3 } from '../../site/entities/site.model';
-
-
 
 @ObjectType()
 export class Product extends AbstractModel {
@@ -14,7 +11,6 @@ export class Product extends AbstractModel {
 
   @Field()
   readonly children: string;
-
 }
 
 @ObjectType()
@@ -51,8 +47,6 @@ export class Article {
   @Field(() => [ImageProduct], { nullable: true })
   readonly image?: ImageProduct[];
 
-
-
   @Field(() => Seo)
   readonly seo: Seo | string;
 }
@@ -81,7 +75,7 @@ export class Detail {
 }
 
 @ObjectType()
-export class Image {
+export class ImageProduct {
   @Field()
   readonly uid: string;
   @Field()
@@ -90,8 +84,8 @@ export class Image {
   readonly alt: string;
 }
 
-@ObjectType()
-export class ImageProduct extends Image {}
+// @ObjectType()
+// export class ImageProduct extends Image {}
 
 @ObjectType()
 export class Seo {
@@ -101,10 +95,10 @@ export class Seo {
   readonly href: string;
   @Field()
   readonly description: string;
-  @Field(() => Image)
-  readonly icon?: Image | string;
-  @Field(() => Image)
-  readonly image: Image | string;
+  @Field(() => ImageProduct)
+  readonly icon?: ImageProduct | string;
+  @Field(() => ImageProduct)
+  readonly image: ImageProduct | string;
 }
 
 @ObjectType()
@@ -156,8 +150,6 @@ export class SizesProduct {
 }
 
 @ObjectType()
-export class Clothing extends Product {
-}
+export class Clothing extends Product {}
 @ObjectType()
-export class Furniture extends Product {
-}
+export class Furniture extends Product {}

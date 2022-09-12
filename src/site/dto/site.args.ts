@@ -2,7 +2,7 @@ import { ArgsType, Field, ID } from '@nestjs/graphql';
 import { IsMongoId, IsNotEmpty, IsString } from 'class-validator';
 
 @ArgsType()
-export class GetSiteArgsV3 {
+export class GetSiteArgs {
   @Field(() => ID)
   @IsString()
   @IsNotEmpty()
@@ -10,7 +10,7 @@ export class GetSiteArgsV3 {
   _id: string;
 }
 @ArgsType()
-export class GetChildrenV3 {
+export class GetChildren {
   @Field(() => ID)
   @IsString()
   @IsNotEmpty()

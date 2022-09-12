@@ -1,8 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AbstractDocument } from 'src/common/abstract';
-import * as mongoose from 'mongoose';
 import { Article } from './product.model';
-import { SiteV3 } from 'src/site/entities/site.model';
 
 @Schema({ versionKey: false })
 export class ProductDocument extends AbstractDocument {

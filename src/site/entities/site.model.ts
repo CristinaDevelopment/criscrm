@@ -1,99 +1,102 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Product } from 'src/product/entities/product.model';
 import { AbstractModel } from '../../common/abstract/abstract.model';
-import { BlogV3 } from '../../blog/entities/blog.model';
+// import { Blog } from '../../blog/entities/blog.model';
+import { Page0 } from '../../page/entities/page.model';
 
 @ObjectType()
-export class SiteV3 extends AbstractModel {
-  @Field(() => DataV3)
-  readonly data: DataV3 | string;
-  @Field(() => [ChildrenV3])
-  readonly children: ChildrenV3[];
-  @Field(() => [RegisterV3])
-  readonly register: RegisterV3[];
+export class Site extends AbstractModel {
+  @Field(() => Data)
+  readonly data: Data | string;
+  // @Field(() => [Children])
+  // readonly children: Children[];
+  @Field(() => [Register])
+  readonly register: Register[];
   @Field()
   readonly client: string;
   @Field()
   readonly url: string;
   @Field(() => [Product])
   readonly product?: Product[];
-  @Field(() => [BlogV3])
-  readonly blog?: BlogV3[];
+  @Field(() => [Page0])
+  readonly page?: Page0[];
+  // @Field(() => [Blog])
+  // readonly blog?: Blog[];
 }
 
 @ObjectType()
-export class RegisterV3 {
+export class Register {
   @Field()
   readonly uid: string;
-  @Field()
-  readonly name: string;
+  // @Field()
+  // readonly name: string;
   @Field()
   readonly change: string;
-  @Field()
-  readonly role: string;
+  // @Field()
+  // readonly role: string;
   @Field()
   readonly date: string;
 }
 @ObjectType()
-export class DataV3 {
+export class Data {
   @Field()
   readonly name: string;
   @Field()
-  readonly numberPhone: number;
+  readonly numberPhone?: number;
   @Field()
-  readonly address: string;
+  readonly address?: string;
   @Field()
   readonly type: string;
   @Field(() => [String])
   readonly users: string[];
   @Field({ nullable: true })
   readonly location?: string;
-  @Field(() => [DataBaseV3])
-  readonly dataBase: DataBaseV3[];
+  @Field(() => [DataBase])
+  readonly dataBase: DataBase[];
   @Field()
   readonly description: string;
-  @Field(() => DomainV3)
-  readonly domain: DomainV3 | string;
-  @Field(() => ImageV3)
-  readonly image?: ImageV3 | string;
-  @Field(() => ImageV3)
-  readonly logo?: ImageV3 | string;
-  @Field(() => ImageV3)
-  readonly icon?: ImageV3 | string;
+  @Field(() => Domain)
+  readonly domain: Domain | string;
+  @Field(() => Image)
+  readonly image?: Image | string;
+  @Field(() => Image)
+  readonly logo?: Image | string;
+  @Field(() => Image)
+  readonly icon?: Image | string;
 }
 
-@ObjectType()
-export class ChildrenV3 {
-  @Field()
-  readonly uid: string;
-  @Field(() => SeoV3)
-  readonly seo: SeoV3 | string;
-  @Field(() => [ChildrenV3], { nullable: true })
-  readonly children?: ChildrenV3[];
-  @Field(() => ImageV3)
-  readonly icon?: ImageV3 | string;
-  @Field()
-  readonly type?: string;
-  @Field()
-  readonly slug: string;
-  @Field(() => [ComponentV3], { nullable: true })
-  readonly section?: ComponentV3[];
-  @Field(() => [Product], { nullable: true })
-  readonly product?: Product[];
-}
+// @ObjectType()
+// export class Children {
+//   @Field()
+//   readonly uid: string;
+//   @Field(() => Seo)
+//   readonly seo: Seo | string;
+//   @Field(() => [Children], { nullable: true })
+//   readonly children?: Children[];
+//   @Field(() => Image)
+//   readonly icon?: Image | string;
+//   @Field()
+//   readonly type?: string;
+//   @Field()
+//   readonly slug: string;
+//   @Field(() => [Component], { nullable: true })
+//   readonly section?: Component[];
+//   @Field(() => [Product], { nullable: true })
+//   readonly product?: Product[];
+// }
+
+// @ObjectType()
+// export class Component {
+//   @Field()
+//   readonly uid: string;
+//   @Field()
+//   readonly component: string;
+//   @Field()
+//   readonly html: string;
+// }
 
 @ObjectType()
-export class ComponentV3 {
-  @Field()
-  readonly uid: string;
-  @Field()
-  readonly component: string;
-  @Field()
-  readonly html: string;
-}
-
-@ObjectType()
-export class SeoV3 {
+export class Seo {
   @Field()
   readonly name: string;
   @Field()
@@ -101,12 +104,12 @@ export class SeoV3 {
   @Field()
   readonly description: string;
 
-  @Field(() => ImageV3)
-  readonly image: ImageV3 | string;
+  @Field(() => Image)
+  readonly image: Image | string;
 }
 
 @ObjectType()
-export class DataBaseV3 {
+export class DataBase {
   @Field()
   readonly uid: string;
   @Field()
@@ -114,19 +117,19 @@ export class DataBaseV3 {
   @Field()
   readonly type: string;
 
-  @Field(() => ImageV3)
-  readonly image: ImageV3 | string;
+  @Field(() => Image)
+  readonly image: Image | string;
 }
 
 @ObjectType()
-export class ImageV3 {
+export class Image {
   @Field()
   readonly src: string;
   @Field()
   readonly alt: string;
 }
 @ObjectType()
-export class DomainV3 {
+export class Domain {
   @Field()
   readonly name: string;
   @Field()
@@ -134,7 +137,7 @@ export class DomainV3 {
 }
 
 @ObjectType()
-export class UserV3 extends AbstractModel {
+export class User extends AbstractModel {
   @Field()
   readonly name: string;
   @Field()
@@ -142,6 +145,6 @@ export class UserV3 extends AbstractModel {
   @Field()
   readonly password: string;
 
-  @Field(() => ImageV3)
-  readonly image: ImageV3 | string;
+  @Field(() => Image)
+  readonly image: Image | string;
 }
