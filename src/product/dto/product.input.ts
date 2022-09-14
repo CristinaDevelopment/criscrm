@@ -26,22 +26,21 @@ export class CreateProductInput {
   @Field()
   readonly site: string;
   @Field()
-  readonly children: string;
-
-  @Field()
-  readonly route: string;
+  readonly page: string;
 
 }
 
 @InputType()
-export class UpdateProductInput extends PartialType(CreateProductInput) {}
+export class UpdateProductInput extends OmitType(CreateProductInput, [
+  'site',
+  'page',
+] as const) {}
 
 @InputType()
 export class UpdateSpecsInput {
   @Field()
   readonly text: string;
 }
-
 
 @InputType()
 export class UpdateImagesInput {
@@ -68,7 +67,6 @@ export class UpdateDetailsInput {
 
 @InputType()
 export class UpdateTagsInput extends PartialType(UpdateSpecsInput) {}
-
 
 //TODO: articleType
 

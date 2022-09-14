@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { slug } from 'src/utils/function';
 import { CreatePage, UpdatePage } from '../dto/page.input';
 import { PageDocument } from '../entities/page.schema';
-import { Page0Repository } from '../repository/page0.repository';
+import { Page0Repository } from '../repository/page.repository';
 import { capitalizar } from '../../utils/function';
 import { GetPageArgs } from '../dto/page.args';
 
@@ -28,7 +28,10 @@ export class Page0Service {
       },
       page: input.page,
       site: input.site,
-
+      updateDate: {
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
       slug: slug(input.title),
       section: [],
     });
@@ -50,14 +53,14 @@ export class Page0Service {
             },
           },
         },
-
         slug: slug(input.title),
+        'updateDate.updatedAt': new Date(),
       },
     });
     return this.toModel(document);
   }
 
-  getPages0() {
+  getPages() {
     return this.pageRepository.find({});
   }
   async deletePage(id: GetPageArgs) {
@@ -69,9 +72,7 @@ export class Page0Service {
   findPage0(pageId) {
     return this.pageRepository.find({ page: pageId });
   }
-  findAll() {
-    return `This action returns all page`;
-  }
+
 
   private toModel(pageDocument: PageDocument) {
     return {

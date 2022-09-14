@@ -11,8 +11,17 @@ export class User extends AbstractModel {
   readonly password: string;
   @Field()
   readonly site: string;
+  @Field(() => UpdateDateUser)
+  readonly updateDate: UpdateDateUser | string;
   
-  
+}
+
+@ObjectType()
+export class UpdateDateUser {
+  @Field()
+  createdAt: Date;
+  @Field()
+  updatedAt: Date;
 }
 
 @ObjectType()

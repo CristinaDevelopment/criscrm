@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AbstractDocument } from 'src/common/abstract';
-import { ComponentPage, DataPage } from './page.model';
+import { ComponentPage, DataPage, UpdateDatePage } from './page.model';
 
 
 @Schema({ versionKey: false })
@@ -15,6 +15,9 @@ export class PageDocument extends AbstractDocument {
   site: string;
   @Prop([ComponentPage])
   section: ComponentPage[];
+  @Prop({ type: UpdateDatePage })
+  updateDate: UpdateDatePage;
+
 }
 
 export const Page0Schema = SchemaFactory.createForClass(PageDocument);

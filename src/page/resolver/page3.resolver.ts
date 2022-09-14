@@ -8,13 +8,14 @@ import {
 } from '@nestjs/graphql';
 import { GetPageArgs } from '../dto/page.args';
 import { CreatePage, UpdatePage } from '../dto/page.input';
-import { Page2, Page3 } from '../entities/page.model';
-import { Page3Service } from '../service/page3.service';
+import { Page2, Page3, Page4 } from '../entities/page.model';
+import { Page4Service, Page3Service } from '../service';
 
 @Resolver(() => Page3)
 export class Page3Resolver {
   constructor(
-    private readonly page3Service: Page3Service, // private readonly page3Service: Page3Service,
+    private readonly page3Service: Page3Service, 
+    private readonly page4Service: Page4Service,
   ) {}
 
   @Mutation(() => Page3, { name: 'createPage3' })
@@ -26,13 +27,17 @@ export class Page3Resolver {
   update(@Args() id: GetPageArgs, @Args('input') input: UpdatePage) {
     return this.page3Service.update(id, input);
   }
-  // @ResolveField('page', () => [Page3])
-  // getPage3(@Parent() input: Page3) {
-  //   return this.page3Service.findPage3(input._id);
-  // }
 
-  @Query(() => [Page3], { name: 'page' })
-  findAll() {
-    return this.page3Service.findAll();
+  @Mutation(() => String, { name: 'deletePage3' })
+  delete(@Args() id: GetPageArgs) {
+    return this.page3Service.deletePage(id);
   }
+
+  @ResolveField('page', () => [Page4])
+  getPage4(@Parent() input: Page4) {
+    return this.page4Service.findPage4(input._id);
+  }
+
+
+
 }

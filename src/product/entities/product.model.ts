@@ -10,7 +10,10 @@ export class Product extends AbstractModel {
   readonly site: string;
 
   @Field()
-  readonly children: string;
+  readonly page: string;
+
+  @Field(() => UpdateDate)
+  readonly updateDate: UpdateDate | string;
 }
 
 @ObjectType()
@@ -29,8 +32,8 @@ export class Article {
   readonly discountPrice: number;
   @Field()
   readonly description: string;
-  @Field()
-  readonly route: string;
+  // @Field()
+  // readonly route: string;
   // @Field(() => [Route])
   // readonly route: Route[];
   @Field(() => Featured)
@@ -49,6 +52,14 @@ export class Article {
 
   @Field(() => Seo)
   readonly seo: Seo | string;
+}
+
+@ObjectType()
+export class UpdateDate {
+  @Field()
+  createdAt: Date;
+  @Field()
+  updatedAt: Date;
 }
 
 @ObjectType()
@@ -95,8 +106,8 @@ export class Seo {
   readonly href: string;
   @Field()
   readonly description: string;
-  @Field(() => ImageProduct)
-  readonly icon?: ImageProduct | string;
+  // @Field(() => ImageProduct)
+  // readonly icon?: ImageProduct | string;
   @Field(() => ImageProduct)
   readonly image: ImageProduct | string;
 }

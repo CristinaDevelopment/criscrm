@@ -3,7 +3,7 @@ import { capitalizar, slug } from 'src/utils/function';
 import { GetPageArgs } from '../dto/page.args';
 import { CreatePage, UpdatePage } from '../dto/page.input';
 import { PageDocument } from '../entities/page.schema';
-import { Page2Repository } from '../repository/page2.repository';
+import { Page2Repository } from '../repository/page.repository';
 
 @Injectable()
 export class Page2Service {
@@ -27,6 +27,10 @@ export class Page2Service {
       },
       page: input.page,
       site: input.site,
+      updateDate: {
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
       slug: slug(input.title),
       section: [],
     });
@@ -48,13 +52,17 @@ export class Page2Service {
             },
           },
         },
-
         slug: slug(input.title),
+        'updateDate.updatedAt': new Date(),
       },
     });
     return this.toModel(document);
   }
-  getPages2() {
+  async getPage(id: GetPageArgs) {
+    const data = await this.pageRepository.findOne(id);
+    return this.toModel(data);
+  }
+  getPages() {
     return this.pageRepository.find({});
   }
 
@@ -66,10 +74,6 @@ export class Page2Service {
 
   findPage2(pageId) {
     return this.pageRepository.find({ page: pageId });
-  }
-
-  findAll() {
-    return `This action returns all page`;
   }
 
   private toModel(pageDocument: PageDocument) {

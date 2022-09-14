@@ -36,7 +36,7 @@ export class Page1Resolver {
 
   @Query(() => [Page1], { name: 'getPages1' })
   getPages() {
-    return this.page1Service.getPages1();
+    return this.page1Service.getPages();
   }
 
 
@@ -45,8 +45,4 @@ export class Page1Resolver {
     return this.page2Service.findPage2(input._id);
   }
 
-  @Query(() => [Page1], { name: 'page' })
-  findAll() {
-    return this.page1Service.findAll();
-  }
 }

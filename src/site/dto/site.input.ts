@@ -25,6 +25,10 @@ export class CreateSite {
   @Field()
   readonly uid: string;
 }
+
+@InputType()
+export class UpdateSite extends OmitType(CreateSite, ['client'] as const) {}
+
 @InputType()
 export class UpdateDataBase {
   @Field()
@@ -62,8 +66,6 @@ export class Children {
   @Field({ nullable: true })
   readonly children_uid_10?: string;
 }
-@InputType()
-export class UpdateSite extends OmitType(CreateSite, ['client'] as const) {}
 
 @InputType()
 export class AddChildren {

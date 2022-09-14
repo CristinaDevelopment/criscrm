@@ -3,12 +3,12 @@ import { capitalizar, slug } from 'src/utils/function';
 import { GetPageArgs } from '../dto/page.args';
 import { CreatePage, UpdatePage } from '../dto/page.input';
 import { PageDocument } from '../entities/page.schema';
-import { Page3Repository } from '../repository/page.repository';
+import { Page6Repository } from '../repository/page.repository';
 
 @Injectable()
-export class Page3Service {
+export class Page6Service {
   constructor(
-    private readonly pageRepository: Page3Repository, // @Inject('PRODUCT_SERVICE') // private readonly communicationCliente: ClientProxy,
+    private readonly pageRepository: Page6Repository, // @Inject('PRODUCT_SERVICE') // private readonly communicationCliente: ClientProxy,
   ) {}
   async createPage(input: CreatePage) {
     const document = await this.pageRepository.create({
@@ -51,9 +51,9 @@ export class Page3Service {
             },
           },
         },
+        'updateDate.updatedAt': new Date(),
 
         slug: slug(input.title),
-        'updateDate.updatedAt': new Date(),
       },
     });
     return this.toModel(document);
@@ -69,7 +69,7 @@ export class Page3Service {
     return 'delete page';
   }
 
-  findPage3(pageId) {
+  findPage6(pageId) {
     return this.pageRepository.find({ page: pageId });
   }
 

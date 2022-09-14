@@ -30,4 +30,12 @@ export class GetChildren {
   readonly children_uid_5?: string;
   @Field({ nullable: true })
   readonly children_uid_6?: string;
+  @Field({ nullable: true })
+  readonly children_uid_7?: string;
+  @Field({ nullable: true })
+  readonly children_uid_8?: string;
+  @Field({ nullable: true })
+  readonly children_uid_9?: string;
+  @Field({ nullable: true })
+  readonly children_uid_10?: string;
 }

@@ -12,7 +12,18 @@ export class Page extends AbstractModel {
   readonly section?: ComponentPage[];
   @Field(() => [Page], { nullable: 'itemsAndList' })
   readonly page?: Page[];
+  @Field(() => UpdateDatePage)
+  readonly updateDate: UpdateDatePage | string;
 }
+
+@ObjectType()
+export class UpdateDatePage {
+  @Field()
+  createdAt: Date;
+  @Field()
+  updatedAt: Date;
+}
+
 
 @ObjectType()
 export class DataPage {

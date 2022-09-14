@@ -20,8 +20,15 @@ export class Site extends AbstractModel {
   readonly product?: Product[];
   @Field(() => [Page0])
   readonly page?: Page0[];
-  // @Field(() => [Blog])
-  // readonly blog?: Blog[];
+  @Field(() => UpdateDateSite)
+  readonly updateDate: UpdateDateSite | string;
+}
+@ObjectType()
+export class UpdateDateSite {
+  @Field()
+  createdAt: Date;
+  @Field()
+  updatedAt: Date;
 }
 
 @ObjectType()

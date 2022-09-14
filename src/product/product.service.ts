@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProductInput } from './dto/product.input';
+import { CreateProductInput, UpdateProductInput } from './dto/product.input';
 import { ProductDocument } from './entities/product.schema';
 import {
   ProductRepositoryClothing,
@@ -19,9 +19,30 @@ export class ProductService {
   async createProduct(input: CreateProductInput, type: string) {
     let data;
     if (type === 'clothing') {
-      data = await this.productRepositoryClothing.create(this.product(input));
+      data = await this.productRepositoryClothing.create(
+        this.productCreated(input),
+      );
     } else if (type === 'furniture') {
-      data = await this.productRepositoryFurniture.create(this.product(input));
+      data = await this.productRepositoryFurniture.create(
+        this.productCreated(input),
+      );
+    }
+    return this.toModel(data);
+  }
+  async updateProduct(
+    id: GetProductArgs,
+    input: UpdateProductInput,
+    type: string,
+  ) {
+    let data;
+    if (type === 'clothing') {
+      data = await this.productRepositoryClothing.findOneAndUpdate(id, {
+        $set: this.productUpdated(input),
+      });
+    } else if (type === 'furniture') {
+      data = await this.productRepositoryFurniture.findOneAndUpdate(id, {
+        $set: this.productUpdated(input),
+      });
     }
     return this.toModel(data);
   }
@@ -35,6 +56,7 @@ export class ProductService {
     }
     return this.toModel(data);
   }
+
   async getProducts(site: GetSiteArgs, type: string) {
     let data;
     if (type === 'clothing') {
@@ -53,6 +75,7 @@ export class ProductService {
     }
     return 'deleted product';
   }
+
   async deleteProducts(site: GetSiteArgs, type: string) {
     if (type === 'clothing') {
       await this.productRepositoryClothing.deleteMany(site);
@@ -60,6 +83,23 @@ export class ProductService {
       await this.productRepositoryFurniture.deleteOne(site);
     }
     return 'deleted products';
+  }
+
+  findByPageUid(pageUi: string, type: string) {
+    let data;
+    if (type === 'clothing') {
+      data = this.productRepositoryClothing.find({ page: pageUi });
+    } else if (type === 'furniture') {
+      data = this.productRepositoryFurniture.find({ page: pageUi });
+    }
+    return data;
+  }
+
+  findByPageClothing(pageUi) {
+    return this.productRepositoryClothing.find({ page: pageUi });
+  }
+  findByPageFurniture(pageUi) {
+    return this.productRepositoryFurniture.find({ page: pageUi });
   }
 
   findBySiteId(siteId: string, type: string) {
@@ -78,7 +118,7 @@ export class ProductService {
     });
   }
 
-  private product(input: CreateProductInput) {
+  private productCreated(input: CreateProductInput) {
     return {
       article: {
         name: capitalizar(input.name),
@@ -92,7 +132,7 @@ export class ProductService {
           name: capitalizar(input.featured),
           href: slug(input.featured),
         },
-        route: input.route,
+        // route: input.route,
         seo: {
           name: capitalizar(input.name),
           href: slug(input.name),
@@ -105,7 +145,39 @@ export class ProductService {
         },
       },
       site: input.site,
-      children: input.children,
+      page: input.page,
+      updateDate: {
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    };
+  }
+  private productUpdated(input: UpdateProductInput) {
+    return {
+      article: {
+        name: capitalizar(input.name),
+        slug: slug(input.name),
+        mark: input.mark,
+        inStock: input.inStock,
+        price: input.price,
+        discountPrice: input.discountPrice,
+        description: input.description,
+        featured: {
+          name: capitalizar(input.featured),
+          href: slug(input.featured),
+        },
+        seo: {
+          name: capitalizar(input.name),
+          href: slug(input.name),
+          description: input.description,
+          image: {
+            uid: uuidv3(),
+            src: 'https://res.cloudinary.com/dvcyhn0lj/image/upload/v1655217461/14.1_no-image.jpg_gkwtld.jpg',
+            alt: 'image description',
+          },
+        },
+      },
+      'updateDate.updatedAt': new Date(),
     };
   }
 
@@ -114,7 +186,8 @@ export class ProductService {
       _id: productDocument._id.toHexString(),
       article: productDocument.article,
       site: productDocument.site,
-      children: productDocument.children,
+      page: productDocument.page,
+      updateDate: productDocument.updateDate,
     };
   }
 }

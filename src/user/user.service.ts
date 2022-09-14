@@ -24,6 +24,10 @@ export class UserService {
         status: true,
         google: false,
       },
+      updateDate: {
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
       email: input.email.toLowerCase(),
       password: await bcrypt.hash(input.password, 10),
       site: input.site,
@@ -54,6 +58,7 @@ export class UserService {
         'data.role': input.role,
         email: input.email.toLowerCase(),
         password: await bcrypt.hash(input.password, 10),
+        'updateDate.updatedAt': new Date(),
       },
     });
     return this.toModel(dataDocument);
@@ -91,6 +96,7 @@ export class UserService {
       password: userDocument.password,
       email: userDocument.email,
       site: userDocument.site,
+      updateDate: userDocument.updateDate,
     };
   }
 }

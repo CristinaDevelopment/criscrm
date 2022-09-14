@@ -35,6 +35,10 @@ export class SiteService {
       },
       client: input.client,
       url: input.domain,
+      updateDate: {
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
       register: [
         {
           uid: input.uid,
@@ -62,6 +66,8 @@ export class SiteService {
           type: input.type,
         },
         url: input.domain,
+        'updateDate.updatedAt': new Date(),
+
       },
       $push: {
         register: {
@@ -388,6 +394,7 @@ export class SiteService {
       client: siteDocument.client,
       url: siteDocument.url,
       register: siteDocument.register,
+      updateDate: siteDocument.updateDate,
     };
   }
 }

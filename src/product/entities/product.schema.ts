@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AbstractDocument } from 'src/common/abstract';
-import { Article } from './product.model';
+import { Article, UpdateDate } from './product.model';
 
 @Schema({ versionKey: false })
 export class ProductDocument extends AbstractDocument {
@@ -11,7 +11,11 @@ export class ProductDocument extends AbstractDocument {
   site: string;
 
   @Prop({ trim: true })
-  children: string;
+  page: string;
+
+  @Prop({ type: UpdateDate })
+  updateDate: UpdateDate;
+
 }
 
 export const ClothingSchema = SchemaFactory.createForClass(ProductDocument);

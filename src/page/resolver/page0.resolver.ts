@@ -21,7 +21,7 @@ export class Page0Resolver {
   ) {}
 
   @Mutation(() => Page0, { name: 'createPage0' })
-  createPage(@Args('input') input: CreatePage) {
+  create(@Args('input') input: CreatePage) {
     return this.page0Service.createPage(input);
   }
 
@@ -32,21 +32,17 @@ export class Page0Resolver {
 
   @Query(() => [Page0], { name: 'getPages0' })
   getPages() {
-    return this.page0Service.getPages0();
+    return this.page0Service.getPages();
   }
-
+  
   @Mutation(() => String, { name: 'deletePage0' })
   deletePage(@Args() id: GetPageArgs) {
     return this.page0Service.deletePage(id);
   }
 
   @ResolveField('page', () => [Page1])
-  getPage0(@Parent() input: Page1) {
+  getPage(@Parent() input: Page1) {
     return this.page1Service.findPage1(input._id);
   }
 
-  @Query(() => [Page0], { name: 'page' })
-  findAll() {
-    return this.page0Service.findAll();
-  }
 }
