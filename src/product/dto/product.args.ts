@@ -12,14 +12,14 @@ export class GetProductArgs {
 
 
 @ArgsType()
-export class GetRouteArgs {
-  @Field()
-  route: string;
-}
-@ArgsType()
-export class GetSiteArgs {
+export class GetSite {
   @Field()
   site: string;
+}
+@ArgsType()
+export class GetPage {
+  @Field()
+  page: string;
 }
 
 

@@ -3,7 +3,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { GetSiteArgs, GetUserArgs } from './dto/user.args';
+import { GetSite, GetUserArgs } from './dto/user.args';
 import { CreateUserInput, UpdateUserInput } from './dto/user.input';
 import { User } from './entities/user.model';
 import { UserDocument } from './entities/user.schema';
@@ -68,7 +68,7 @@ export class UserService {
     await this.userRepository.deleteOne(id);
     return 'user delete';
   }
-  async deleteUsers(site: GetSiteArgs) {
+  async deleteUsers(site: GetSite) {
     await this.userRepository.deleteMany(site);
     return 'users deleted';
   }

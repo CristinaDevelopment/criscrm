@@ -1,7 +1,7 @@
 import { InputType, Field, PartialType, ID, OmitType } from '@nestjs/graphql';
 
 @InputType()
-export class CreateProductInput {
+export class CreateProduct {
   @Field()
   readonly name: string;
 
@@ -27,30 +27,29 @@ export class CreateProductInput {
   readonly site: string;
   @Field()
   readonly page: string;
-
 }
 
 @InputType()
-export class UpdateProductInput extends OmitType(CreateProductInput, [
+export class UpdateProduct extends OmitType(CreateProduct, [
   'site',
   'page',
 ] as const) {}
 
 @InputType()
-export class UpdateSpecsInput {
+export class UpdateSpecs {
   @Field()
   readonly text: string;
 }
 
 @InputType()
-export class UpdateImagesInput {
+export class UpdateImages {
   @Field()
   readonly src: string;
   @Field()
   readonly alt: string;
 }
 @InputType()
-export class UpdateDetailsInput {
+export class UpdateDetails {
   @Field()
   readonly material: string;
   @Field()
@@ -66,12 +65,12 @@ export class UpdateDetailsInput {
 }
 
 @InputType()
-export class UpdateTagsInput extends PartialType(UpdateSpecsInput) {}
+export class UpdateTags extends PartialType(UpdateSpecs) {}
 
 //TODO: articleType
 
 @InputType()
-export class AddColorsInput {
+export class AddColors {
   @Field()
   readonly name: string;
   @Field()
@@ -80,19 +79,19 @@ export class AddColorsInput {
   readonly selectedClass: string;
 }
 @InputType()
-export class UpdateColorsInput extends PartialType(AddColorsInput) {
+export class UpdateColors extends PartialType(AddColors) {
   @Field(() => ID)
   readonly id: string;
 }
 @InputType()
-export class RemoveColorsInput extends OmitType(UpdateColorsInput, [
+export class RemoveColors extends OmitType(UpdateColors, [
   'name',
   'class',
   'selectedClass',
 ]) {}
 
 @InputType()
-export class AddSizesInput {
+export class AddSizes {
   @Field()
   readonly name: string;
   @Field()
@@ -100,24 +99,21 @@ export class AddSizesInput {
 }
 
 @InputType()
-export class UpdateSizesInput extends PartialType(AddSizesInput) {
+export class UpdateSizes extends PartialType(AddSizes) {
   @Field(() => ID)
   readonly id: string;
 }
 
 @InputType()
-export class RemoveSizesInput extends OmitType(UpdateSizesInput, [
-  'name',
-  'inStock',
-]) {}
+export class RemoveSizes extends OmitType(UpdateSizes, ['name', 'inStock']) {}
 
 @InputType()
-export class SearchInput {
+export class Search {
   @Field({ nullable: true })
   readonly title: string;
 }
 @InputType()
-export class ProductInput {
+export class Product {
   @Field({ nullable: true })
   readonly name: string;
   @Field({ nullable: true })

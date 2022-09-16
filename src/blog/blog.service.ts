@@ -3,17 +3,12 @@ import { uuidv3 } from 'src/utils';
 import { slug } from 'src/utils/function';
 import { BlogRepository } from './blog.repository';
 import { CreateBlog } from './dto/blog.input';
-import { CreateBlogInput } from './dto/create-blog.input';
-import { UpdateBlogInput } from './dto/update-blog.input';
 import { Blog } from './entities/blog.model';
 import { BlogDocument } from './entities/blog.schema';
 
 @Injectable()
 export class BlogService {
   constructor(private readonly blogRepository: BlogRepository) {}
-  create(createBlogInput: CreateBlogInput) {
-    return 'This action adds a new blog';
-  }
 
   async createBlog(input: CreateBlog) {
     // await this.validateDomain(input);
@@ -28,14 +23,15 @@ export class BlogService {
       src,
       alt,
       category,
+      page,
     } = input;
     const data = await this.blogRepository.create({
-      ...input,
       data: {
         title: title,
         slug: slug(title),
         content: content,
         description: description,
+        category: category,
         meta: meta,
         tags: tags.map((data) => ({ uid: uuidv3(), text: data })),
         author: author,
@@ -51,13 +47,20 @@ export class BlogService {
         },
       },
       site: site,
-      category: category,
+      page: page,
+      updateDate: {
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     });
     return this.toModel(data);
   }
 
   findBySiteId(siteId) {
     return this.blogRepository.find({ site: siteId });
+  }
+  findByPageId(pageId) {
+    return this.blogRepository.find({ page: pageId });
   }
 
   findAll() {
@@ -66,10 +69,6 @@ export class BlogService {
 
   findOne(id: number) {
     return `This action returns a #${id} blog`;
-  }
-
-  update(id: number, updateBlogInput: UpdateBlogInput) {
-    return `This action updates a #${id} blog`;
   }
 
   remove(id: number) {
@@ -81,7 +80,8 @@ export class BlogService {
       _id: blogDocument._id.toHexString(),
       data: blogDocument.data,
       site: blogDocument.site,
-      category: blogDocument.category,
+      page: blogDocument.page,
+      updateDate: blogDocument.updateDate,
     };
   }
 }

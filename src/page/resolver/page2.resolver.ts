@@ -7,11 +7,22 @@ import {
   ResolveField,
   Parent,
 } from '@nestjs/graphql';
+import { connectionFromArraySlice } from 'graphql-relay';
+import { BlogService } from 'src/blog/blog.service';
+import { Blog } from 'src/blog/entities/blog.model';
+import ConnectionArgs, {
+  getPagingParameters,
+} from 'src/common/pagination/relay/connection.args';
 import { Product } from 'src/product/entities/product.model';
 import { ProductService } from 'src/product/product.service';
-import { GetPageArgs } from '../dto/page.args';
+import { GetPage, GetSite } from '../dto/page.args';
 import { CreatePage, UpdatePage } from '../dto/page.input';
-import { Page2, Page3 } from '../entities/page.model';
+import {
+  DataPage,
+  ListPageResponse,
+  Page2,
+  Page3,
+} from '../entities/page.model';
 import { Page2Service } from '../service/page2.service';
 import { Page3Service } from '../service/page3.service';
 
@@ -21,52 +32,72 @@ export class Page2Resolver {
     private readonly page2Service: Page2Service,
     private readonly page3Service: Page3Service,
     private readonly productService: ProductService,
+    private readonly blogService: BlogService,
   ) {}
 
   @Mutation(() => Page2, { name: 'createPage2' })
-  createPage(@Args('input') input: CreatePage) {
-    return this.page2Service.createPage(input);
+  create(@Args('input') input: CreatePage) {
+    return this.page2Service.create(input);
   }
 
-  
   @Mutation(() => Page2, { name: 'updatePage2' })
-  update(@Args() id: GetPageArgs, @Args('input') input: UpdatePage) {
+  update(@Args() id: GetPage, @Args('input') input: UpdatePage) {
     return this.page2Service.update(id, input);
   }
 
-  @Mutation(() => String, { name: 'deletePage2' })
-  delete(@Args() id: GetPageArgs) {
-    return this.page2Service.deletePage(id);
-  }
-  @Query(() => Page2, { name: 'getPage2' })
-  getPage(@Args() id: GetPageArgs) {
-    return this.page2Service.getPage(id);
-  }
-  @Query(() => [Page2], { name: 'getPages2' })
-  getPages() {
-    return this.page2Service.getPages();
+  @Query(() => Page2, { name: 'findPage2' })
+  findPage(@Args() id: GetPage) {
+    return this.page2Service.findPage(id);
   }
 
-  @ResolveField('page', () => [Page3])
-  getPage2(@Parent() input: Page3) {
+  @Query(() => [Page2], { name: 'findPages2BySite' })
+  findPagesBySite(@Args() site: GetSite) {
+    return this.page2Service.findPagesBySite(site);
+  }
+
+  @Mutation(() => String, { name: 'deletePage2' })
+  delete(@Args() id: GetPage) {
+    return this.page2Service.deletePage(id);
+  }
+
+  @Query(() => [Page2], { name: 'findPages2' })
+  findPages() {
+    return this.page2Service.findPages();
+  }
+
+  @Query(() => ListPageResponse, { name: 'listPages2WithCursor' })
+  async findAllWithCursor(
+    @Args('args') args: ConnectionArgs,
+  ): Promise<ListPageResponse> {
+    const { limit, offset } = getPagingParameters(args);
+    const { data, count } = await this.page2Service.all({
+      limit,
+      offset,
+    });
+    const page = connectionFromArraySlice(data, args, {
+      arrayLength: count,
+      sliceStart: offset || 0,
+    });
+
+    return { page, pageData: { count, limit, offset } };
+  }
+
+  @ResolveField('page', () => [Page2])
+  getPage(@Parent() input: Page2) {
     return this.page3Service.findPage3(input._id);
   }
 
-  // @ResolveField('product', () => [Product])
-  // getProductClothing(@Parent() page: Page3) {
-  //   const { _id } = page;
-  //   return this.productService.findByPageClothing(_id);
-  // }
-  // @ResolveField('product', () => [Product])
-  // getProductFurniture(@Parent() page: Page3) {
-  //   const { _id } = page;
-  //   return this.productService.findByPageFurniture(_id);
-  // }
-
-  @ResolveField('product', () => [Product])
-  getProduct(@Parent() page: Page3, @Args('type') type: string) {
+  @ResolveField('blog', () => [Blog])
+  getBlog(@Parent() page: Page2) {
     const { _id } = page;
-    return this.productService.findByPageUid(_id, type);
+
+    return this.blogService.findByPageId(_id);
   }
 
+  @ResolveField('product', () => [Product])
+  getProduct(@Parent() page: Page2) {
+    const { _id, data } = page;
+    const { type } = data as DataPage;
+    return this.productService.findByPageUid(_id, type);
+  }
 }

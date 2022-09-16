@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { capitalizar, slug } from 'src/utils/function';
-import { GetPageArgs } from '../dto/page.args';
+import { GetPage } from '../dto/page.args';
 import { CreatePage, UpdatePage } from '../dto/page.input';
 import { PageDocument } from '../entities/page.schema';
 import { Page6Repository } from '../repository/page.repository';
@@ -35,7 +35,7 @@ export class Page6Service {
     });
     return this.toModel(document);
   }
-  async update(id: GetPageArgs, input: UpdatePage) {
+  async update(id: GetPage, input: UpdatePage) {
     const document = await this.pageRepository.findOneAndUpdate(id, {
       $set: {
         data: {
@@ -63,7 +63,7 @@ export class Page6Service {
     return this.pageRepository.find({});
   }
 
-  async deletePage(id: GetPageArgs) {
+  async deletePage(id: GetPage) {
     // await this.validateSite(id);
     await this.pageRepository.deleteOne(id);
     return 'delete page';

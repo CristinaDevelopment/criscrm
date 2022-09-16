@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProductInput, UpdateProductInput } from './dto/product.input';
+import { CreateProduct, UpdateProduct } from './dto/product.input';
 import { ProductDocument } from './entities/product.schema';
 import {
   ProductRepositoryClothing,
   ProductRepositoryFurniture,
 } from './product.repository';
-import { GetProductArgs, GetSiteArgs } from './dto/product.args';
+import { GetPage, GetProductArgs, GetSite } from './dto/product.args';
 import { capitalizar, slug } from 'src/utils/function';
 import { uuidv3 } from 'src/utils';
+import { ListInput } from 'src/common/pagination/dto/list.input';
 
 @Injectable()
 export class ProductService {
@@ -16,7 +17,7 @@ export class ProductService {
     private readonly productRepositoryFurniture: ProductRepositoryFurniture,
   ) {}
 
-  async createProduct(input: CreateProductInput, type: string) {
+  async createProduct(input: CreateProduct, type: string) {
     let data;
     if (type === 'clothing') {
       data = await this.productRepositoryClothing.create(
@@ -29,11 +30,7 @@ export class ProductService {
     }
     return this.toModel(data);
   }
-  async updateProduct(
-    id: GetProductArgs,
-    input: UpdateProductInput,
-    type: string,
-  ) {
+  async updateProduct(id: GetProductArgs, input: UpdateProduct, type: string) {
     let data;
     if (type === 'clothing') {
       data = await this.productRepositoryClothing.findOneAndUpdate(id, {
@@ -57,12 +54,21 @@ export class ProductService {
     return this.toModel(data);
   }
 
-  async getProducts(site: GetSiteArgs, type: string) {
+  async getProductsBySite(site: GetSite, type: string) {
     let data;
     if (type === 'clothing') {
       data = await this.productRepositoryClothing.find(site);
     } else if (type === 'furniture') {
       data = await this.productRepositoryFurniture.find(site);
+    }
+    return data;
+  }
+  async getProductsByPage(page: GetPage, type: string) {
+    let data;
+    if (type === 'clothing') {
+      data = await this.productRepositoryClothing.find(page);
+    } else if (type === 'furniture') {
+      data = await this.productRepositoryFurniture.find(page);
     }
     return data;
   }
@@ -76,7 +82,7 @@ export class ProductService {
     return 'deleted product';
   }
 
-  async deleteProducts(site: GetSiteArgs, type: string) {
+  async deleteProducts(site: GetSite, type: string) {
     if (type === 'clothing') {
       await this.productRepositoryClothing.deleteMany(site);
     } else if (type === 'furniture') {
@@ -91,6 +97,8 @@ export class ProductService {
       data = this.productRepositoryClothing.find({ page: pageUi });
     } else if (type === 'furniture') {
       data = this.productRepositoryFurniture.find({ page: pageUi });
+    } else {
+      data = []
     }
     return data;
   }
@@ -118,7 +126,18 @@ export class ProductService {
     });
   }
 
-  private productCreated(input: CreateProductInput) {
+  all(pagination: ListInput, type: string) {
+    let data;
+    if (type === 'clothing') {
+      data = this.productRepositoryClothing.All(pagination);
+    } else if (type === 'furniture') {
+      data = this.productRepositoryFurniture.All(pagination);
+    }
+    return data;
+  }
+
+
+  private productCreated(input: CreateProduct) {
     return {
       article: {
         name: capitalizar(input.name),
@@ -152,7 +171,7 @@ export class ProductService {
       },
     };
   }
-  private productUpdated(input: UpdateProductInput) {
+  private productUpdated(input: UpdateProduct) {
     return {
       article: {
         name: capitalizar(input.name),

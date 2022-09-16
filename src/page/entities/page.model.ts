@@ -1,4 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Blog } from 'src/blog/entities/blog.model';
+import { RelayTypes } from 'src/common/pagination/relay/relay.types';
 import { Product } from 'src/product/entities/product.model';
 import { AbstractModel } from '../../common/abstract/abstract.model';
 
@@ -10,10 +12,14 @@ export class Page extends AbstractModel {
   readonly slug: string;
   @Field(() => [ComponentPage])
   readonly section?: ComponentPage[];
-  @Field(() => [Page], { nullable: 'itemsAndList' })
-  readonly page?: Page[];
   @Field(() => UpdateDatePage)
   readonly updateDate: UpdateDatePage | string;
+  @Field(() => [Page], { nullable: 'itemsAndList' })
+  readonly page?: Page[];
+  @Field(() => [Product], { nullable: 'itemsAndList' })
+  readonly product?: Product[];
+  @Field(() => [Blog], { nullable: true })
+  readonly blog?: Blog[];
 }
 
 @ObjectType()
@@ -23,7 +29,6 @@ export class UpdateDatePage {
   @Field()
   updatedAt: Date;
 }
-
 
 @ObjectType()
 export class DataPage {
@@ -88,3 +93,6 @@ export class Page8 extends Page {}
 export class Page9 extends Page {}
 @ObjectType()
 export class Page10 extends Page {}
+
+@ObjectType()
+export class ListPageResponse extends RelayTypes<Page>(Page) {}

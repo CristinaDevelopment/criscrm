@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { ListInput } from 'src/common/pagination/dto/list.input';
 import { capitalizar, slug } from 'src/utils/function';
-import { GetPageArgs } from '../dto/page.args';
+import { GetPage, GetSite } from '../dto/page.args';
 import { CreatePage, UpdatePage } from '../dto/page.input';
 import { PageDocument } from '../entities/page.schema';
 import { Page3Repository } from '../repository/page.repository';
@@ -10,8 +11,46 @@ export class Page3Service {
   constructor(
     private readonly pageRepository: Page3Repository, // @Inject('PRODUCT_SERVICE') // private readonly communicationCliente: ClientProxy,
   ) {}
-  async createPage(input: CreatePage) {
-    const document = await this.pageRepository.create({
+  async create(input: CreatePage) {
+    const document = await this.pageRepository.create(this.pageCreated(input));
+    return this.toModel(document);
+  }
+
+  async update(id: GetPage, input: UpdatePage) {
+    const document = await this.pageRepository.findOneAndUpdate(id, {
+      $set: this.pageUpdate(input),
+    });
+    return this.toModel(document);
+  }
+
+  async findPage(id: GetPage) {
+    const document = await this.pageRepository.findOne(id);
+    return this.toModel(document);
+  }
+  findPagesBySite(site: GetSite) {
+    return this.pageRepository.find(site);
+  }
+
+  findPages() {
+    return this.pageRepository.find({});
+  }
+
+
+  async deletePage(id: GetPage) {
+    // await this.validateSite(id);
+    await this.pageRepository.deleteOne(id);
+    return 'delete page';
+  }
+  findPage3(pageId) {
+    return this.pageRepository.find({ page: pageId });
+  }
+
+  all(pagination: ListInput) {
+    return this.pageRepository.All(pagination);
+  }
+
+  private pageCreated(input: CreatePage) {
+    return {
       data: {
         type: input.type,
         seo: {
@@ -32,45 +71,26 @@ export class Page3Service {
       },
       slug: slug(input.title),
       section: [],
-    });
-    return this.toModel(document);
+    };
   }
-  async update(id: GetPageArgs, input: UpdatePage) {
-    const document = await this.pageRepository.findOneAndUpdate(id, {
-      $set: {
-        data: {
-          // title: capitalizar(input.title),
-          type: input.type,
-          seo: {
-            title: capitalizar(input.title),
-            href: slug(input.title),
-            description: input.description,
-            image: {
-              src: input.src,
-              alt: input.alt,
-            },
+  private pageUpdate(input: UpdatePage) {
+    return {
+      data: {
+        type: input.type,
+        seo: {
+          title: capitalizar(input.title),
+          href: slug(input.title),
+          description: input.description,
+          image: {
+            src: input.src,
+            alt: input.alt,
           },
         },
-
-        slug: slug(input.title),
-        'updateDate.updatedAt': new Date(),
       },
-    });
-    return this.toModel(document);
-  }
-  
-  getPages() {
-    return this.pageRepository.find({});
-  }
 
-  async deletePage(id: GetPageArgs) {
-    // await this.validateSite(id);
-    await this.pageRepository.deleteOne(id);
-    return 'delete page';
-  }
-
-  findPage3(pageId) {
-    return this.pageRepository.find({ page: pageId });
+      slug: slug(input.title),
+      'updateDate.updatedAt': new Date(),
+    }
   }
 
   private toModel(pageDocument: PageDocument) {

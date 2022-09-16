@@ -18,6 +18,8 @@ export class CreateBlog {
   @Field()
   readonly site: string;
   @Field()
+  readonly page: string;
+  @Field()
   readonly category: string;
   @Field()
   readonly src: string;

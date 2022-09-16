@@ -6,7 +6,7 @@ import {
   ResolveField,
   Parent,
 } from '@nestjs/graphql';
-import { GetPageArgs } from '../dto/page.args';
+import { GetPage } from '../dto/page.args';
 import { CreatePage, UpdatePage } from '../dto/page.input';
 import { Page2, Page3, Page5, Page6 } from '../entities/page.model';
 import { Page6Service, Page5Service } from '../service';
@@ -24,12 +24,12 @@ export class Page5Resolver {
   }
 
   @Mutation(() => Page5, { name: 'updatePage5' })
-  update(@Args() id: GetPageArgs, @Args('input') input: UpdatePage) {
+  update(@Args() id: GetPage, @Args('input') input: UpdatePage) {
     return this.page5Service.update(id, input);
   }
 
   @Mutation(() => String, { name: 'deletePage5' })
-  delete(@Args() id: GetPageArgs) {
+  delete(@Args() id: GetPage) {
     return this.page5Service.deletePage(id);
   }
 

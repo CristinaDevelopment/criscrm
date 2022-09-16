@@ -1,16 +1,20 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { ProductService } from './product.service';
 
-import { CreateProductInput, UpdateProductInput } from './dto/product.input';
-import { Product } from './entities/product.model';
-import { GetProductArgs, GetSiteArgs } from './dto/product.args';
+import { CreateProduct, UpdateProduct } from './dto/product.input';
+import { ListProductResponse, Product } from './entities/product.model';
+import { GetPage, GetProductArgs, GetSite } from './dto/product.args';
+import ConnectionArgs, {
+  getPagingParameters,
+} from 'src/common/pagination/relay/connection.args';
+import { connectionFromArraySlice } from 'graphql-relay';
 @Resolver(() => Product)
 export class ProductResolver {
   constructor(private readonly productService: ProductService) {}
 
   @Mutation(() => Product, { name: 'createProduct' })
   createProduct(
-    @Args('input') input: CreateProductInput,
+    @Args('input') input: CreateProduct,
     @Args('type') type: string,
   ) {
     return this.productService.createProduct(input, type);
@@ -18,7 +22,7 @@ export class ProductResolver {
   @Mutation(() => Product, { name: 'updateProduct' })
   updateSite(
     @Args() id: GetProductArgs,
-    @Args('input') input: UpdateProductInput,
+    @Args('input') input: UpdateProduct,
     @Args('type') type: string,
   ) {
     return this.productService.updateProduct(id, input, type);
@@ -29,7 +33,7 @@ export class ProductResolver {
   }
 
   @Mutation(() => String, { name: 'deleteProducts' })
-  deleteProducts(@Args() site: GetSiteArgs, @Args('type') type: string) {
+  deleteProducts(@Args() site: GetSite, @Args('type') type: string) {
     return this.productService.deleteProducts(site, type);
   }
 
@@ -37,8 +41,33 @@ export class ProductResolver {
   getProduct(@Args() id: GetProductArgs, @Args('type') type: string) {
     return this.productService.getProduct(id, type);
   }
-  @Query(() => [Product], { name: 'getProducts' })
-  getProducts(@Args() site: GetSiteArgs, @Args('type') type: string) {
-    return this.productService.getProducts(site, type);
+  @Query(() => [Product], { name: 'getProductsBySite' })
+  getProductsBySite(@Args() site: GetSite, @Args('type') type: string) {
+    return this.productService.getProductsBySite(site, type);
+  }
+  @Query(() => [Product], { name: 'getProductsByPage' })
+  getProductsByPage(@Args() page: GetPage, @Args('type') type: string) {
+    return this.productService.getProductsByPage(page, type);
+  }
+
+  @Query(() => ListProductResponse, { name: 'listProductWithCursor' })
+  async findAllWithCursor(
+    @Args('args') args: ConnectionArgs,
+    @Args('type') type: string,
+  ): Promise<ListProductResponse> {
+    const { limit, offset } = getPagingParameters(args);
+    const { data, count } = await this.productService.all(
+      {
+        limit,
+        offset,
+      },
+      type,
+    );
+    const page = connectionFromArraySlice(data, args, {
+      arrayLength: count,
+      sliceStart: offset || 0,
+    });
+
+    return { page, pageData: { count, limit, offset } };
   }
 }

@@ -1,5 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { AbstractModel } from 'src/common/abstract';
+import { RelayTypes } from 'src/common/pagination/relay/relay.types';
 
 @ObjectType()
 export class Product extends AbstractModel {
@@ -164,3 +165,6 @@ export class SizesProduct {
 export class Clothing extends Product {}
 @ObjectType()
 export class Furniture extends Product {}
+
+@ObjectType()
+export class ListProductResponse extends RelayTypes<Product>(Product) {}

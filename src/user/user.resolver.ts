@@ -1,5 +1,5 @@
 import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
-import { GetSiteArgs, GetUserArgs } from './dto/user.args';
+import { GetSite, GetUserArgs } from './dto/user.args';
 import { CreateUserInput, UpdateUserInput } from './dto/user.input';
 import { UserService } from './user.service';
 import { User } from './entities/user.model';
@@ -23,7 +23,7 @@ export class UserResolver {
     return this.userService.deleteUser(id);
   }
   @Mutation(() => String, { name: 'deleteUsers' })
-  deleteUsers(@Args() site: GetSiteArgs) {
+  deleteUsers(@Args() site: GetSite) {
     return this.userService.deleteUsers(site);
   }
 

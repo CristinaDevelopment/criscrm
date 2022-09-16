@@ -1,5 +1,6 @@
 import { Logger, NotFoundException } from '@nestjs/common';
 import { FilterQuery, Model, Types, UpdateQuery } from 'mongoose';
+import { ListInput } from '../pagination/dto/list.input';
 import { AbstractDocument } from './abstract.schema';
 
 export abstract class AbstractRepository<TDocument extends AbstractDocument> {
@@ -58,4 +59,16 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
   async deleteMany(filterQuery: FilterQuery<TDocument>) {
     return this.model.deleteMany(filterQuery);
   }
+
+  findAll(paginationQuery: ListInput) {
+    const { limit, offset } = paginationQuery;
+    return this.model.find().skip(offset).limit(limit).exec();
+  }
+
+  async All(paginationQuery: ListInput) {
+    const count = await this.model.count();
+    const data = await this.findAll(paginationQuery);
+    return { data, count };
+  }
+
 }

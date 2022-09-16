@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { BlogModule } from 'src/blog/blog.module';
 import { ProductModule } from 'src/product/product.module';
 import {
   Page0,
@@ -53,6 +54,7 @@ import {
 @Module({
   imports: [
     ProductModule,
+    BlogModule,
     MongooseModule.forFeature([{ name: Page0.name, schema: Page0Schema }]),
     MongooseModule.forFeature([{ name: Page1.name, schema: Page1Schema }]),
     MongooseModule.forFeature([{ name: Page2.name, schema: Page2Schema }]),

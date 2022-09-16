@@ -8,11 +8,18 @@ export class Blog extends AbstractModel {
   @Field()
   readonly site: string;
   @Field()
-  readonly category: string;
-  @Field({ nullable: true })
-  readonly createdAt?: Date;
-  @Field({ nullable: true })
-  readonly updatedAt?: Date;
+  readonly page: string;
+
+  @Field(() => UpdateDateBlog)
+  readonly updateDate: UpdateDateBlog | string;
+}
+
+@ObjectType()
+export class UpdateDateBlog {
+  @Field()
+  createdAt: Date;
+  @Field()
+  updatedAt: Date;
 }
 
 @ObjectType()
@@ -23,6 +30,8 @@ export class DataBlog {
   readonly slug: string;
   @Field()
   readonly content: string;
+  @Field()
+  readonly category: string;
   @Field()
   readonly description: string;
   @Field()

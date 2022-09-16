@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type PageDataDto {
+  count: Float!
+  limit: Float!
+  offset: Float!
+}
+
 type Product {
   _id: ID!
   article: Article!
@@ -73,13 +79,80 @@ type SpecsProduct {
   text: String!
 }
 
+type ListProductResponse {
+  page: ProductConnection!
+  pageData: PageDataDto
+}
+
+type ProductConnection {
+  edges: [ProductEdge!]
+  pageInfo: ProductPageInfo
+}
+
+type ProductEdge {
+  cursor: String
+  node: Product
+}
+
+type ProductPageInfo {
+  startCursor: String
+  endCursor: String
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
+}
+
+type Blog {
+  _id: ID!
+  data: DataBlog!
+  site: String!
+  page: String!
+  updateDate: UpdateDateBlog!
+}
+
+type UpdateDateBlog {
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type DataBlog {
+  title: String!
+  slug: String!
+  content: String!
+  category: String!
+  description: String!
+  meta: String!
+  tags: [Tags!]!
+  author: String!
+  thumbnail: ImageBlog!
+  seo: SeoBlog!
+}
+
+type SeoBlog {
+  name: String!
+  href: String!
+  description: String!
+  image: ImageBlog!
+}
+
+type Tags {
+  uid: String!
+  text: String!
+}
+
+type ImageBlog {
+  src: String!
+  alt: String!
+}
+
 type Page {
   _id: ID!
   data: DataPage!
   slug: String!
   section: [ComponentPage!]!
-  page: [Page]
   updateDate: UpdateDatePage!
+  page: [Page]
+  product: [Product]
+  blog: [Blog!]
 }
 
 type UpdateDatePage {
@@ -116,8 +189,10 @@ type Page0 {
   data: DataPage!
   slug: String!
   section: [ComponentPage!]!
-  page: [Page1!]!
   updateDate: UpdateDatePage!
+  page: [Page0!]!
+  product: [Product!]!
+  blog: [Blog!]!
 }
 
 type Page1 {
@@ -125,8 +200,10 @@ type Page1 {
   data: DataPage!
   slug: String!
   section: [ComponentPage!]!
-  page: [Page2!]!
   updateDate: UpdateDatePage!
+  page: [Page1!]!
+  product: [Product!]!
+  blog: [Blog!]!
 }
 
 type Page2 {
@@ -134,9 +211,10 @@ type Page2 {
   data: DataPage!
   slug: String!
   section: [ComponentPage!]!
-  page: [Page3!]!
   updateDate: UpdateDatePage!
-  product(type: String!): [Product!]!
+  page: [Page2!]!
+  product: [Product!]!
+  blog: [Blog!]!
 }
 
 type Page3 {
@@ -144,8 +222,10 @@ type Page3 {
   data: DataPage!
   slug: String!
   section: [ComponentPage!]!
-  page: [Page4!]!
   updateDate: UpdateDatePage!
+  page: [Page3!]!
+  product: [Product!]!
+  blog: [Blog!]!
 }
 
 type Page4 {
@@ -153,8 +233,10 @@ type Page4 {
   data: DataPage!
   slug: String!
   section: [ComponentPage!]!
-  page: [Page5!]!
   updateDate: UpdateDatePage!
+  page: [Page5!]!
+  product: [Product]
+  blog: [Blog!]
 }
 
 type Page5 {
@@ -162,8 +244,10 @@ type Page5 {
   data: DataPage!
   slug: String!
   section: [ComponentPage!]!
-  page: [Page6!]!
   updateDate: UpdateDatePage!
+  page: [Page6!]!
+  product: [Product]
+  blog: [Blog!]
 }
 
 type Page6 {
@@ -171,8 +255,32 @@ type Page6 {
   data: DataPage!
   slug: String!
   section: [ComponentPage!]!
-  page: [Page]
   updateDate: UpdateDatePage!
+  page: [Page]
+  product: [Product]
+  blog: [Blog!]
+}
+
+type ListPageResponse {
+  page: PageConnection!
+  pageData: PageDataDto
+}
+
+type PageConnection {
+  edges: [PageEdge!]
+  pageInfo: PagePageInfo
+}
+
+type PageEdge {
+  cursor: String
+  node: Page
+}
+
+type PagePageInfo {
+  startCursor: String
+  endCursor: String
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
 }
 
 type Site {
@@ -181,7 +289,6 @@ type Site {
   register: [Register!]!
   client: String!
   url: String!
-  product(type: String!): [Product!]!
   page: [Page0!]!
   updateDate: UpdateDateSite!
 }
@@ -199,17 +306,17 @@ type Register {
 
 type Data {
   name: String!
-  numberPhone: Float!
-  address: String!
+  numberPhone: Float
+  address: String
   type: String!
   users: [String!]!
   location: String
   dataBase: [DataBase!]!
   description: String!
   domain: Domain!
-  image: Image!
-  logo: Image!
-  icon: Image!
+  image: Image
+  logo: Image
+  icon: Image
 }
 
 type DataBase {
@@ -229,42 +336,26 @@ type Domain {
   dlt: String!
 }
 
-type Blog {
-  _id: ID!
-  data: DataBlog!
-  site: String!
-  category: String!
-  createdAt: DateTime
-  updatedAt: DateTime
+type ListSiteResponse {
+  page: SiteConnection!
+  pageData: PageDataDto
 }
 
-type DataBlog {
-  title: String!
-  slug: String!
-  content: String!
-  description: String!
-  meta: String!
-  tags: [Tags!]!
-  author: String!
-  thumbnail: ImageBlog!
-  seo: SeoBlog!
+type SiteConnection {
+  edges: [SiteEdge!]
+  pageInfo: SitePageInfo
 }
 
-type SeoBlog {
-  name: String!
-  href: String!
-  description: String!
-  image: ImageBlog!
+type SiteEdge {
+  cursor: String
+  node: Site
 }
 
-type Tags {
-  uid: String!
-  text: String!
-}
-
-type ImageBlog {
-  src: String!
-  alt: String!
+type SitePageInfo {
+  startCursor: String
+  endCursor: String
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
 }
 
 type User {
@@ -300,14 +391,30 @@ type Upload {
 }
 
 type Query {
-  getSite(_id: ID!): Site!
-  getSites: [Site!]!
+  findSite(_id: ID!): Site!
+  findSites: [Site!]!
+  sitesByPagination(input: ListInput!): [Site!]!
+  listSitesWithCursor(args: ConnectionArgs!): ListSiteResponse!
   getProduct(_id: ID!, type: String!): Product!
-  getProducts(site: String!, type: String!): [Product!]!
-  getPages0: [Page0!]!
-  getPages1: [Page1!]!
-  getPage2(_id: ID!): Page2!
-  getPages2: [Page2!]!
+  getProductsBySite(site: String!, type: String!): [Product!]!
+  getProductsByPage(page: String!, type: String!): [Product!]!
+  listProductWithCursor(args: ConnectionArgs!, type: String!): ListProductResponse!
+  findPage0(_id: ID!): Page0!
+  findPages0BySite(site: String!): [Page0!]!
+  findPages0: [Page0!]!
+  listPages0WithCursor(args: ConnectionArgs!): ListPageResponse!
+  findPage1(_id: ID!): Page1!
+  findPages1BySite(site: String!): [Page1!]!
+  findPages1: [Page1!]!
+  listPages1WithCursor(args: ConnectionArgs!): ListPageResponse!
+  findPage2(_id: ID!): Page2!
+  findPages2BySite(site: String!): [Page2!]!
+  findPages2: [Page2!]!
+  listPages2WithCursor(args: ConnectionArgs!): ListPageResponse!
+  findPage3(_id: ID!): Page3!
+  findPages3BySite(site: String!): [Page3!]!
+  findPages3: [Page3!]!
+  listPages3WithCursor(args: ConnectionArgs!): ListPageResponse!
   blog(id: Int!): Blog!
   getUser(_id: ID!): User!
   getUserByEmail(email: String!): User!
@@ -316,13 +423,35 @@ type Query {
   upload(id: Int!): Upload!
 }
 
+input ListInput {
+  """classical limit"""
+  limit: Float!
+
+  """classical offset"""
+  offset: Float!
+}
+
+input ConnectionArgs {
+  """Paginate before opaque cursor"""
+  before: String
+
+  """Paginate after opaque cursor"""
+  after: String
+
+  """Paginate first"""
+  first: Float
+
+  """Paginate last"""
+  last: Float
+}
+
 type Mutation {
   createSite(input: CreateSite!): Site!
   updateSite(_id: ID!, input: UpdateSite!): Site!
   deleteSite(_id: ID!): String!
   deleteSites: String!
-  createProduct(input: CreateProductInput!, type: String!): Product!
-  updateProduct(_id: ID!, input: UpdateProductInput!, type: String!): Product!
+  createProduct(input: CreateProduct!, type: String!): Product!
+  updateProduct(_id: ID!, input: UpdateProduct!, type: String!): Product!
   deleteProduct(_id: ID!, type: String!): String!
   deleteProducts(site: String!, type: String!): String!
   createPage0(input: CreatePage!): Page0!
@@ -343,9 +472,7 @@ type Mutation {
   createPage5(input: CreatePage!): Page5!
   updatePage5(_id: ID!, input: UpdatePage!): Page5!
   deletePage5(_id: ID!): String!
-  addBlog(input: CreateBlog!): Blog!
-  createBlogs(createBlogInput: CreateBlogInput!): Blog!
-  updateBlog(updateBlogInput: UpdateBlogInput!): Blog!
+  createBlog(input: CreateBlog!): Blog!
   removeBlog(id: Int!): Blog!
   createUser(input: CreateUserInput!): User!
   updateUser(_id: ID!, input: UpdateUserInput!): User!
@@ -378,7 +505,7 @@ input UpdateSite {
   uid: String!
 }
 
-input CreateProductInput {
+input CreateProduct {
   name: String!
   mark: String!
   description: String!
@@ -390,7 +517,7 @@ input CreateProductInput {
   page: String!
 }
 
-input UpdateProductInput {
+input UpdateProduct {
   name: String!
   mark: String!
   description: String!
@@ -428,20 +555,10 @@ input CreateBlog {
   author: String!
   description: String!
   site: String!
+  page: String!
   category: String!
   src: String!
   alt: String!
-}
-
-input CreateBlogInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateBlogInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
 }
 
 input CreateUserInput {

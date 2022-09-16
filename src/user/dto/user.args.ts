@@ -10,7 +10,7 @@ export class GetUserArgs {
   _id: string;
 }
 @ArgsType()
-export class GetSiteArgs {
+export class GetSite {
   @Field()
   site: string;
 }

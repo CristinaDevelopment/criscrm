@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { RelayTypes } from 'src/common/pagination/relay/relay.types';
 import { Product } from 'src/product/entities/product.model';
 import { AbstractModel } from '../../common/abstract/abstract.model';
 // import { Blog } from '../../blog/entities/blog.model';
@@ -16,9 +17,9 @@ export class Site extends AbstractModel {
   readonly client: string;
   @Field()
   readonly url: string;
-  @Field(() => [Product])
-  readonly product?: Product[];
-  @Field(() => [Page0])
+  // @Field(() => [Product], { nullable: 'itemsAndList' })
+  // readonly product?: Product[];
+  @Field(() => [Page0], { nullable: 'itemsAndList' })
   readonly page?: Page0[];
   @Field(() => UpdateDateSite)
   readonly updateDate: UpdateDateSite | string;
@@ -35,12 +36,8 @@ export class UpdateDateSite {
 export class Register {
   @Field()
   readonly uid: string;
-  // @Field()
-  // readonly name: string;
   @Field()
   readonly change: string;
-  // @Field()
-  // readonly role: string;
   @Field()
   readonly date: string;
 }
@@ -48,9 +45,9 @@ export class Register {
 export class Data {
   @Field()
   readonly name: string;
-  @Field()
+  @Field({ nullable: true })
   readonly numberPhone?: number;
-  @Field()
+  @Field({ nullable: true })
   readonly address?: string;
   @Field()
   readonly type: string;
@@ -64,11 +61,11 @@ export class Data {
   readonly description: string;
   @Field(() => Domain)
   readonly domain: Domain | string;
-  @Field(() => Image)
+  @Field(() => Image, { nullable: true })
   readonly image?: Image | string;
-  @Field(() => Image)
+  @Field(() => Image, { nullable: true })
   readonly logo?: Image | string;
-  @Field(() => Image)
+  @Field(() => Image, { nullable: true })
   readonly icon?: Image | string;
 }
 
@@ -155,3 +152,6 @@ export class User extends AbstractModel {
   @Field(() => Image)
   readonly image: Image | string;
 }
+
+@ObjectType()
+export class ListSiteResponse extends RelayTypes<Site>(Site) {}
