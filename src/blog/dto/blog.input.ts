@@ -1,4 +1,4 @@
-import { InputType, Field, PartialType } from '@nestjs/graphql';
+import { InputType, Field, PartialType, OmitType } from '@nestjs/graphql';
 
 
 @InputType()
@@ -28,4 +28,4 @@ export class CreateBlog {
 }
 
 @InputType()
-export class UpdateBlog extends PartialType(CreateBlog) {}
+export class UpdateBlog extends OmitType(CreateBlog, ['site', 'page']) {}

@@ -10,6 +10,7 @@ import { GraphQLModule } from '@nestjs/graphql';
       autoSchemaFile: 'src/schema.gql',
       debug: true,
       playground: true,
+      installSubscriptionHandlers: true
     }),
   ],
 })

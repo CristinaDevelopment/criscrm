@@ -19,12 +19,21 @@ export class Page2Service {
   async update(id: GetPage, input: UpdatePage) {
     const document = await this.pageRepository.findOneAndUpdate(id, {
       $set: this.pageUpdate(input),
+      $push: { 'updateDate.register': { updatedAt: new Date() } },
+
     });
     return this.toModel(document);
   }
 
   async findPage(id: GetPage) {
     const document = await this.pageRepository.findOne(id);
+    return this.toModel(document);
+  }
+  async findPageBySite(input: GetSite, slug: string) {
+    const document = await this.pageRepository.findOne({
+      site: input.site,
+      slug: slug,
+    });
     return this.toModel(document);
   }
   findPagesBySite(site: GetSite) {
@@ -91,7 +100,6 @@ export class Page2Service {
       },
 
       slug: slug(input.title),
-      'updateDate.updatedAt': new Date(),
     }
   }
   private toModel(pageDocument: PageDocument) {

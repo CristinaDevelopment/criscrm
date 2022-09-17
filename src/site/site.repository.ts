@@ -9,7 +9,9 @@ import { SiteDocument } from './entities/site.schema';
 export class SiteRepository extends AbstractRepository<SiteDocument> {
   protected readonly logger = new Logger(SiteRepository.name);
 
-  constructor(@InjectModel(Site.name) siteModel: Model<SiteDocument>) {
+  constructor(
+    @InjectModel(Site.name, 'sitesDB') siteModel: Model<SiteDocument>,
+  ) {
     super(siteModel);
   }
 }

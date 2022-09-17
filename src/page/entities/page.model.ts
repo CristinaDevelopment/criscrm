@@ -1,5 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Blog } from 'src/blog/entities/blog.model';
+import { Image, Seo, UpdateDate } from 'src/common/model/model';
 import { RelayTypes } from 'src/common/pagination/relay/relay.types';
 import { Product } from 'src/product/entities/product.model';
 import { AbstractModel } from '../../common/abstract/abstract.model';
@@ -12,8 +13,8 @@ export class Page extends AbstractModel {
   readonly slug: string;
   @Field(() => [ComponentPage])
   readonly section?: ComponentPage[];
-  @Field(() => UpdateDatePage)
-  readonly updateDate: UpdateDatePage | string;
+  @Field(() => UpdateDate)
+  readonly updateDate: UpdateDate | string;
   @Field(() => [Page], { nullable: 'itemsAndList' })
   readonly page?: Page[];
   @Field(() => [Product], { nullable: 'itemsAndList' })
@@ -22,44 +23,20 @@ export class Page extends AbstractModel {
   readonly blog?: Blog[];
 }
 
-@ObjectType()
-export class UpdateDatePage {
-  @Field()
-  createdAt: Date;
-  @Field()
-  updatedAt: Date;
-}
+
 
 @ObjectType()
 export class DataPage {
   @Field()
   readonly type: string;
-  @Field(() => ImagePage)
-  readonly icon?: ImagePage | string;
-  @Field(() => SeoPage)
-  readonly seo: SeoPage | string;
+  @Field(() => Image)
+  readonly icon?: Image | string;
+  @Field(() => Seo)
+  readonly seo: Seo | string;
 }
 
-@ObjectType()
-export class SeoPage {
-  @Field()
-  readonly title: string;
-  @Field()
-  readonly href: string;
-  @Field()
-  readonly description: string;
 
-  @Field(() => ImagePage)
-  readonly image: ImagePage | string;
-}
 
-@ObjectType()
-export class ImagePage {
-  @Field()
-  readonly src: string;
-  @Field()
-  readonly alt: string;
-}
 
 @ObjectType()
 export class ComponentPage {

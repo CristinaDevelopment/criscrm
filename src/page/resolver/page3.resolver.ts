@@ -49,6 +49,11 @@ export class Page3Resolver {
     return this.page3Service.findPage(id);
   }
 
+  @Query(() => Page3, { name: 'findPage3BySite' })
+  findPageBySite(@Args() input: GetSite, @Args('slug') slug: string) {
+    return this.page3Service.findPageBySite(input, slug);
+  }
+
   @Query(() => [Page3], { name: 'findPages3BySite' })
   findPagesBySite(@Args() site: GetSite) {
     return this.page3Service.findPagesBySite(site);
@@ -81,9 +86,10 @@ export class Page3Resolver {
     return { page, pageData: { count, limit, offset } };
   }
 
-  @ResolveField('page', () => [Page3])
-  getPage(@Parent() input: Page3) {
-    return this.page4Service.findPage4(input._id);
+  @ResolveField('page', () => [Page4])
+  getPage(@Parent() page: Page3) {
+    const { _id } = page;
+    return this.page4Service.findPage4(_id);
   }
 
   @ResolveField('blog', () => [Blog])

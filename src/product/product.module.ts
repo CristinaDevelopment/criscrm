@@ -11,10 +11,13 @@ import {
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: Clothing.name, schema: ClothingSchema },
-      { name: Furniture.name, schema: FurnitureSchema },
-    ]),
+    MongooseModule.forFeature(
+      [
+        { name: Clothing.name, schema: ClothingSchema },
+        { name: Furniture.name, schema: FurnitureSchema },
+      ],
+      'productsDB',
+    ),
   ],
   providers: [
     ProductResolver,

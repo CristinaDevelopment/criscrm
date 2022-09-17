@@ -35,10 +35,14 @@ export class ProductService {
     if (type === 'clothing') {
       data = await this.productRepositoryClothing.findOneAndUpdate(id, {
         $set: this.productUpdated(input),
+        $push: { 'updateDate.register': { updatedAt: new Date() } },
+
       });
     } else if (type === 'furniture') {
       data = await this.productRepositoryFurniture.findOneAndUpdate(id, {
         $set: this.productUpdated(input),
+        $push: { 'updateDate.register': { updatedAt: new Date() } },
+
       });
     }
     return this.toModel(data);
@@ -98,7 +102,7 @@ export class ProductService {
     } else if (type === 'furniture') {
       data = this.productRepositoryFurniture.find({ page: pageUi });
     } else {
-      data = []
+      data = [];
     }
     return data;
   }
@@ -136,7 +140,6 @@ export class ProductService {
     return data;
   }
 
-
   private productCreated(input: CreateProduct) {
     return {
       article: {
@@ -153,7 +156,7 @@ export class ProductService {
         },
         // route: input.route,
         seo: {
-          name: capitalizar(input.name),
+          title: capitalizar(input.name),
           href: slug(input.name),
           description: input.description,
           image: {
@@ -167,7 +170,6 @@ export class ProductService {
       page: input.page,
       updateDate: {
         createdAt: new Date(),
-        updatedAt: new Date(),
       },
     };
   }
@@ -186,7 +188,7 @@ export class ProductService {
           href: slug(input.featured),
         },
         seo: {
-          name: capitalizar(input.name),
+          title: capitalizar(input.name),
           href: slug(input.name),
           description: input.description,
           image: {
@@ -196,7 +198,6 @@ export class ProductService {
           },
         },
       },
-      'updateDate.updatedAt': new Date(),
     };
   }
 

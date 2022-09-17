@@ -9,7 +9,8 @@ import { ProductDocument } from './entities/product.schema';
 export class ProductRepositoryClothing extends AbstractRepository<ProductDocument> {
   protected readonly logger = new Logger(ProductRepositoryClothing.name);
   constructor(
-    @InjectModel(Clothing.name) productModelClothing: Model<ProductDocument>,
+    @InjectModel(Clothing.name, 'productsDB')
+    productModelClothing: Model<ProductDocument>,
   ) {
     super(productModelClothing);
   }
@@ -18,7 +19,8 @@ export class ProductRepositoryClothing extends AbstractRepository<ProductDocumen
 export class ProductRepositoryFurniture extends AbstractRepository<ProductDocument> {
   protected readonly logger = new Logger(ProductRepositoryFurniture.name);
   constructor(
-    @InjectModel(Furniture.name) productModel: Model<ProductDocument>,
+    @InjectModel(Furniture.name, 'productsDB')
+    productModel: Model<ProductDocument>,
   ) {
     super(productModel);
   }

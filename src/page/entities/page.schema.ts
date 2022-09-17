@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AbstractDocument } from 'src/common/abstract';
-import { ComponentPage, DataPage, UpdateDatePage } from './page.model';
+import { UpdateDate } from 'src/common/model/model';
+import { ComponentPage, DataPage } from './page.model';
 
 
 @Schema({ versionKey: false })
@@ -15,8 +16,8 @@ export class PageDocument extends AbstractDocument {
   site: string;
   @Prop([ComponentPage])
   section: ComponentPage[];
-  @Prop({ type: UpdateDatePage })
-  updateDate: UpdateDatePage;
+  @Prop({ type: UpdateDate })
+  updateDate: UpdateDate;
 
 }
 

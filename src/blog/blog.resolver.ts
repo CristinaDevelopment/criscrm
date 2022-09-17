@@ -1,29 +1,72 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  Subscription,
+} from '@nestjs/graphql';
 import { BlogService } from './blog.service';
-import { Blog } from './entities/blog.model';
-import { CreateBlog } from './dto/blog.input';
+import { Blog, ListBlogResponse } from './entities/blog.model';
+import { CreateBlog, UpdateBlog } from './dto/blog.input';
+import { PubSub } from 'graphql-subscriptions';
+import { GetBlog } from './dto/blog.args';
+import ConnectionArgs, {
+  getPagingParameters,
+} from 'src/common/pagination/relay/connection.args';
+import { connectionFromArraySlice } from 'graphql-relay';
 
 @Resolver(() => Blog)
 export class BlogResolver {
-  constructor(private readonly blogService: BlogService) {}
+  constructor(
+    private readonly blogService: BlogService,
+    private readonly pubSub: PubSub,
+  ) {}
 
   @Mutation(() => Blog, { name: 'createBlog' })
   create(@Args('input') input: CreateBlog) {
-    return this.blogService.createBlog(input);
+    return this.blogService.create(input);
   }
 
-  @Query(() => [Blog], { name: 'blog' })
+  @Subscription(() => Blog)
+  blogAdded() {
+    return this.pubSub.asyncIterator('blogAdded');
+  }
+
+  @Mutation(() => Blog, { name: 'updateBlog' })
+  update(@Args() id: GetBlog, @Args('input') input: UpdateBlog) {
+    return this.blogService.update(id, input);
+  }
+
+  @Query(() => Blog, { name: 'findBlog' })
+  findOne(@Args() id: GetBlog) {
+    return this.blogService.findOne(id);
+  }
+
+  @Query(() => [Blog], { name: 'findBlogs' })
   findAll() {
     return this.blogService.findAll();
   }
 
-  @Query(() => Blog, { name: 'blog' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.blogService.findOne(id);
+  @Mutation(() => String, { name: 'deleteBlog' })
+  deleteOne(@Args() id: GetBlog) {
+    return this.blogService.deleteOne(id);
   }
 
-  @Mutation(() => Blog)
-  removeBlog(@Args('id', { type: () => Int }) id: number) {
-    return this.blogService.remove(id);
+  @Query(() => ListBlogResponse, { name: 'listPages0WithCursor' })
+  async findAllWithCursor(
+    @Args('args') args: ConnectionArgs,
+  ): Promise<ListBlogResponse> {
+    const { limit, offset } = getPagingParameters(args);
+    const { data, count } = await this.blogService.all({
+      limit,
+      offset,
+    });
+    const page = connectionFromArraySlice(data, args, {
+      arrayLength: count,
+      sliceStart: offset || 0,
+    });
+
+    return { page, pageData: { count, limit, offset } };
   }
 }

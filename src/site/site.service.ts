@@ -23,8 +23,6 @@ export class SiteService {
 
       data: {
         name: input.name,
-        // numberPhone: input.numberPhone,
-        // address: input.address,
         description: input.description,
         dataBase: [],
         users: [],
@@ -38,15 +36,14 @@ export class SiteService {
       url: input.domain,
       updateDate: {
         createdAt: new Date(),
-        updatedAt: new Date(),
+        register: [
+          {
+            uid: input.uid,
+            change: input.change,
+            updatedAt: new Date(),
+          },
+        ],
       },
-      register: [
-        {
-          uid: input.uid,
-          change: input.change,
-          date: Date.now().toString(),
-        },
-      ],
     });
     return this.toModel(document);
   }
@@ -65,13 +62,12 @@ export class SiteService {
         'data.description': input.description,
         'data.type': input.type,
         url: input.domain,
-        'updateDate.updatedAt': new Date(),
       },
       $push: {
-        register: {
+        'updateDate.register': {
           uid: input.uid,
           change: input.change,
-          date: Date.now().toString(),
+          updatedAt: new Date(),
         },
       },
     });
@@ -114,7 +110,6 @@ export class SiteService {
       data: siteDocument.data,
       client: siteDocument.client,
       url: siteDocument.url,
-      register: siteDocument.register,
       updateDate: siteDocument.updateDate,
     };
   }

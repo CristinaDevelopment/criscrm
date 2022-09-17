@@ -1,5 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { AbstractModel } from 'src/common/abstract';
+import { Image, Seo, UpdateDate } from 'src/common/model/model';
+import { RelayTypes } from 'src/common/pagination/relay/relay.types';
 
 @ObjectType()
 export class Blog extends AbstractModel {
@@ -10,17 +12,17 @@ export class Blog extends AbstractModel {
   @Field()
   readonly page: string;
 
-  @Field(() => UpdateDateBlog)
-  readonly updateDate: UpdateDateBlog | string;
+  @Field(() => UpdateDate)
+  readonly updateDate: UpdateDate | string;
 }
 
-@ObjectType()
-export class UpdateDateBlog {
-  @Field()
-  createdAt: Date;
-  @Field()
-  updatedAt: Date;
-}
+// @ObjectType()
+// export class UpdateDateBlog {
+//   @Field()
+//   createdAt: Date;
+//   @Field()
+//   updatedAt: Date;
+// }
 
 @ObjectType()
 export class DataBlog {
@@ -40,28 +42,28 @@ export class DataBlog {
   readonly tags: Tags[];
   @Field()
   readonly author: string;
-  @Field(() => ImageBlog)
-  readonly thumbnail: ImageBlog | string;
+  @Field(() => Image)
+  readonly thumbnail: Image | string;
   // @Field(() => Timestamps)
   // readonly timestamps: Timestamps | number;
-  @Field(() => SeoBlog)
-  readonly seo: SeoBlog | string;
+  @Field(() => Seo)
+  readonly seo: Seo | string;
 }
 
 
 
-@ObjectType()
-class SeoBlog {
-  @Field()
-  readonly name: string;
-  @Field()
-  readonly href: string;
-  @Field()
-  readonly description: string;
+// @ObjectType()
+// class SeoBlog {
+//   @Field()
+//   readonly name: string;
+//   @Field()
+//   readonly href: string;
+//   @Field()
+//   readonly description: string;
 
-  @Field(() => ImageBlog)
-  readonly image: ImageBlog | string;
-}
+//   @Field(() => ImageBlog)
+//   readonly image: ImageBlog | string;
+// }
 @ObjectType()
 export class Tags {
   @Field()
@@ -70,10 +72,13 @@ export class Tags {
   readonly text: string;
 }
 
+// @ObjectType()
+// export class ImageBlog {
+//   @Field()
+//   readonly src: string;
+//   @Field()
+//   readonly alt: string;
+// }
+
 @ObjectType()
-export class ImageBlog {
-  @Field()
-  readonly src: string;
-  @Field()
-  readonly alt: string;
-}
+export class ListBlogResponse extends RelayTypes<Blog>(Blog) {}

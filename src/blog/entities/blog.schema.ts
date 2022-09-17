@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AbstractDocument } from 'src/common/abstract';
-import { DataBlog, UpdateDateBlog } from './blog.model';
+import { UpdateDate } from 'src/common/model/model';
+import { DataBlog } from './blog.model';
 
 @Schema({ versionKey: false })
 
@@ -14,8 +15,8 @@ export class BlogDocument extends AbstractDocument {
   @Prop({ trim: true })
   page: string;
 
-  @Prop({ type: UpdateDateBlog })
-  updateDate: UpdateDateBlog;
+  @Prop({ type: UpdateDate })
+  updateDate: UpdateDate;
 
 }
 

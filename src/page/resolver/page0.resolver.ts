@@ -10,12 +10,19 @@ import {
 import { connectionFromArraySlice } from 'graphql-relay';
 import { BlogService } from 'src/blog/blog.service';
 import { Blog } from 'src/blog/entities/blog.model';
-import ConnectionArgs, { getPagingParameters } from 'src/common/pagination/relay/connection.args';
+import ConnectionArgs, {
+  getPagingParameters,
+} from 'src/common/pagination/relay/connection.args';
 import { Product } from 'src/product/entities/product.model';
 import { ProductService } from 'src/product/product.service';
 import { GetPage, GetSite } from '../dto/page.args';
 import { CreatePage, UpdatePage } from '../dto/page.input';
-import { DataPage, ListPageResponse, Page0, Page1 } from '../entities/page.model';
+import {
+  DataPage,
+  ListPageResponse,
+  Page0,
+  Page1,
+} from '../entities/page.model';
 import { Page0Service } from '../service/page0.service';
 import { Page1Service } from '../service/page1.service';
 
@@ -26,7 +33,6 @@ export class Page0Resolver {
     private readonly page1Service: Page1Service,
     private readonly productService: ProductService,
     private readonly blogService: BlogService,
-
   ) {}
 
   @Mutation(() => Page0, { name: 'createPage0' })
@@ -44,6 +50,11 @@ export class Page0Resolver {
     return this.page0Service.findPage(id);
   }
 
+  @Query(() => Page0, { name: 'findPage0BySite' })
+  findPageBySite(@Args() input: GetSite, @Args('slug') slug: string) {
+    return this.page0Service.findPageBySite(input, slug);
+  }
+
   @Query(() => [Page0], { name: 'findPages0BySite' })
   findPagesBySite(@Args() site: GetSite) {
     return this.page0Service.findPagesBySite(site);
@@ -53,7 +64,7 @@ export class Page0Resolver {
   findPages() {
     return this.page0Service.findPages();
   }
-  
+
   @Mutation(() => String, { name: 'deletePage0' })
   delete(@Args() id: GetPage) {
     return this.page0Service.deletePage(id);
@@ -76,7 +87,7 @@ export class Page0Resolver {
     return { page, pageData: { count, limit, offset } };
   }
 
-  @ResolveField('page', () => [Page0])
+  @ResolveField('page', () => [Page1])
   getPage(@Parent() page: Page0) {
     const { _id } = page;
     return this.page1Service.findPage1(_id);
@@ -88,11 +99,11 @@ export class Page0Resolver {
 
     return this.blogService.findByPageId(_id);
   }
-  
+
   @ResolveField('product', () => [Product])
   getProduct(@Parent() page: Page0) {
     const { _id, data } = page;
-    const { type } = data as DataPage
+    const { type } = data as DataPage;
     return this.productService.findByPageUid(_id, type);
   }
 }

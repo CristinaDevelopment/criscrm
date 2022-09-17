@@ -55,13 +55,34 @@ import {
   imports: [
     ProductModule,
     BlogModule,
-    MongooseModule.forFeature([{ name: Page0.name, schema: Page0Schema }]),
-    MongooseModule.forFeature([{ name: Page1.name, schema: Page1Schema }]),
-    MongooseModule.forFeature([{ name: Page2.name, schema: Page2Schema }]),
-    MongooseModule.forFeature([{ name: Page3.name, schema: Page3Schema }]),
-    MongooseModule.forFeature([{ name: Page4.name, schema: Page4Schema }]),
-    MongooseModule.forFeature([{ name: Page5.name, schema: Page5Schema }]),
-    MongooseModule.forFeature([{ name: Page6.name, schema: Page6Schema }]),
+    MongooseModule.forFeature(
+      [{ name: Page0.name, schema: Page0Schema }],
+      'pagesDB',
+    ),
+    MongooseModule.forFeature(
+      [{ name: Page1.name, schema: Page1Schema }],
+      'pagesDB',
+    ),
+    MongooseModule.forFeature(
+      [{ name: Page2.name, schema: Page2Schema }],
+      'pagesDB',
+    ),
+    MongooseModule.forFeature(
+      [{ name: Page3.name, schema: Page3Schema }],
+      'pagesDB',
+    ),
+    MongooseModule.forFeature(
+      [{ name: Page4.name, schema: Page4Schema }],
+      'pagesDB',
+    ),
+    MongooseModule.forFeature(
+      [{ name: Page5.name, schema: Page5Schema }],
+      'pagesDB',
+    ),
+    MongooseModule.forFeature(
+      [{ name: Page6.name, schema: Page6Schema }],
+      'pagesDB',
+    ),
   ],
   providers: [
     Page0Repository,
@@ -85,6 +106,6 @@ import {
     Page6Repository,
     Page6Service,
   ],
-  exports: [Page0Service],
+  exports: [Page0Service, Page1Service, Page2Service],
 })
 export class PageModule {}

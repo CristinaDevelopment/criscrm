@@ -1,5 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { AbstractModel } from 'src/common/abstract';
+import { Image, Seo, UpdateDate } from 'src/common/model/model';
 import { RelayTypes } from 'src/common/pagination/relay/relay.types';
 
 @ObjectType()
@@ -33,10 +34,6 @@ export class Article {
   readonly discountPrice: number;
   @Field()
   readonly description: string;
-  // @Field()
-  // readonly route: string;
-  // @Field(() => [Route])
-  // readonly route: Route[];
   @Field(() => Featured)
   readonly featured: Featured | string;
   @Field(() => Detail, { nullable: true })
@@ -48,20 +45,14 @@ export class Article {
   @Field(() => [TagsProduct])
   readonly tags?: TagsProduct[];
 
-  @Field(() => [ImageProduct], { nullable: true })
-  readonly image?: ImageProduct[];
+  @Field(() => [Image], { nullable: true })
+  readonly image?: Image[];
 
   @Field(() => Seo)
   readonly seo: Seo | string;
 }
 
-@ObjectType()
-export class UpdateDate {
-  @Field()
-  createdAt: Date;
-  @Field()
-  updatedAt: Date;
-}
+
 
 @ObjectType()
 export class Featured {
@@ -86,32 +77,32 @@ export class Detail {
   dimensions: string[];
 }
 
-@ObjectType()
-export class ImageProduct {
-  @Field()
-  readonly uid: string;
-  @Field()
-  readonly src: string;
-  @Field()
-  readonly alt: string;
-}
+// @ObjectType()
+// export class ImageProduct {
+//   @Field()
+//   readonly uid: string;
+//   @Field()
+//   readonly src: string;
+//   @Field()
+//   readonly alt: string;
+// }
 
 // @ObjectType()
 // export class ImageProduct extends Image {}
 
-@ObjectType()
-export class Seo {
-  @Field()
-  readonly name: string;
-  @Field()
-  readonly href: string;
-  @Field()
-  readonly description: string;
-  // @Field(() => ImageProduct)
-  // readonly icon?: ImageProduct | string;
-  @Field(() => ImageProduct)
-  readonly image: ImageProduct | string;
-}
+// @ObjectType()
+// export class Seo {
+//   @Field()
+//   readonly name: string;
+//   @Field()
+//   readonly href: string;
+//   @Field()
+//   readonly description: string;
+//   // @Field(() => ImageProduct)
+//   // readonly icon?: ImageProduct | string;
+//   @Field(() => ImageProduct)
+//   readonly image: ImageProduct | string;
+// }
 
 @ObjectType()
 export class TagsProduct {

@@ -8,6 +8,7 @@ import { UploadModule } from './upload/upload.module';
 import { CommonModule } from './config/common.module';
 import { PageModule } from './page/page.module';
 import { AuthModule } from './auth/auth.module';
+import { PubSubModule } from './pub-sub/pub-sub.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AuthModule } from './auth/auth.module';
     CommonModule,
     PageModule,
     AuthModule,
+    PubSubModule,
   ],
   controllers: [],
   providers: [],

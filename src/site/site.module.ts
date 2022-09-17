@@ -14,7 +14,7 @@ import { PageModule } from 'src/page/page.module';
     ProductModule,
     PageModule,
     BlogModule,
-    MongooseModule.forFeature([{ name: Site.name, schema: SiteSchema }]),
+    MongooseModule.forFeature([{ name: Site.name, schema: SiteSchema }], 'sitesDB'),
   ],
   providers: [SiteRepository, SiteResolver, SiteService],
 })

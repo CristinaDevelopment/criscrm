@@ -18,13 +18,23 @@ export class Page0Service {
   }
   async update(id: GetPage, input: UpdatePage) {
     const document = await this.pageRepository.findOneAndUpdate(id, {
-      $set: this.pageUpdate(input)
+      $set: this.pageUpdate(input),
+      $push: { 'updateDate.register': { updatedAt: new Date() } },
+
     });
     return this.toModel(document);
   }
 
   async findPage(id: GetPage) {
     const document = await this.pageRepository.findOne(id);
+    return this.toModel(document);
+  }
+
+  async findPageBySite(input: GetSite, slug: string) {
+    const document = await this.pageRepository.findOne({
+      site: input.site,
+      slug: slug,
+    });
     return this.toModel(document);
   }
 
@@ -53,7 +63,6 @@ export class Page0Service {
   private pageCreated(input: CreatePage) {
     return {
       data: {
-        // title: input.title,
         type: input.type,
         seo: {
           title: capitalizar(input.title),
@@ -69,7 +78,6 @@ export class Page0Service {
       site: input.site,
       updateDate: {
         createdAt: new Date(),
-        updatedAt: new Date(),
       },
       slug: slug(input.title),
       section: [],
@@ -91,8 +99,7 @@ export class Page0Service {
       },
 
       slug: slug(input.title),
-      'updateDate.updatedAt': new Date(),
-    }
+    };
   }
 
   private toModel(pageDocument: PageDocument) {

@@ -28,7 +28,6 @@ export class Page4Service {
       site: input.site,
       updateDate: {
         createdAt: new Date(),
-        updatedAt: new Date(),
       },
       slug: slug(input.title),
       section: [],
@@ -53,9 +52,10 @@ export class Page4Service {
         },
 
         slug: slug(input.title),
-        'updateDate.updatedAt': new Date(),
 
       },
+      $push: { 'updateDate.register': { updatedAt: new Date() } },
+
     });
     return this.toModel(document);
   }

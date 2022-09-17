@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Image, UpdateDate } from 'src/common/model/model';
 import { RelayTypes } from 'src/common/pagination/relay/relay.types';
 import { Product } from 'src/product/entities/product.model';
 import { AbstractModel } from '../../common/abstract/abstract.model';
@@ -11,8 +12,8 @@ export class Site extends AbstractModel {
   readonly data: Data | string;
   // @Field(() => [Children])
   // readonly children: Children[];
-  @Field(() => [Register])
-  readonly register: Register[];
+  // @Field(() => [Register])
+  // readonly register: Register[];
   @Field()
   readonly client: string;
   @Field()
@@ -21,26 +22,27 @@ export class Site extends AbstractModel {
   // readonly product?: Product[];
   @Field(() => [Page0], { nullable: 'itemsAndList' })
   readonly page?: Page0[];
-  @Field(() => UpdateDateSite)
-  readonly updateDate: UpdateDateSite | string;
-}
-@ObjectType()
-export class UpdateDateSite {
-  @Field()
-  createdAt: Date;
-  @Field()
-  updatedAt: Date;
+  @Field(() => UpdateDate)
+  readonly updateDate: UpdateDate | string;
 }
 
-@ObjectType()
-export class Register {
-  @Field()
-  readonly uid: string;
-  @Field()
-  readonly change: string;
-  @Field()
-  readonly date: string;
-}
+// @ObjectType()
+// export class UpdateDateSite {
+//   @Field()
+//   createdAt: Date;
+//   @Field(() => [Register], { nullable: true })
+//   readonly register?: Register[];
+// }
+
+// @ObjectType()
+// export class Register {
+//   @Field()
+//   readonly uid: string;
+//   @Field()
+//   readonly change: string;
+//   @Field()
+//   updatedAt: Date;
+// }
 @ObjectType()
 export class Data {
   @Field()
@@ -99,18 +101,18 @@ export class Data {
 //   readonly html: string;
 // }
 
-@ObjectType()
-export class Seo {
-  @Field()
-  readonly name: string;
-  @Field()
-  readonly href: string;
-  @Field()
-  readonly description: string;
+// @ObjectType()
+// export class Seo {
+//   @Field()
+//   readonly name: string;
+//   @Field()
+//   readonly href: string;
+//   @Field()
+//   readonly description: string;
 
-  @Field(() => Image)
-  readonly image: Image | string;
-}
+//   @Field(() => Image)
+//   readonly image: Image | string;
+// }
 
 @ObjectType()
 export class DataBase {
@@ -125,13 +127,13 @@ export class DataBase {
   readonly image: Image | string;
 }
 
-@ObjectType()
-export class Image {
-  @Field()
-  readonly src: string;
-  @Field()
-  readonly alt: string;
-}
+// @ObjectType()
+// export class Image {
+//   @Field()
+//   readonly src: string;
+//   @Field()
+//   readonly alt: string;
+// }
 @ObjectType()
 export class Domain {
   @Field()

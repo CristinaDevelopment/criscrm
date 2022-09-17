@@ -8,7 +8,9 @@ import { UserDocument } from './entities/user.schema';
 @Injectable()
 export class UserRepository extends AbstractRepository<UserDocument> {
   protected readonly logger = new Logger(UserRepository.name);
-  constructor(@InjectModel(User.name) userModel: Model<UserDocument>) {
+  constructor(
+    @InjectModel(User.name, 'sitesDB') userModel: Model<UserDocument>,
+  ) {
     super(userModel);
   }
 }

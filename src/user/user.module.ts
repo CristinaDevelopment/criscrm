@@ -8,7 +8,11 @@ import { UserSchema } from './entities/user.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    // User,
+    MongooseModule.forFeature(
+      [{ name: User.name, schema: UserSchema }],
+      'sitesDB',
+    ),
   ],
   providers: [UserResolver, UserService, UserRepository],
   exports: [UserService],
