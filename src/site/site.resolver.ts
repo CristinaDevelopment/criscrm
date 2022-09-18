@@ -7,18 +7,10 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { ProductService } from 'src/product/product.service';
-import { GetChildren, GetSite } from './dto/site.args';
-import {
-  AddChildren,
-  CreateSite,
-  DeleteChildren,
-  UpdateChildren,
-  UpdateSite,
-} from './dto/site.input';
+import { GetSite } from './dto/site.args';
+import { CreateSite, UpdateSite } from './dto/site.input';
 import { ListSiteResponse, Site } from './entities/site.model';
 import { SiteService } from './site.service';
-import { Product } from '../product/entities/product.model';
-// import { Blog } from 'src/blog/entities/blog.model';
 import { BlogService } from 'src/blog/blog.service';
 import { Page0Service } from 'src/page/service/page0.service';
 import { Page0 } from '../page/entities/page.model';
@@ -27,6 +19,7 @@ import ConnectionArgs, {
   getPagingParameters,
 } from 'src/common/pagination/relay/connection.args';
 import { connectionFromArraySlice } from 'graphql-relay';
+import { UpdateDataBase } from './dto/site.input';
 
 @Resolver(() => Site)
 export class SiteResolver {
@@ -38,17 +31,24 @@ export class SiteResolver {
   ) {}
 
   @Mutation(() => Site, { name: 'createSite' })
-  createSite(@Args('input') input: CreateSite) {
-    return this.siteService.createSite(input);
+  create(@Args('input') input: CreateSite) {
+    return this.siteService.create(input);
   }
 
   @Mutation(() => Site, { name: 'updateSite' })
-  updateSite(@Args() id: GetSite, @Args('input') input: UpdateSite) {
-    return this.siteService.updateSite(id, input);
+  update(@Args() id: GetSite, @Args('input') input: UpdateSite) {
+    return this.siteService.update(id, input);
+  }
+  @Mutation(() => Site, { name: 'updateDataBase' })
+  updateDataBase(
+    @Args() id: GetSite,
+    @Args('input', { type: () => [UpdateDataBase] }) input: UpdateDataBase[],
+  ) {
+    return this.siteService.updateDataBase(id, input);
   }
 
   @Mutation(() => String, { name: 'deleteSite' })
-  deleteSite(@Args() id: GetSite) {
+  delete(@Args() id: GetSite) {
     return this.siteService.deleteSite(id);
   }
 

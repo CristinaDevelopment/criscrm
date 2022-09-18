@@ -41,6 +41,19 @@ export class ProductResolver {
   getProduct(@Args() id: GetProductArgs, @Args('type') type: string) {
     return this.productService.getProduct(id, type);
   }
+  @Query(() => [Product], { name: 'getProducts' })
+  getProducts(@Args('type') type: string) {
+    return this.productService.getProducts(type);
+  }
+  @Query(() => [Product], { name: 'getProductsClothing' })
+  getProductsClothing() {
+    return this.productService.getProductsClothing();
+  }
+  @Query(() => [Product], { name: 'getProductsFurniture' })
+  getProductsFurniture() {
+    return this.productService.getProductsFurniture();
+  }
+
   @Query(() => [Product], { name: 'getProductsBySite' })
   getProductsBySite(@Args() site: GetSite, @Args('type') type: string) {
     return this.productService.getProductsBySite(site, type);

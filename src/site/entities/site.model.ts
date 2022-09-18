@@ -10,39 +10,17 @@ import { Page0 } from '../../page/entities/page.model';
 export class Site extends AbstractModel {
   @Field(() => Data)
   readonly data: Data | string;
-  // @Field(() => [Children])
-  // readonly children: Children[];
-  // @Field(() => [Register])
-  // readonly register: Register[];
   @Field()
   readonly client: string;
   @Field()
   readonly url: string;
-  // @Field(() => [Product], { nullable: 'itemsAndList' })
-  // readonly product?: Product[];
   @Field(() => [Page0], { nullable: 'itemsAndList' })
   readonly page?: Page0[];
   @Field(() => UpdateDate)
   readonly updateDate: UpdateDate | string;
 }
 
-// @ObjectType()
-// export class UpdateDateSite {
-//   @Field()
-//   createdAt: Date;
-//   @Field(() => [Register], { nullable: true })
-//   readonly register?: Register[];
-// }
 
-// @ObjectType()
-// export class Register {
-//   @Field()
-//   readonly uid: string;
-//   @Field()
-//   readonly change: string;
-//   @Field()
-//   updatedAt: Date;
-// }
 @ObjectType()
 export class Data {
   @Field()
@@ -71,69 +49,20 @@ export class Data {
   readonly icon?: Image | string;
 }
 
-// @ObjectType()
-// export class Children {
-//   @Field()
-//   readonly uid: string;
-//   @Field(() => Seo)
-//   readonly seo: Seo | string;
-//   @Field(() => [Children], { nullable: true })
-//   readonly children?: Children[];
-//   @Field(() => Image)
-//   readonly icon?: Image | string;
-//   @Field()
-//   readonly type?: string;
-//   @Field()
-//   readonly slug: string;
-//   @Field(() => [Component], { nullable: true })
-//   readonly section?: Component[];
-//   @Field(() => [Product], { nullable: true })
-//   readonly product?: Product[];
-// }
-
-// @ObjectType()
-// export class Component {
-//   @Field()
-//   readonly uid: string;
-//   @Field()
-//   readonly component: string;
-//   @Field()
-//   readonly html: string;
-// }
-
-// @ObjectType()
-// export class Seo {
-//   @Field()
-//   readonly name: string;
-//   @Field()
-//   readonly href: string;
-//   @Field()
-//   readonly description: string;
-
-//   @Field(() => Image)
-//   readonly image: Image | string;
-// }
-
 @ObjectType()
 export class DataBase {
   @Field()
   readonly uid: string;
-  @Field()
-  readonly name: string;
+  // @Field()
+  // readonly name: string;
   @Field()
   readonly type: string;
 
-  @Field(() => Image)
-  readonly image: Image | string;
+  // @Field(() => Image)
+  // readonly image: Image | string;
 }
 
-// @ObjectType()
-// export class Image {
-//   @Field()
-//   readonly src: string;
-//   @Field()
-//   readonly alt: string;
-// }
+
 @ObjectType()
 export class Domain {
   @Field()

@@ -31,7 +31,11 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     update: UpdateQuery<TDocument>,
     options: Record<string, unknown> = { lean: true, new: true },
   ) {
-    const document = await this.model.findOneAndUpdate(filterQuery, update, options);
+    const document = await this.model.findOneAndUpdate(
+      filterQuery,
+      update,
+      options,
+    );
     if (!document) {
       this.logger.warn(`Document not found with filterQuery:`, filterQuery);
       throw new NotFoundException('Document not found.');
@@ -70,5 +74,4 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     const data = await this.findAll(paginationQuery);
     return { data, count };
   }
-
 }

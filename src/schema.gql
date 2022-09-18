@@ -303,9 +303,7 @@ type Data {
 
 type DataBase {
   uid: String!
-  name: String!
   type: String!
-  image: Image!
 }
 
 type Domain {
@@ -373,6 +371,9 @@ type Query {
   sitesByPagination(input: ListInput!): [Site!]!
   listSitesWithCursor(args: ConnectionArgs!): ListSiteResponse!
   getProduct(_id: ID!, type: String!): Product!
+  getProducts(type: String!): [Product!]!
+  getProductsClothing: [Product!]!
+  getProductsFurniture: [Product!]!
   getProductsBySite(site: String!, type: String!): [Product!]!
   getProductsByPage(page: String!, type: String!): [Product!]!
   listProductWithCursor(args: ConnectionArgs!, type: String!): ListProductResponse!
@@ -430,6 +431,7 @@ input ConnectionArgs {
 type Mutation {
   createSite(input: CreateSite!): Site!
   updateSite(_id: ID!, input: UpdateSite!): Site!
+  updateDataBase(_id: ID!, input: [UpdateDataBase!]!): Site!
   deleteSite(_id: ID!): String!
   deleteSites: String!
   createProduct(input: CreateProduct!, type: String!): Product!
@@ -486,6 +488,10 @@ input UpdateSite {
   type: String!
   change: String!
   uid: String!
+}
+
+input UpdateDataBase {
+  type: String!
 }
 
 input CreateProduct {

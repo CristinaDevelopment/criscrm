@@ -36,13 +36,11 @@ export class ProductService {
       data = await this.productRepositoryClothing.findOneAndUpdate(id, {
         $set: this.productUpdated(input),
         $push: { 'updateDate.register': { updatedAt: new Date() } },
-
       });
     } else if (type === 'furniture') {
       data = await this.productRepositoryFurniture.findOneAndUpdate(id, {
         $set: this.productUpdated(input),
         $push: { 'updateDate.register': { updatedAt: new Date() } },
-
       });
     }
     return this.toModel(data);
@@ -56,6 +54,21 @@ export class ProductService {
       data = await this.productRepositoryFurniture.findOne(id);
     }
     return this.toModel(data);
+  }
+  getProducts(type: string) {
+    let data;
+    if (type === 'clothing') {
+      data = this.productRepositoryClothing.find({});
+    } else if (type === 'furniture') {
+      data = this.productRepositoryFurniture.find({});
+    }
+    return data;
+  }
+  getProductsClothing() {
+    return this.productRepositoryClothing.find({})
+  }
+  getProductsFurniture() {
+    return this.productRepositoryFurniture.find({})
   }
 
   async getProductsBySite(site: GetSite, type: string) {
