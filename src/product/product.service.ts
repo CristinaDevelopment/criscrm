@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProduct, UpdateProduct } from './dto/product.input';
+import { CreateProduct, UpdateImage, UpdateProduct } from './dto/product.input';
 import { ProductDocument } from './entities/product.schema';
 import {
   ProductRepositoryClothing,
@@ -40,6 +40,37 @@ export class ProductService {
     } else if (type === 'furniture') {
       data = await this.productRepositoryFurniture.findOneAndUpdate(id, {
         $set: this.productUpdated(input),
+        $push: { 'updateDate.register': { updatedAt: new Date() } },
+      });
+    }
+    return this.toModel(data);
+  }
+  async updateProductImage(
+    id: GetProductArgs,
+    input: UpdateImage[],
+    type: string,
+  ) {
+    let data;
+    if (type === 'clothing') {
+      data = await this.productRepositoryClothing.findOneAndUpdate(id, {
+        $set: {
+          'article.image': input.map((data) => ({
+            uid: uuidv3(),
+            src: data.src,
+            alt: data.alt,
+          })),
+        },
+        $push: { 'updateDate.register': { updatedAt: new Date() } },
+      });
+    } else if (type === 'furniture') {
+      data = await this.productRepositoryFurniture.findOneAndUpdate(id, {
+        $set: {
+          'article.image': input.map((data) => ({
+            uid: uuidv3(),
+            src: data.src,
+            alt: data.alt,
+          })),
+        },
         $push: { 'updateDate.register': { updatedAt: new Date() } },
       });
     }
@@ -174,7 +205,7 @@ export class ProductService {
           name: capitalizar(input.featured),
           href: slug(input.featured),
         },
-        // route: input.route,
+        image: [],
         seo: {
           title: capitalizar(input.name),
           href: slug(input.name),

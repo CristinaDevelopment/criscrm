@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { ProductService } from './product.service';
 
-import { CreateProduct, UpdateProduct } from './dto/product.input';
+import { CreateProduct, UpdateProduct, UpdateImage } from './dto/product.input';
 import { ListProductResponse, Product } from './entities/product.model';
 import { GetPage, GetProductArgs, GetSite } from './dto/product.args';
 import ConnectionArgs, {
@@ -20,12 +20,20 @@ export class ProductResolver {
     return this.productService.createProduct(input, type);
   }
   @Mutation(() => Product, { name: 'updateProduct' })
-  updateSite(
+  updateProduct(
     @Args() id: GetProductArgs,
     @Args('input') input: UpdateProduct,
     @Args('type') type: string,
   ) {
     return this.productService.updateProduct(id, input, type);
+  }
+  @Mutation(() => Product, { name: 'updateProductImage' })
+  updateProductImage(
+    @Args() id: GetProductArgs,
+    @Args('input', { type: () => [UpdateImage] }) input: UpdateImage[],
+    @Args('type') type: string,
+  ) {
+    return this.productService.updateProductImage(id, input, type);
   }
   @Mutation(() => String, { name: 'deleteProduct' })
   deleteProduct(@Args() id: GetProductArgs, @Args('type') type: string) {

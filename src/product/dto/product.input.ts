@@ -1,4 +1,5 @@
 import { InputType, Field, PartialType, ID, OmitType } from '@nestjs/graphql';
+import { Image } from 'src/common/model/model';
 
 @InputType()
 export class CreateProduct {
@@ -42,12 +43,15 @@ export class UpdateSpecs {
 }
 
 @InputType()
-export class UpdateImages {
+export class UpdateImage {
+  @Field({ nullable: true })
+  uid?: string;
   @Field()
-  readonly src: string;
+  src: string;
   @Field()
-  readonly alt: string;
+  alt: string;
 }
+
 @InputType()
 export class UpdateDetails {
   @Field()

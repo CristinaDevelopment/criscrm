@@ -439,6 +439,7 @@ type Mutation {
   deleteSites: String!
   createProduct(input: CreateProduct!, type: String!): Product!
   updateProduct(_id: ID!, input: UpdateProduct!, type: String!): Product!
+  updateProductImage(_id: ID!, input: [UpdateImage!]!, type: String!): Product!
   deleteProduct(_id: ID!, type: String!): String!
   deleteProducts(site: String!, type: String!): String!
   createPage0(input: CreatePage!): Page0!
@@ -517,6 +518,12 @@ input UpdateProduct {
   inStock: Float!
   price: Float!
   discountPrice: Float!
+}
+
+input UpdateImage {
+  uid: String
+  src: String!
+  alt: String!
 }
 
 input CreatePage {

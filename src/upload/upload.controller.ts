@@ -32,7 +32,7 @@ export class UploadController {
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
-          fileType: 'png|jpg|jpeg',
+          fileType: 'png|jpg|jpeg|webp',
         })
         .addMaxSizeValidator({
           maxSize: 5000000,
@@ -54,34 +54,34 @@ export class UploadController {
     return await deleteFile(body.name);
   }
 
-  @Post('image')
-  @UseInterceptors(FileInterceptor('file'))
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
-  }
+  // @Post('image')
+  // @UseInterceptors(FileInterceptor('file'))
+  // uploadFile(@UploadedFile() file: Express.Multer.File) {
+  //   console.log(file);
+  // }
 
-  @Post()
-  create(@Body() createUploadDto: CreateUploadDto) {
-    return this.uploadService.create(createUploadDto);
-  }
+  // @Post()
+  // create(@Body() createUploadDto: CreateUploadDto) {
+  //   return this.uploadService.create(createUploadDto);
+  // }
 
-  @Get()
-  findAll() {
-    return this.uploadService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.uploadService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.uploadService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.uploadService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUploadDto: UpdateUploadDto) {
-    return this.uploadService.update(+id, updateUploadDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateUploadDto: UpdateUploadDto) {
+  //   return this.uploadService.update(+id, updateUploadDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.uploadService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.uploadService.remove(+id);
+  // }
 }
