@@ -21,11 +21,11 @@ export class ProductService {
     let data;
     if (type === 'clothing') {
       data = await this.productRepositoryClothing.create(
-        this.productCreated(input),
+        this.productCreated(input, type),
       );
     } else if (type === 'furniture') {
       data = await this.productRepositoryFurniture.create(
-        this.productCreated(input),
+        this.productCreated(input, type),
       );
     }
     return this.toModel(data);
@@ -65,10 +65,17 @@ export class ProductService {
     return data;
   }
   getProductsClothing() {
-    return this.productRepositoryClothing.find({})
+    return this.productRepositoryClothing.find({});
   }
   getProductsFurniture() {
-    return this.productRepositoryFurniture.find({})
+    return this.productRepositoryFurniture.find({});
+  }
+
+  async getAllProducts() {
+    const clothings = await this.productRepositoryClothing.find({});
+    const furnituries = await this.productRepositoryFurniture.find({});
+
+    return [clothings, furnituries].flat(1);
   }
 
   async getProductsBySite(site: GetSite, type: string) {
@@ -153,7 +160,7 @@ export class ProductService {
     return data;
   }
 
-  private productCreated(input: CreateProduct) {
+  private productCreated(input: CreateProduct, type: string) {
     return {
       article: {
         name: capitalizar(input.name),
@@ -181,6 +188,7 @@ export class ProductService {
       },
       site: input.site,
       page: input.page,
+      type: type === 'clothing' ? 'clothing' : 'furniture',
       updateDate: {
         createdAt: new Date(),
       },
@@ -220,6 +228,7 @@ export class ProductService {
       article: productDocument.article,
       site: productDocument.site,
       page: productDocument.page,
+      type: productDocument.type,
       updateDate: productDocument.updateDate,
     };
   }

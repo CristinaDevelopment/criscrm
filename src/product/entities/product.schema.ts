@@ -13,6 +13,9 @@ export class ProductDocument extends AbstractDocument {
 
   @Prop({ trim: true })
   page: string;
+  
+  @Prop({ trim: true })
+  type: string;
 
   @Prop({ type: UpdateDate })
   updateDate: UpdateDate;

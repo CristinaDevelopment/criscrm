@@ -41,6 +41,7 @@ type Product {
   _id: ID!
   article: Article!
   site: String!
+  type: String!
   page: String!
   updateDate: UpdateDate!
 }
@@ -360,7 +361,7 @@ type Comment {
   exampleField: Int!
 }
 
-type Upload {
+type Beverage {
   """Example field (placeholder)"""
   exampleField: Int!
 }
@@ -372,6 +373,7 @@ type Query {
   listSitesWithCursor(args: ConnectionArgs!): ListSiteResponse!
   getProduct(_id: ID!, type: String!): Product!
   getProducts(type: String!): [Product!]!
+  getAllProducts: [Product!]!
   getProductsClothing: [Product!]!
   getProductsFurniture: [Product!]!
   getProductsBySite(site: String!, type: String!): [Product!]!
@@ -403,7 +405,8 @@ type Query {
   getUserByEmail(email: String!): User!
   getUsers: [User!]!
   comment(id: Int!): Comment!
-  upload(id: Int!): Upload!
+  beverages: [Beverage!]!
+  beverage(id: Int!): Beverage!
 }
 
 input ListInput {
@@ -466,9 +469,9 @@ type Mutation {
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
   removeComment(id: Int!): Comment!
-  createUpload(createUploadInput: CreateUploadInput!): Upload!
-  updateUpload(updateUploadInput: UpdateUploadInput!): Upload!
-  removeUpload(id: Int!): Upload!
+  createBeverage(createBeverageInput: CreateBeverageInput!): Beverage!
+  updateBeverage(updateBeverageInput: UpdateBeverageInput!): Beverage!
+  removeBeverage(id: Int!): Beverage!
 }
 
 input CreateSite {
@@ -591,12 +594,12 @@ input UpdateCommentInput {
   id: Int!
 }
 
-input CreateUploadInput {
+input CreateBeverageInput {
   """Example field (placeholder)"""
   exampleField: Int!
 }
 
-input UpdateUploadInput {
+input UpdateBeverageInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!

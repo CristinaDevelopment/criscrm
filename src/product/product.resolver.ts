@@ -45,6 +45,10 @@ export class ProductResolver {
   getProducts(@Args('type') type: string) {
     return this.productService.getProducts(type);
   }
+  @Query(() => [Product], { name: 'getAllProducts' })
+  getAllProducts() {
+    return this.productService.getAllProducts();
+  }
   @Query(() => [Product], { name: 'getProductsClothing' })
   getProductsClothing() {
     return this.productService.getProductsClothing();

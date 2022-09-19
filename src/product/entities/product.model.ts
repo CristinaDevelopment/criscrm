@@ -10,6 +10,8 @@ export class Product extends AbstractModel {
 
   @Field()
   readonly site: string;
+  @Field()
+  readonly type: string;
 
   @Field()
   readonly page: string;
@@ -77,32 +79,6 @@ export class Detail {
   dimensions: string[];
 }
 
-// @ObjectType()
-// export class ImageProduct {
-//   @Field()
-//   readonly uid: string;
-//   @Field()
-//   readonly src: string;
-//   @Field()
-//   readonly alt: string;
-// }
-
-// @ObjectType()
-// export class ImageProduct extends Image {}
-
-// @ObjectType()
-// export class Seo {
-//   @Field()
-//   readonly name: string;
-//   @Field()
-//   readonly href: string;
-//   @Field()
-//   readonly description: string;
-//   // @Field(() => ImageProduct)
-//   // readonly icon?: ImageProduct | string;
-//   @Field(() => ImageProduct)
-//   readonly image: ImageProduct | string;
-// }
 
 @ObjectType()
 export class TagsProduct {
