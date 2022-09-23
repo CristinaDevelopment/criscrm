@@ -27,13 +27,13 @@ export class CreateProduct {
   @Field()
   readonly site: string;
   @Field()
-  readonly page: string;
+  readonly parent: string;
 }
 
 @InputType()
 export class UpdateProduct extends OmitType(CreateProduct, [
   'site',
-  'page',
+  'parent',
 ] as const) {}
 
 @InputType()

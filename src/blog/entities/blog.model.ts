@@ -11,19 +11,9 @@ export class Blog extends AbstractModel {
   readonly site: string;
   @Field()
   readonly page: string;
-
   @Field(() => UpdateDate)
   readonly updateDate: UpdateDate | string;
 }
-
-// @ObjectType()
-// export class UpdateDateBlog {
-//   @Field()
-//   createdAt: Date;
-//   @Field()
-//   updatedAt: Date;
-// }
-
 @ObjectType()
 export class DataBlog {
   @Field()
@@ -31,39 +21,22 @@ export class DataBlog {
   @Field()
   readonly slug: string;
   @Field()
-  readonly content: string;
+  readonly content?: string;
   @Field()
   readonly category: string;
   @Field()
   readonly description: string;
   @Field()
-  readonly meta: string;
+  readonly meta?: string;
   @Field(() => [Tags])
-  readonly tags: Tags[];
+  readonly tags?: Tags[];
   @Field()
   readonly author: string;
   @Field(() => Image)
-  readonly thumbnail: Image | string;
-  // @Field(() => Timestamps)
-  // readonly timestamps: Timestamps | number;
+  readonly thumbnail?: Image | string;
   @Field(() => Seo)
   readonly seo: Seo | string;
 }
-
-
-
-// @ObjectType()
-// class SeoBlog {
-//   @Field()
-//   readonly name: string;
-//   @Field()
-//   readonly href: string;
-//   @Field()
-//   readonly description: string;
-
-//   @Field(() => ImageBlog)
-//   readonly image: ImageBlog | string;
-// }
 @ObjectType()
 export class Tags {
   @Field()
@@ -71,14 +44,5 @@ export class Tags {
   @Field()
   readonly text: string;
 }
-
-// @ObjectType()
-// export class ImageBlog {
-//   @Field()
-//   readonly src: string;
-//   @Field()
-//   readonly alt: string;
-// }
-
 @ObjectType()
 export class ListBlogResponse extends RelayTypes<Blog>(Blog) {}

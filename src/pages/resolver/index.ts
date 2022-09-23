@@ -1,0 +1,6 @@
+export * from './pages0.resolver'
+export * from './pages1.resolver'
+export * from './pages2.resolver'
+export * from './pages3.resolver'
+export * from './pages4.resolver'
+export * from './pages5.resolver'

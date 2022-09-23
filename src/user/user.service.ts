@@ -66,7 +66,7 @@ export class UserService {
 
   async deleteUser(id: GetUserArgs) {
     await this.userRepository.deleteOne(id);
-    return 'user delete';
+    return id._id;
   }
   async deleteUsers(site: GetSite) {
     await this.userRepository.deleteMany(site);

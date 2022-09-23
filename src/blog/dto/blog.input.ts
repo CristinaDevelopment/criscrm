@@ -6,12 +6,6 @@ export class CreateBlog {
   @Field()
   readonly title: string;
   @Field()
-  readonly content: string;
-  @Field()
-  readonly meta: string;
-  @Field(() => [String])
-  readonly tags: string[];
-  @Field()
   readonly author: string;
   @Field()
   readonly description: string;
@@ -21,11 +15,18 @@ export class CreateBlog {
   readonly page: string;
   @Field()
   readonly category: string;
+}
+
+@InputType()
+export class UpdateBlog extends OmitType(CreateBlog, ['site', 'page']) {
   @Field()
   readonly src: string;
   @Field()
   readonly alt: string;
+  @Field()
+  readonly content: string;
+  @Field()
+  readonly meta: string;
+  @Field(() => [String])
+  readonly tags: string[];
 }
-
-@InputType()
-export class UpdateBlog extends OmitType(CreateBlog, ['site', 'page']) {}

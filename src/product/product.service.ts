@@ -118,7 +118,7 @@ export class ProductService {
     }
     return data;
   }
-  async getProductsByPage(page: GetPage, type: string) {
+  async getProductsByParent(page: GetPage, type: string) {
     let data;
     if (type === 'clothing') {
       data = await this.productRepositoryClothing.find(page);
@@ -134,7 +134,7 @@ export class ProductService {
     } else if (type === 'furniture') {
       await this.productRepositoryFurniture.deleteOne(id);
     }
-    return 'deleted product';
+    return id._id;
   }
 
   async deleteProducts(site: GetSite, type: string) {
@@ -157,12 +157,23 @@ export class ProductService {
     }
     return data;
   }
-
-  findByPageClothing(pageUi) {
-    return this.productRepositoryClothing.find({ page: pageUi });
+  findByParentUid(parentUi: string, type: string) {
+    let data;
+    if (type === 'clothing') {
+      data = this.productRepositoryClothing.find({ parent: parentUi });
+    } else if (type === 'furniture') {
+      data = this.productRepositoryFurniture.find({ parent: parentUi });
+    } else {
+      data = [];
+    }
+    return data;
   }
-  findByPageFurniture(pageUi) {
-    return this.productRepositoryFurniture.find({ page: pageUi });
+
+  findByParentClothing(pageUi) {
+    return this.productRepositoryClothing.find({ parent: pageUi });
+  }
+  findByParentFurniture(pageUi) {
+    return this.productRepositoryFurniture.find({ parent: pageUi });
   }
 
   findBySiteId(siteId: string, type: string) {
@@ -218,7 +229,7 @@ export class ProductService {
         },
       },
       site: input.site,
-      page: input.page,
+      parent: input.parent,
       type: type === 'clothing' ? 'clothing' : 'furniture',
       updateDate: {
         createdAt: new Date(),
@@ -227,27 +238,25 @@ export class ProductService {
   }
   private productUpdated(input: UpdateProduct) {
     return {
-      article: {
-        name: capitalizar(input.name),
-        slug: slug(input.name),
-        mark: input.mark,
-        inStock: input.inStock,
-        price: input.price,
-        discountPrice: input.discountPrice,
+      'article.name': capitalizar(input.name),
+      'article.slug': slug(input.name),
+      'article.mark': input.mark,
+      'article.inStock': input.inStock,
+      'article.price': input.price,
+      'article.discountPrice': input.discountPrice,
+      'article.description': input.description,
+      'article.featured': {
+        name: capitalizar(input.featured),
+        href: slug(input.featured),
+      },
+      'article.seo': {
+        title: capitalizar(input.name),
+        href: slug(input.name),
         description: input.description,
-        featured: {
-          name: capitalizar(input.featured),
-          href: slug(input.featured),
-        },
-        seo: {
-          title: capitalizar(input.name),
-          href: slug(input.name),
-          description: input.description,
-          image: {
-            uid: uuidv3(),
-            src: 'https://res.cloudinary.com/dvcyhn0lj/image/upload/v1655217461/14.1_no-image.jpg_gkwtld.jpg',
-            alt: 'image description',
-          },
+        image: {
+          uid: uuidv3(),
+          src: 'https://res.cloudinary.com/dvcyhn0lj/image/upload/v1655217461/14.1_no-image.jpg_gkwtld.jpg',
+          alt: 'image description',
         },
       },
     };
@@ -258,7 +267,7 @@ export class ProductService {
       _id: productDocument._id.toHexString(),
       article: productDocument.article,
       site: productDocument.site,
-      page: productDocument.page,
+      parent: productDocument.parent,
       type: productDocument.type,
       updateDate: productDocument.updateDate,
     };

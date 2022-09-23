@@ -52,41 +52,28 @@ export class BlogService {
   async deleteOne(id: GetBlog) {
     // await this.validateSite(id);
     await this.blogRepository.deleteOne(id);
-    return 'delete blog';
+    return id._id;
   }
 
   private createBlog(input: CreateBlog) {
-    const {
-      title,
-      content,
-      description,
-      meta,
-      tags,
-      author,
-      site,
-      src,
-      alt,
-      category,
-      page,
-    } = input;
+    const { title, description, author, site, category, page } = input;
     return {
       data: {
-        title: capitalizar(input.title),
+        title: capitalizar(title),
         slug: slug(title),
-        content: content,
+        // content: content,
         description: description,
         category: category,
-        meta: meta,
-        tags: tags.map((data) => ({ uid: uuidv3(), text: data })),
+        // meta: meta,
+        // tags: tags.map((data) => ({ uid: uuidv3(), text: data })),
         author: author,
-        thumbnail: { src: src, alt: alt },
         seo: {
-          title: capitalizar(input.title),
+          title: capitalizar(title),
           href: slug(title),
           description: description,
           image: {
-            src: src,
-            alt: alt,
+            src: 'https://res.cloudinary.com/dqsbh2kn0/image/upload/v1663014890/zawkgpyjvvxrfwp9j7w1.jpg',
+            alt: description,
           },
         },
       },
@@ -130,7 +117,6 @@ export class BlogService {
           },
         },
       },
-      
     };
   }
 

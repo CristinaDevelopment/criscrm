@@ -5,44 +5,38 @@ import { RelayTypes } from 'src/common/pagination/relay/relay.types';
 
 @ObjectType()
 export class Product extends AbstractModel {
-  @Field(() => Article)
-  readonly article: Article | string;
-
+  @Field(() => DataCourse)
+  readonly data: DataCourse | string;
   @Field()
   readonly site: string;
   @Field()
-  readonly type: string;
-
+  readonly category: string;
   @Field()
-  readonly parent: string;
-
+  readonly page: string;
   @Field(() => UpdateDate)
   readonly updateDate: UpdateDate | string;
 }
 
 @ObjectType()
-export class Article {
+export class DataCourse {
   @Field()
   readonly name: string;
   @Field()
   readonly slug: string;
   @Field()
-  readonly mark: string;
+  readonly description: string;
   @Field()
-  readonly inStock: number;
+  readonly category: number;
   @Field()
   readonly price: number;
   @Field()
   readonly discountPrice: number;
-  @Field()
-  readonly description: string;
   @Field(() => Featured)
   readonly featured: Featured | string;
   @Field(() => Detail, { nullable: true })
   readonly details?: Detail | string;
-
-  @Field(() => [SpecsProduct])
-  readonly specs?: SpecsProduct[];
+  @Field( )
+  readonly moreDetails: string;
 
   @Field(() => [TagsProduct])
   readonly tags?: TagsProduct[];
@@ -53,8 +47,6 @@ export class Article {
   @Field(() => Seo)
   readonly seo: Seo | string;
 }
-
-
 
 @ObjectType()
 export class Featured {

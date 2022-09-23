@@ -1,0 +1,7 @@
+export * from './pages0.service'
+export * from './pages1.service'
+export * from './pages2.service'
+export * from './pages3.service'
+export * from './pages4.service'
+export * from './pages5.service'
+export * from './pages6.service'

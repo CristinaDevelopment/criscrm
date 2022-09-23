@@ -1,6 +1,0 @@
-export * from './page0.resolver'
-export * from './page1.resolver'
-export * from './page2.resolver'
-export * from './page3.resolver'
-export * from './page4.resolver'
-export * from './page5.resolver'

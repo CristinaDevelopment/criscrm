@@ -72,7 +72,7 @@ export class ProductResolver {
   }
   @Query(() => [Product], { name: 'getProductsByPage' })
   getProductsByPage(@Args() page: GetPage, @Args('type') type: string) {
-    return this.productService.getProductsByPage(page, type);
+    return this.productService.getProductsByParent(page, type);
   }
 
   @Query(() => ListProductResponse, { name: 'listProductWithCursor' })

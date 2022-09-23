@@ -12,7 +12,7 @@ export class ProductDocument extends AbstractDocument {
   site: string;
 
   @Prop({ trim: true })
-  page: string;
+  parent: string;
   
   @Prop({ trim: true })
   type: string;

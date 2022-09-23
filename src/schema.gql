@@ -42,7 +42,7 @@ type Product {
   article: Article!
   site: String!
   type: String!
-  page: String!
+  parent: String!
   updateDate: UpdateDate!
 }
 
@@ -108,6 +108,28 @@ type ProductPageInfo {
   hasNextPage: Boolean!
 }
 
+type User {
+  _id: ID!
+  data: DataUser!
+  email: String!
+  password: String!
+  site: String!
+  updateDate: UpdateDateUser!
+}
+
+type UpdateDateUser {
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type DataUser {
+  name: String!
+  role: String!
+  image: String!
+  status: Boolean!
+  google: Boolean!
+}
+
 type Blog {
   _id: ID!
   data: DataBlog!
@@ -156,14 +178,31 @@ type BlogPageInfo {
   hasNextPage: Boolean!
 }
 
+type Comment {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Beverage {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Course {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type Page {
   _id: ID!
   data: DataPage!
   slug: String!
+  site: String!
+  parent: String!
   section: [ComponentPage!]!
   updateDate: UpdateDate!
-  page: [Page]
-  product: [Product]
+  page: [Page!]!
+  product: [Product]!
   blog: [Blog!]
 }
 
@@ -183,32 +222,38 @@ type Page0 {
   _id: ID!
   data: DataPage!
   slug: String!
+  site: String!
+  parent: String!
   section: [ComponentPage!]!
   updateDate: UpdateDate!
-  page: [Page1!]!
-  product: [Product!]!
-  blog: [Blog!]!
+  page: [Page1]
+  product: [Product]!
+  blog: [Blog!]
 }
 
 type Page1 {
   _id: ID!
   data: DataPage!
   slug: String!
+  site: String!
+  parent: String!
   section: [ComponentPage!]!
   updateDate: UpdateDate!
-  page: [Page2!]!
-  product: [Product!]!
-  blog: [Blog!]!
+  page: [Page2]
+  product: [Product]!
+  blog: [Blog!]
 }
 
 type Page2 {
   _id: ID!
   data: DataPage!
   slug: String!
+  site: String!
+  parent: String!
   section: [ComponentPage!]!
   updateDate: UpdateDate!
-  page: [Page3!]!
-  product: [Product!]!
+  page: [Page3]
+  product: [Product]
   blog: [Blog!]!
 }
 
@@ -216,6 +261,8 @@ type Page3 {
   _id: ID!
   data: DataPage!
   slug: String!
+  site: String!
+  parent: String!
   section: [ComponentPage!]!
   updateDate: UpdateDate!
   page: [Page4!]!
@@ -227,10 +274,12 @@ type Page4 {
   _id: ID!
   data: DataPage!
   slug: String!
+  site: String!
+  parent: String!
   section: [ComponentPage!]!
   updateDate: UpdateDate!
   page: [Page5!]!
-  product: [Product]
+  product: [Product]!
   blog: [Blog!]
 }
 
@@ -238,10 +287,12 @@ type Page5 {
   _id: ID!
   data: DataPage!
   slug: String!
+  site: String!
+  parent: String!
   section: [ComponentPage!]!
   updateDate: UpdateDate!
   page: [Page6!]!
-  product: [Product]
+  product: [Product]!
   blog: [Blog!]
 }
 
@@ -249,10 +300,12 @@ type Page6 {
   _id: ID!
   data: DataPage!
   slug: String!
+  site: String!
+  parent: String!
   section: [ComponentPage!]!
   updateDate: UpdateDate!
-  page: [Page]
-  product: [Product]
+  page: [Page!]!
+  product: [Product]!
   blog: [Blog!]
 }
 
@@ -283,7 +336,7 @@ type Site {
   data: Data!
   client: String!
   url: String!
-  page: [Page0!]!
+  page: [Page0]
   updateDate: UpdateDate!
 }
 
@@ -304,7 +357,8 @@ type Data {
 
 type DataBase {
   uid: String!
-  type: String!
+  label: String!
+  value: String!
 }
 
 type Domain {
@@ -334,43 +388,7 @@ type SitePageInfo {
   hasNextPage: Boolean!
 }
 
-type User {
-  _id: ID!
-  data: DataUser!
-  email: String!
-  password: String!
-  site: String!
-  updateDate: UpdateDateUser!
-}
-
-type UpdateDateUser {
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type DataUser {
-  name: String!
-  role: String!
-  image: String!
-  status: Boolean!
-  google: Boolean!
-}
-
-type Comment {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-type Beverage {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
 type Query {
-  findSite(_id: ID!): Site!
-  findSites: [Site!]!
-  sitesByPagination(input: ListInput!): [Site!]!
-  listSitesWithCursor(args: ConnectionArgs!): ListSiteResponse!
   getProduct(_id: ID!, type: String!): Product!
   getProducts(type: String!): [Product!]!
   getAllProducts: [Product!]!
@@ -379,42 +397,49 @@ type Query {
   getProductsBySite(site: String!, type: String!): [Product!]!
   getProductsByPage(page: String!, type: String!): [Product!]!
   listProductWithCursor(args: ConnectionArgs!, type: String!): ListProductResponse!
+  getUser(_id: ID!): User!
+  getUserByEmail(email: String!): User!
+  getUsers: [User!]!
+  findBlog(_id: ID!): Blog!
+  findBlogs: [Blog!]!
+  listPages0WithCursor(args: ConnectionArgs!): ListPageResponse!
+  comment(id: Int!): Comment!
+  beverages: [Beverage!]!
+  beverage(id: Int!): Beverage!
+  courses: [Course!]!
+  course(id: Int!): Course!
+  findSite(_id: ID!): Site!
+  findSites: [Site!]!
+  sitesByPagination(input: ListInput!): [Site!]!
+  listSitesWithCursor(args: ConnectionArgs!): ListSiteResponse!
   findPage0(_id: ID!): Page0!
-  findPage0BySite(site: String!, slug: String!): Page0!
+  findPage0BySlug(site: String!, slug: String!): Page0!
   findPages0BySite(site: String!): [Page0!]!
   findPages0: [Page0!]!
-  listPages0WithCursor(args: ConnectionArgs!): ListBlogResponse!
   findPage1(_id: ID!): Page1!
-  findPage1BySite(site: String!, slug: String!): Page1!
+  findPage1BySlug(site: String!, slug: String!): Page1!
+  findPages1ByParent(parent: String!): [Page1!]!
   findPages1BySite(site: String!): [Page1!]!
   findPages1: [Page1!]!
   listPages1WithCursor(args: ConnectionArgs!): ListPageResponse!
   findPage2(_id: ID!): Page2!
-  findPage2BySite(site: String!, slug: String!): Page2!
+  findPage2BySlug(site: String!, slug: String!): Page2!
   findPages2BySite(site: String!): [Page2!]!
   findPages2: [Page2!]!
   listPages2WithCursor(args: ConnectionArgs!): ListPageResponse!
   findPage3(_id: ID!): Page3!
-  findPage3BySite(site: String!, slug: String!): Page3!
+  findPage3BySlug(site: String!, slug: String!): Page3!
   findPages3BySite(site: String!): [Page3!]!
   findPages3: [Page3!]!
   listPages3WithCursor(args: ConnectionArgs!): ListPageResponse!
-  findBlog(_id: ID!): Blog!
-  findBlogs: [Blog!]!
-  getUser(_id: ID!): User!
-  getUserByEmail(email: String!): User!
-  getUsers: [User!]!
-  comment(id: Int!): Comment!
-  beverages: [Beverage!]!
-  beverage(id: Int!): Beverage!
-}
-
-input ListInput {
-  """classical limit"""
-  limit: Float!
-
-  """classical offset"""
-  offset: Float!
+  findPage4(_id: ID!): Page4!
+  findPages4: [Page4!]!
+  findPage4BySlug(site: String!, slug: String!): Page4!
+  findPages4BySite(site: String!): [Page4!]!
+  findPage5(_id: ID!): Page5!
+  findPages5: [Page5!]!
+  findPage5BySlug(site: String!, slug: String!): Page5!
+  findPages5BySite(site: String!): [Page5!]!
 }
 
 input ConnectionArgs {
@@ -431,17 +456,41 @@ input ConnectionArgs {
   last: Float
 }
 
+input ListInput {
+  """classical limit"""
+  limit: Float!
+
+  """classical offset"""
+  offset: Float!
+}
+
 type Mutation {
-  createSite(input: CreateSite!): Site!
-  updateSite(_id: ID!, input: UpdateSite!): Site!
-  updateDataBase(_id: ID!, input: [UpdateDataBase!]!): Site!
-  deleteSite(_id: ID!): String!
-  deleteSites: String!
   createProduct(input: CreateProduct!, type: String!): Product!
   updateProduct(_id: ID!, input: UpdateProduct!, type: String!): Product!
   updateProductImage(_id: ID!, input: [UpdateImage!]!, type: String!): Product!
   deleteProduct(_id: ID!, type: String!): String!
   deleteProducts(site: String!, type: String!): String!
+  createUser(input: CreateUserInput!): User!
+  updateUser(_id: ID!, input: UpdateUserInput!): User!
+  deleteUser(_id: ID!): String!
+  deleteUsers(site: String!): String!
+  createBlog(input: CreateBlog!): Blog!
+  updateBlog(_id: ID!, input: UpdateBlog!): Blog!
+  deleteBlog(_id: ID!): String!
+  createComment(createCommentInput: CreateCommentInput!): Comment!
+  updateComment(updateCommentInput: UpdateCommentInput!): Comment!
+  removeComment(id: Int!): Comment!
+  createBeverage(createBeverageInput: CreateBeverageInput!): Beverage!
+  updateBeverage(updateBeverageInput: UpdateBeverageInput!): Beverage!
+  removeBeverage(id: Int!): Beverage!
+  createCourse(createCourseInput: CreateCourseInput!): Course!
+  updateCourse(updateCourseInput: UpdateCourseInput!): Course!
+  removeCourse(id: Int!): Course!
+  createSite(input: CreateSite!): Site!
+  updateSite(_id: ID!, input: UpdateSite!): Site!
+  updateDataBase(_id: ID!, input: [UpdateDataBase!]!): Site!
+  deleteSite(_id: ID!): String!
+  deleteSites: String!
   createPage0(input: CreatePage!): Page0!
   updatePage0(_id: ID!, input: UpdatePage!): Page0!
   deletePage0(_id: ID!): String!
@@ -460,19 +509,106 @@ type Mutation {
   createPage5(input: CreatePage!): Page5!
   updatePage5(_id: ID!, input: UpdatePage!): Page5!
   deletePage5(_id: ID!): String!
-  createBlog(input: CreateBlog!): Blog!
-  updateBlog(_id: ID!, input: UpdateBlog!): Blog!
-  deleteBlog(_id: ID!): String!
-  createUser(input: CreateUserInput!): User!
-  updateUser(_id: ID!, input: UpdateUserInput!): User!
-  deleteUser(_id: ID!): String!
-  deleteUsers(site: String!): String!
-  createComment(createCommentInput: CreateCommentInput!): Comment!
-  updateComment(updateCommentInput: UpdateCommentInput!): Comment!
-  removeComment(id: Int!): Comment!
-  createBeverage(createBeverageInput: CreateBeverageInput!): Beverage!
-  updateBeverage(updateBeverageInput: UpdateBeverageInput!): Beverage!
-  removeBeverage(id: Int!): Beverage!
+}
+
+input CreateProduct {
+  name: String!
+  mark: String!
+  description: String!
+  featured: String!
+  inStock: Float!
+  price: Float!
+  discountPrice: Float!
+  site: String!
+  parent: String!
+}
+
+input UpdateProduct {
+  name: String!
+  mark: String!
+  description: String!
+  featured: String!
+  inStock: Float!
+  price: Float!
+  discountPrice: Float!
+}
+
+input UpdateImage {
+  uid: String
+  src: String!
+  alt: String!
+}
+
+input CreateUserInput {
+  name: String!
+  site: String!
+  image: String!
+  email: String!
+  password: String!
+  role: String!
+}
+
+input UpdateUserInput {
+  name: String
+  site: String
+  image: String
+  email: String
+  password: String
+  role: String
+}
+
+input CreateBlog {
+  title: String!
+  author: String!
+  description: String!
+  site: String!
+  page: String!
+  category: String!
+}
+
+input UpdateBlog {
+  title: String!
+  author: String!
+  description: String!
+  category: String!
+  src: String!
+  alt: String!
+  content: String!
+  meta: String!
+  tags: [String!]!
+}
+
+input CreateCommentInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateCommentInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateBeverageInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateBeverageInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateCourseInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateCourseInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
 
 input CreateSite {
@@ -498,34 +634,6 @@ input UpdateDataBase {
   type: String!
 }
 
-input CreateProduct {
-  name: String!
-  mark: String!
-  description: String!
-  featured: String!
-  inStock: Float!
-  price: Float!
-  discountPrice: Float!
-  site: String!
-  page: String!
-}
-
-input UpdateProduct {
-  name: String!
-  mark: String!
-  description: String!
-  featured: String!
-  inStock: Float!
-  price: Float!
-  discountPrice: Float!
-}
-
-input UpdateImage {
-  uid: String
-  src: String!
-  alt: String!
-}
-
 input CreatePage {
   title: String!
   description: String!
@@ -533,7 +641,7 @@ input CreatePage {
   src: String!
   alt: String!
   type: String!
-  page: String!
+  parent: String!
   site: String!
 }
 
@@ -544,72 +652,6 @@ input UpdatePage {
   src: String!
   alt: String!
   type: String!
-}
-
-input CreateBlog {
-  title: String!
-  content: String!
-  meta: String!
-  tags: [String!]!
-  author: String!
-  description: String!
-  site: String!
-  page: String!
-  category: String!
-  src: String!
-  alt: String!
-}
-
-input UpdateBlog {
-  title: String!
-  content: String!
-  meta: String!
-  tags: [String!]!
-  author: String!
-  description: String!
-  category: String!
-  src: String!
-  alt: String!
-}
-
-input CreateUserInput {
-  name: String!
-  site: String!
-  image: String!
-  email: String!
-  password: String!
-  role: String!
-}
-
-input UpdateUserInput {
-  name: String
-  site: String
-  image: String
-  email: String
-  password: String
-  role: String
-}
-
-input CreateCommentInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateCommentInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
-input CreateBeverageInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateBeverageInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
 }
 
 type Subscription {
