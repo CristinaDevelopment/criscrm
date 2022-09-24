@@ -20,19 +20,19 @@ export class DataArticle {
   readonly title: string;
   @Field()
   readonly slug: string;
-  @Field()
+  @Field({ nullable: true })
   readonly content?: string;
   @Field()
   readonly category: string;
   @Field()
   readonly description: string;
-  @Field()
+  @Field({ nullable: true })
   readonly meta?: string;
-  @Field(() => [Tags])
+  @Field(() => [Tags], { nullable: 'itemsAndList' })
   readonly tags?: Tags[];
   @Field()
   readonly author: string;
-  @Field(() => Image)
+  @Field(() => Image, { nullable: true })
   readonly thumbnail?: Image | string;
   @Field(() => Seo)
   readonly seo: Seo | string;

@@ -156,13 +156,13 @@ type Article {
 type DataArticle {
   title: String!
   slug: String!
-  content: String!
+  content: String
   category: String!
   description: String!
-  meta: String!
-  tags: [Tags!]!
+  meta: String
+  tags: [Tags]
   author: String!
-  thumbnail: Image!
+  thumbnail: Image
   seo: Seo!
 }
 
