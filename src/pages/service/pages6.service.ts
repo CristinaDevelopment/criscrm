@@ -3,6 +3,7 @@ import { ListInput } from 'src/common/pagination/dto/list.input';
 import { capitalizar, slug } from 'src/utils/function';
 import { GetPage, GetSite } from '../dto/page.args';
 import { CreatePage, UpdatePage } from '../dto/page.input';
+import { Page6 } from '../entities/page.model';
 import { PageDocument } from '../entities/page.schema';
 import { Pages6Repository } from '../repository/pages.repository';
 
@@ -102,11 +103,14 @@ export class Pages6Service {
     }
   }
 
-  private toModel(pageDocument: PageDocument) {
+  private toModel(pageDocument: PageDocument): Page6 {
     return {
       _id: pageDocument._id.toHexString(),
       data: pageDocument.data,
+      site: pageDocument.site,
+      parent: pageDocument.parent,
       slug: pageDocument.slug,
+      updateDate: pageDocument.updateDate,
     };
   }
 }

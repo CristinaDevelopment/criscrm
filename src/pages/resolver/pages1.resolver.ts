@@ -7,8 +7,6 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { connectionFromArraySlice } from 'graphql-relay';
-import { BlogService } from 'src/blog/blog.service';
-import { Blog } from 'src/blog/entities/blog.model';
 import ConnectionArgs, {
   getPagingParameters,
 } from 'src/common/pagination/relay/connection.args';
@@ -32,7 +30,6 @@ export class Pages1Resolver {
     private readonly page1Service: Pages1Service,
     private readonly page2Service: Pages2Service,
     private readonly productService: ProductService,
-    private readonly blogService: BlogService,
   ) {}
 
   @Mutation(() => Page1, { name: 'createPage1' })

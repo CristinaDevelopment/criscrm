@@ -1,23 +1,23 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AbstractDocument } from 'src/common/abstract';
 import { UpdateDate } from 'src/common/model/model';
-import { DataBlog } from './blog.model';
+import { DataArticle } from './article.model';
 
 @Schema({ versionKey: false })
 
-export class BlogDocument extends AbstractDocument {
-  @Prop({ type: DataBlog })
-  data: DataBlog;
+export class ArticleDocument extends AbstractDocument {
+  @Prop({ type: DataArticle })
+  data: DataArticle;
   
   @Prop({ trim: true })
   site: string;
 
   @Prop({ trim: true })
-  page: string;
+  parent: string;
 
   @Prop({ type: UpdateDate })
   updateDate: UpdateDate;
 
 }
 
-export const BlogSchema = SchemaFactory.createForClass(BlogDocument);
+export const ArticleSchema = SchemaFactory.createForClass(ArticleDocument);

@@ -31,6 +31,11 @@ type Register {
   updatedAt: DateTime!
 }
 
+type Tags {
+  uid: String!
+  text: String!
+}
+
 type PageDataDto {
   count: Float!
   limit: Float!
@@ -39,14 +44,14 @@ type PageDataDto {
 
 type Product {
   _id: ID!
-  article: Article!
+  article: ArticleProduct!
   site: String!
   type: String!
   parent: String!
   updateDate: UpdateDate!
 }
 
-type Article {
+type ArticleProduct {
   name: String!
   slug: String!
   mark: String!
@@ -57,7 +62,7 @@ type Article {
   featured: Featured!
   details: Detail
   specs: [SpecsProduct!]!
-  tags: [TagsProduct!]!
+  tags: [Tags!]!
   image: [Image!]
   seo: Seo!
 }
@@ -74,11 +79,6 @@ type Detail {
   logo: String!
   accessories: String!
   dimensions: [String!]!
-}
-
-type TagsProduct {
-  uid: String!
-  text: String!
 }
 
 type SpecsProduct {
@@ -130,54 +130,6 @@ type DataUser {
   google: Boolean!
 }
 
-type Blog {
-  _id: ID!
-  data: DataBlog!
-  site: String!
-  page: String!
-  updateDate: UpdateDate!
-}
-
-type DataBlog {
-  title: String!
-  slug: String!
-  content: String!
-  category: String!
-  description: String!
-  meta: String!
-  tags: [Tags!]!
-  author: String!
-  thumbnail: Image!
-  seo: Seo!
-}
-
-type Tags {
-  uid: String!
-  text: String!
-}
-
-type ListBlogResponse {
-  page: BlogConnection!
-  pageData: PageDataDto
-}
-
-type BlogConnection {
-  edges: [BlogEdge!]
-  pageInfo: BlogPageInfo
-}
-
-type BlogEdge {
-  cursor: String
-  node: Blog
-}
-
-type BlogPageInfo {
-  startCursor: String
-  endCursor: String
-  hasPreviousPage: Boolean!
-  hasNextPage: Boolean!
-}
-
 type Comment {
   """Example field (placeholder)"""
   exampleField: Int!
@@ -193,6 +145,49 @@ type Course {
   exampleField: Int!
 }
 
+type Article {
+  _id: ID!
+  data: DataArticle!
+  site: String!
+  parent: String!
+  updateDate: UpdateDate!
+}
+
+type DataArticle {
+  title: String!
+  slug: String!
+  content: String!
+  category: String!
+  description: String!
+  meta: String!
+  tags: [Tags!]!
+  author: String!
+  thumbnail: Image!
+  seo: Seo!
+}
+
+type ListArticleResponse {
+  page: ArticleConnection!
+  pageData: PageDataDto
+}
+
+type ArticleConnection {
+  edges: [ArticleEdge!]
+  pageInfo: ArticlePageInfo
+}
+
+type ArticleEdge {
+  cursor: String
+  node: Article
+}
+
+type ArticlePageInfo {
+  startCursor: String
+  endCursor: String
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
+}
+
 type Page {
   _id: ID!
   data: DataPage!
@@ -203,7 +198,7 @@ type Page {
   updateDate: UpdateDate!
   page: [Page!]!
   product: [Product]!
-  blog: [Blog!]
+  article: [Article!]
 }
 
 type DataPage {
@@ -228,7 +223,7 @@ type Page0 {
   updateDate: UpdateDate!
   page: [Page1]
   product: [Product]!
-  blog: [Blog!]
+  article: [Article!]!
 }
 
 type Page1 {
@@ -241,7 +236,7 @@ type Page1 {
   updateDate: UpdateDate!
   page: [Page2]
   product: [Product]!
-  blog: [Blog!]
+  article: [Article!]
 }
 
 type Page2 {
@@ -254,7 +249,7 @@ type Page2 {
   updateDate: UpdateDate!
   page: [Page3]
   product: [Product]
-  blog: [Blog!]!
+  article: [Article!]
 }
 
 type Page3 {
@@ -267,7 +262,7 @@ type Page3 {
   updateDate: UpdateDate!
   page: [Page4!]!
   product: [Product!]!
-  blog: [Blog!]!
+  article: [Article!]
 }
 
 type Page4 {
@@ -280,7 +275,7 @@ type Page4 {
   updateDate: UpdateDate!
   page: [Page5!]!
   product: [Product]!
-  blog: [Blog!]
+  article: [Article!]
 }
 
 type Page5 {
@@ -293,7 +288,7 @@ type Page5 {
   updateDate: UpdateDate!
   page: [Page6!]!
   product: [Product]!
-  blog: [Blog!]
+  article: [Article!]
 }
 
 type Page6 {
@@ -306,7 +301,7 @@ type Page6 {
   updateDate: UpdateDate!
   page: [Page!]!
   product: [Product]!
-  blog: [Blog!]
+  article: [Article!]
 }
 
 type ListPageResponse {
@@ -400,9 +395,6 @@ type Query {
   getUser(_id: ID!): User!
   getUserByEmail(email: String!): User!
   getUsers: [User!]!
-  findBlog(_id: ID!): Blog!
-  findBlogs: [Blog!]!
-  listPages0WithCursor(args: ConnectionArgs!): ListPageResponse!
   comment(id: Int!): Comment!
   beverages: [Beverage!]!
   beverage(id: Int!): Beverage!
@@ -416,6 +408,7 @@ type Query {
   findPage0BySlug(site: String!, slug: String!): Page0!
   findPages0BySite(site: String!): [Page0!]!
   findPages0: [Page0!]!
+  listPages0WithCursor(args: ConnectionArgs!): ListPageResponse!
   findPage1(_id: ID!): Page1!
   findPage1BySlug(site: String!, slug: String!): Page1!
   findPages1ByParent(parent: String!): [Page1!]!
@@ -440,6 +433,9 @@ type Query {
   findPages5: [Page5!]!
   findPage5BySlug(site: String!, slug: String!): Page5!
   findPages5BySite(site: String!): [Page5!]!
+  findArticle(_id: ID!): Article!
+  findArticles: [Article!]!
+  listArticlesWithCursor(args: ConnectionArgs!): ListArticleResponse!
 }
 
 input ConnectionArgs {
@@ -474,9 +470,6 @@ type Mutation {
   updateUser(_id: ID!, input: UpdateUserInput!): User!
   deleteUser(_id: ID!): String!
   deleteUsers(site: String!): String!
-  createBlog(input: CreateBlog!): Blog!
-  updateBlog(_id: ID!, input: UpdateBlog!): Blog!
-  deleteBlog(_id: ID!): String!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
   removeComment(id: Int!): Comment!
@@ -509,6 +502,9 @@ type Mutation {
   createPage5(input: CreatePage!): Page5!
   updatePage5(_id: ID!, input: UpdatePage!): Page5!
   deletePage5(_id: ID!): String!
+  createArticle(input: CreateArticle!): Article!
+  updateArticle(_id: ID!, input: UpdateArticle!): Article!
+  deleteArticle(_id: ID!): String!
 }
 
 input CreateProduct {
@@ -555,27 +551,6 @@ input UpdateUserInput {
   email: String
   password: String
   role: String
-}
-
-input CreateBlog {
-  title: String!
-  author: String!
-  description: String!
-  site: String!
-  page: String!
-  category: String!
-}
-
-input UpdateBlog {
-  title: String!
-  author: String!
-  description: String!
-  category: String!
-  src: String!
-  alt: String!
-  content: String!
-  meta: String!
-  tags: [String!]!
 }
 
 input CreateCommentInput {
@@ -654,6 +629,27 @@ input UpdatePage {
   type: String!
 }
 
+input CreateArticle {
+  title: String!
+  author: String!
+  description: String!
+  site: String!
+  parent: String!
+  category: String!
+}
+
+input UpdateArticle {
+  title: String!
+  author: String!
+  description: String!
+  category: String!
+  src: String!
+  alt: String!
+  content: String!
+  meta: String!
+  tags: [String!]!
+}
+
 type Subscription {
-  blogAdded: Blog!
+  blogAdded: Article!
 }

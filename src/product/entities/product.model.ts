@@ -1,12 +1,12 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { AbstractModel } from 'src/common/abstract';
-import { Image, Seo, UpdateDate } from 'src/common/model/model';
+import { Image, Seo, Tags, UpdateDate } from 'src/common/model/model';
 import { RelayTypes } from 'src/common/pagination/relay/relay.types';
 
 @ObjectType()
 export class Product extends AbstractModel {
-  @Field(() => Article)
-  readonly article: Article | string;
+  @Field(() => ArticleProduct)
+  readonly article: ArticleProduct | string;
 
   @Field()
   readonly site: string;
@@ -21,7 +21,7 @@ export class Product extends AbstractModel {
 }
 
 @ObjectType()
-export class Article {
+export class ArticleProduct {
   @Field()
   readonly name: string;
   @Field()
@@ -44,8 +44,8 @@ export class Article {
   @Field(() => [SpecsProduct])
   readonly specs?: SpecsProduct[];
 
-  @Field(() => [TagsProduct])
-  readonly tags?: TagsProduct[];
+  @Field(() => [Tags])
+  readonly tags?: Tags[];
 
   @Field(() => [Image], { nullable: true })
   readonly image?: Image[];
@@ -80,13 +80,6 @@ export class Detail {
 }
 
 
-@ObjectType()
-export class TagsProduct {
-  @Field()
-  readonly uid: string;
-  @Field()
-  readonly text: string;
-}
 
 @ObjectType()
 export class SpecsProduct {

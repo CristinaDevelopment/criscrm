@@ -2,7 +2,7 @@ import { InputType, Field, PartialType, OmitType } from '@nestjs/graphql';
 
 
 @InputType()
-export class CreateBlog {
+export class CreateArticle {
   @Field()
   readonly title: string;
   @Field()
@@ -12,13 +12,13 @@ export class CreateBlog {
   @Field()
   readonly site: string;
   @Field()
-  readonly page: string;
+  readonly parent: string;
   @Field()
   readonly category: string;
 }
 
 @InputType()
-export class UpdateBlog extends OmitType(CreateBlog, ['site', 'page']) {
+export class UpdateArticle extends OmitType(CreateArticle, ['site', 'parent']) {
   @Field()
   readonly src: string;
   @Field()

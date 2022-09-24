@@ -35,6 +35,16 @@ import { MongooseModule } from '@nestjs/mongoose';
       }),
       inject: [ConfigService],
     }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      connectionName: 'articlesDB',
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URL_ARTICLES'),
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }),
+      inject: [ConfigService],
+    }),
   ],
 })
 export class MongoModule {}

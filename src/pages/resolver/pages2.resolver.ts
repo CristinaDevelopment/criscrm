@@ -8,8 +8,6 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { connectionFromArraySlice } from 'graphql-relay';
-import { BlogService } from 'src/blog/blog.service';
-import { Blog } from 'src/blog/entities/blog.model';
 import ConnectionArgs, {
   getPagingParameters,
 } from 'src/common/pagination/relay/connection.args';
@@ -33,7 +31,6 @@ export class Pages2Resolver {
     private readonly page2Service: Pages2Service,
     private readonly page3Service: Pages3Service,
     private readonly productService: ProductService,
-    private readonly blogService: BlogService,
   ) {}
 
   @Mutation(() => Page2, { name: 'createPage2' })
@@ -93,11 +90,11 @@ export class Pages2Resolver {
     return this.page3Service.findPage3(_id.toString());
   }
 
-  @ResolveField('blog', () => [Blog])
-  getBlog(@Parent() page: Page2) {
-    const { _id } = page;
-    return this.blogService.findByPageId(_id);
-  }
+  // @ResolveField('blog', () => [Blog])
+  // getBlog(@Parent() page: Page2) {
+  //   const { _id } = page;
+  //   return this.blogService.findByPageId(_id);
+  // }
 
   // @ResolveField('product', () => [Product], { nullable: 'itemsAndList' })
   // getProduct(@Parent() { _id, data }: Page) {

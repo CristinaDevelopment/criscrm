@@ -1,62 +1,63 @@
 import { Injectable } from '@nestjs/common';
 import { uuidv3 } from 'src/utils';
 import { capitalizar, slug } from 'src/utils/function';
-import { BlogRepository } from './blog.repository';
-import { CreateBlog, UpdateBlog } from './dto/blog.input';
-import { Blog } from './entities/blog.model';
-import { BlogDocument } from './entities/blog.schema';
+import { ArticlesRepository } from './articles.repository';
+import { CreateArticle, UpdateArticle } from './dto/article.input';
+import { Article } from './entities/article.model';
+import { ArticleDocument } from './entities/article.schema';
 import { PubSub } from 'graphql-subscriptions';
-import { GetBlog } from './dto/blog.args';
+import { GetArticle } from './dto/article.args';
 import { ListInput } from 'src/common/pagination/dto/list.input';
 
 @Injectable()
-export class BlogService {
+export class ArticlesService {
   constructor(
-    private readonly blogRepository: BlogRepository,
+    private readonly articleRepository: ArticlesRepository,
     private readonly pubSub: PubSub,
   ) {}
 
-  async create(input: CreateBlog) {
-    const data = await this.blogRepository.create(this.createBlog(input));
+  async create(input: CreateArticle) {
+    const data = await this.articleRepository.create(this.createArticle(input));
     const newPost = this.toModel(data);
-    this.pubSub.publish('blogAdded', { blogAdded: newPost });
+    this.pubSub.publish('articleAdded', { articleAdded: newPost });
     return newPost;
   }
 
-  async update(id: GetBlog, input: UpdateBlog) {
-    const document = await this.blogRepository.findOneAndUpdate(id, {
-      $set: this.updateBlog(input),
+  async update(id: GetArticle, input: UpdateArticle) {
+    const document = await this.articleRepository.findOneAndUpdate(id, {
+      $set: this.updateArticle(input),
       $push: { 'updateDate.register': { updatedAt: new Date() } },
     });
     return this.toModel(document);
   }
-  async findOne(id: GetBlog) {
-    const document = await this.blogRepository.findOne(id);
+  async findOne(id: GetArticle) {
+    const document = await this.articleRepository.findOne(id);
     return this.toModel(document);
   }
   findBySiteId(siteId) {
-    return this.blogRepository.find({ site: siteId });
+    return this.articleRepository.find({ site: siteId });
   }
-  findByPageId(pageId) {
-    return this.blogRepository.find({ page: pageId });
+  
+  findByParentId(parentId) {
+    return this.articleRepository.find({ parent: parentId });
   }
 
   findAll() {
-    return this.blogRepository.find({});
+    return this.articleRepository.find({});
   }
 
   all(pagination: ListInput) {
-    return this.blogRepository.All(pagination);
+    return this.articleRepository.All(pagination);
   }
 
-  async deleteOne(id: GetBlog) {
+  async deleteOne(id: GetArticle) {
     // await this.validateSite(id);
-    await this.blogRepository.deleteOne(id);
+    await this.articleRepository.deleteOne(id);
     return id._id;
   }
 
-  private createBlog(input: CreateBlog) {
-    const { title, description, author, site, category, page } = input;
+  private createArticle(input: CreateArticle) {
+    const { title, description, author, site, category, parent } = input;
     return {
       data: {
         title: capitalizar(title),
@@ -78,13 +79,13 @@ export class BlogService {
         },
       },
       site: site,
-      page: page,
+      parent: parent,
       updateDate: {
         createdAt: new Date(),
       },
     };
   }
-  private updateBlog(input: UpdateBlog) {
+  private updateArticle(input: UpdateArticle) {
     const {
       title,
       content,
@@ -120,13 +121,13 @@ export class BlogService {
     };
   }
 
-  private toModel(blogDocument: BlogDocument): Blog {
+  private toModel(articleDocument: ArticleDocument): Article {
     return {
-      _id: blogDocument._id.toHexString(),
-      data: blogDocument.data,
-      site: blogDocument.site,
-      page: blogDocument.page,
-      updateDate: blogDocument.updateDate,
+      _id: articleDocument._id.toHexString(),
+      data: articleDocument.data,
+      site: articleDocument.site,
+      parent: articleDocument.parent,
+      updateDate: articleDocument.updateDate,
     };
   }
 }

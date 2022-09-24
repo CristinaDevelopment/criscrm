@@ -3,6 +3,7 @@ import { ListInput } from 'src/common/pagination/dto/list.input';
 import { capitalizar, slug } from 'src/utils/function';
 import { GetPage, GetSite } from '../dto/page.args';
 import { CreatePage, UpdatePage } from '../dto/page.input';
+import { Page2 } from '../entities/page.model';
 import { PageDocument } from '../entities/page.schema';
 import { Pages2Repository } from '../repository/pages.repository';
 
@@ -103,11 +104,14 @@ export class Pages2Service {
       slug: slug(input.title),
     }
   }
-  private toModel(pageDocument: PageDocument) {
+  private toModel(pageDocument: PageDocument): Page2 {
     return {
       _id: pageDocument._id.toHexString(),
       data: pageDocument.data,
+      site: pageDocument.site,
+      parent: pageDocument.parent,
       slug: pageDocument.slug,
+      updateDate: pageDocument.updateDate,
     };
   }
 }

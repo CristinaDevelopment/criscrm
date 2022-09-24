@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ProductModule } from './product/product.module';
 import { UserModule } from './user/user.module';
-import { BlogModule } from './blog/blog.module';
+// import { BlogModule } from './blog/blog.module';
 import { CommentModule } from './comment/comment.module';
 import { CommonModule } from './config/common.module';
 import { AuthModule } from './auth/auth.module';
@@ -11,12 +11,13 @@ import { UploadModule } from './upload/upload.module';
 import { CoursesModule } from './courses/courses.module';
 import { SitesModule } from './sites/sites.module';
 import { PagesModule } from './pages/pages.module';
+import { ArticlesModule } from './articles/articles.module';
 
 @Module({
   imports: [
     ProductModule,
     UserModule,
-    BlogModule,
+    // BlogModule,
     CommentModule,
     CommonModule,
     AuthModule,
@@ -26,6 +27,7 @@ import { PagesModule } from './pages/pages.module';
     CoursesModule,
     SitesModule,
     PagesModule,
+    ArticlesModule,
   ],
   controllers: [],
   providers: [],

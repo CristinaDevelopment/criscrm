@@ -6,6 +6,7 @@ import { Pages0Repository } from '../repository/pages.repository';
 import { capitalizar } from '../../utils/function';
 import { GetPage, GetSite } from '../dto/page.args';
 import { ListInput } from 'src/common/pagination/dto/list.input';
+import { Page0 } from '../entities/page.model';
 
 @Injectable()
 export class Pages0Service {
@@ -101,11 +102,14 @@ export class Pages0Service {
     };
   }
 
-  private toModel(pageDocument: PageDocument) {
+  private toModel(pageDocument: PageDocument): Page0 {
     return {
       _id: pageDocument._id.toHexString(),
       data: pageDocument.data,
+      site: pageDocument.site,
+      parent: pageDocument.parent,
       slug: pageDocument.slug,
+      updateDate: pageDocument.updateDate,
     };
   }
 }

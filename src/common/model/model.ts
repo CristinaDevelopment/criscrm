@@ -39,3 +39,11 @@ export class Register {
   @Field()
   updatedAt: Date;
 }
+
+@ObjectType()
+export class Tags {
+  @Field()
+  readonly uid: string;
+  @Field()
+  readonly text: string;
+}

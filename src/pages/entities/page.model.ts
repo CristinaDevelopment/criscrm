@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Blog } from 'src/blog/entities/blog.model';
+import { Article } from 'src/articles/entities/article.model';
 import { Image, Seo, UpdateDate } from 'src/common/model/model';
 import { RelayTypes } from 'src/common/pagination/relay/relay.types';
 import { Product } from 'src/product/entities/product.model';
@@ -23,8 +23,8 @@ export class Page extends AbstractModel {
   readonly page?: Page[];
   @Field(() => [Product], { nullable: 'items' })
   readonly product?: Product[];
-  @Field(() => [Blog], { nullable: true })
-  readonly blog?: Blog[];
+  @Field(() => [Article], { nullable: true })
+  readonly article?: Article[];
 }
 
 @ObjectType()

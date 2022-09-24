@@ -60,7 +60,7 @@ export class Pages4Resolver {
   delete(@Args() id: GetPage) {
     return this.page4Service.deletePage(id);
   }
-
+  
   @Query(() => ListPageResponse, { name: 'listPages3WithCursor' })
   async findAllWithCursor(
     @Args('args') args: ConnectionArgs,
