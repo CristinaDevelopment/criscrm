@@ -65,6 +65,7 @@ export class ArticlesService {
         description: description,
         category: category,
         author: author,
+        content: '',
         thumbnail: {
           uid: uuidv3(),
           src: 'https://res.cloudinary.com/dqsbh2kn0/image/upload/v1663014890/zawkgpyjvvxrfwp9j7w1.jpg',
