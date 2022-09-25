@@ -8,6 +8,7 @@ import ConnectionArgs, {
   getPagingParameters,
 } from 'src/common/pagination/relay/connection.args';
 import { connectionFromArraySlice } from 'graphql-relay';
+import { UsePipes, ValidationPipe } from '@nestjs/common';
 
 @Resolver(() => Article)
 export class ArticlesResolver {
@@ -17,6 +18,7 @@ export class ArticlesResolver {
   ) {}
 
   @Mutation(() => Article, { name: 'createArticle' })
+  @UsePipes(new ValidationPipe({ transform: true }))
   create(@Args('input') input: CreateArticle) {
     return this.blogService.create(input);
   }

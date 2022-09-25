@@ -1,4 +1,8 @@
-import { Logger, NotFoundException } from '@nestjs/common';
+import {
+  Logger,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { FilterQuery, Model, Types, UpdateQuery } from 'mongoose';
 import { ListInput } from '../pagination/dto/list.input';
 import { AbstractDocument } from './abstract.schema';
@@ -73,5 +77,17 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     const count = await this.model.count();
     const data = await this.findAll(paginationQuery);
     return { data, count };
+  }
+
+  async findOneBySlug(filterQuery: FilterQuery<TDocument>): Promise<TDocument> {
+    const document = await this.model.findOne(filterQuery, {}, { lean: true });
+
+    if (document) {
+      // this.logger.warn('Document not found with filterQuery', filterQuery);
+      throw new UnprocessableEntityException(
+        'You already have an item registered with that name',
+      );
+    }
+    return;
   }
 }

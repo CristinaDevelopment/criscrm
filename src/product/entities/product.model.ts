@@ -5,8 +5,8 @@ import { RelayTypes } from 'src/common/pagination/relay/relay.types';
 
 @ObjectType()
 export class Product extends AbstractModel {
-  @Field(() => ArticleProduct)
-  readonly article: ArticleProduct | string;
+  @Field(() => DataProduct)
+  readonly data: DataProduct | string;
 
   @Field()
   readonly site: string;
@@ -21,7 +21,7 @@ export class Product extends AbstractModel {
 }
 
 @ObjectType()
-export class ArticleProduct {
+export class DataProduct {
   @Field()
   readonly name: string;
   @Field()
@@ -47,8 +47,8 @@ export class ArticleProduct {
   @Field(() => [Tags])
   readonly tags?: Tags[];
 
-  @Field(() => [Image], { nullable: true })
-  readonly image?: Image[];
+  @Field(() => [Image])
+  readonly image: Image[];
 
   @Field(() => Seo)
   readonly seo: Seo | string;

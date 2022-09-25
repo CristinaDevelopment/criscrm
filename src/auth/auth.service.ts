@@ -4,10 +4,6 @@ import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { DataUser, User } from '../user/entities/user.model';
 
-export interface UserI {
-  _id: string;
-  data: DataUser;
-}
 export interface TokenPayload {
   userId: string;
   name: string;
@@ -20,15 +16,17 @@ export class AuthService {
   constructor(
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
+    
   ) {}
 
-  async login(user: UserI, response: Response) {
+  async login(user: User, response: Response) {
     const { _id, data } = user;
+    const { name, role, image } = data as DataUser;
     const tokenPayload: TokenPayload = {
       userId: _id,
-      name: data.name,
-      role: data.role,
-      image: data.image,
+      name: name,
+      role: role,
+      image: image,
     };
 
     const expires = new Date();
@@ -43,6 +41,22 @@ export class AuthService {
       expires,
     });
   }
+
+  // async verifyPayload(payload: JwtPayload): Promise<User> {
+  //   let user: User;
+
+  //   try {
+  //     user = await this.userService.findOne({ where: { email: payload.sub } });
+  //   } catch (error) {
+  //     throw new UnauthorizedException(
+  //       `There isn't any user with email: ${payload.sub}`,
+  //     );
+  //   }
+  //   delete user.password;
+
+  //   return user;
+  // }
+
   logout(response: Response) {
     response.cookie('Authentication', '', {
       httpOnly: true,

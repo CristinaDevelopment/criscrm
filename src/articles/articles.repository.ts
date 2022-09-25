@@ -10,8 +10,9 @@ export class ArticlesRepository extends AbstractRepository<ArticleDocument> {
   protected readonly logger = new Logger(ArticlesRepository.name);
 
   constructor(
-    @InjectModel(Article.name, 'articlesDB') blogModel: Model<ArticleDocument>,
+    @InjectModel(Article.name, 'articlesDB')
+    articleModel: Model<ArticleDocument>,
   ) {
-    super(blogModel);
+    super(articleModel);
   }
 }

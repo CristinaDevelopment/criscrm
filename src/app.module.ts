@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { ProductModule } from './product/product.module';
 import { UserModule } from './user/user.module';
 // import { BlogModule } from './blog/blog.module';
@@ -12,12 +12,13 @@ import { CoursesModule } from './courses/courses.module';
 import { SitesModule } from './sites/sites.module';
 import { PagesModule } from './pages/pages.module';
 import { ArticlesModule } from './articles/articles.module';
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { LoggingInterceptor } from './common/interceptors/logginf.interceptor';
 
 @Module({
   imports: [
     ProductModule,
     UserModule,
-    // BlogModule,
     CommentModule,
     CommonModule,
     AuthModule,
@@ -30,6 +31,15 @@ import { ArticlesModule } from './articles/articles.module';
     ArticlesModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
+  ],
 })
 export class AppModule {}

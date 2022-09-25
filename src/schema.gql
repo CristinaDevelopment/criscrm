@@ -45,14 +45,14 @@ type PageDataDto {
 
 type Product {
   _id: ID!
-  article: ArticleProduct!
+  data: DataProduct!
   site: String!
   type: String!
   parent: String!
   updateDate: UpdateDate!
 }
 
-type ArticleProduct {
+type DataProduct {
   name: String!
   slug: String!
   mark: String!
@@ -64,7 +64,7 @@ type ArticleProduct {
   details: Detail
   specs: [SpecsProduct!]!
   tags: [Tags!]!
-  image: [Image!]
+  image: [Image!]!
   seo: Seo!
 }
 
@@ -157,13 +157,13 @@ type Article {
 type DataArticle {
   title: String!
   slug: String!
-  content: String
+  content: String!
   category: String!
   description: String!
-  meta: String
-  tags: [Tags]
+  meta: String!
+  tags: [Tags!]!
   author: String!
-  thumbnail: Image
+  thumbnail: Image!
   seo: Seo!
 }
 
@@ -385,56 +385,56 @@ type SitePageInfo {
 }
 
 type Query {
-  getProduct(_id: ID!, type: String!): Product!
-  getProducts(type: String!): [Product!]!
-  getAllProducts: [Product!]!
-  getProductsClothing: [Product!]!
-  getProductsFurniture: [Product!]!
-  getProductsBySite(site: String!, type: String!): [Product!]!
-  getProductsByPage(page: String!, type: String!): [Product!]!
+  findProduct(id: ID!, type: String!): Product!
+  findProducts(type: String!): [Product!]!
+  findAllProducts: [Product!]!
+  findProductsClothing: [Product!]!
+  findProductsFurniture: [Product!]!
+  findProductsBySite(siteId: String!, type: String!): [Product!]!
+  findProductsByPage(parentId: String!, type: String!): [Product!]!
   listProductWithCursor(args: ConnectionArgs!, type: String!): ListProductResponse!
-  getUser(_id: ID!): User!
-  getUserByEmail(email: String!): User!
-  getUsers: [User!]!
+  findUser(id: ID!): User!
+  findUserByEmail(email: String!): User!
+  findUsers: [User!]!
   comment(id: Int!): Comment!
   beverages: [Beverage!]!
   beverage(id: Int!): Beverage!
   courses: [Course!]!
   course(id: Int!): Course!
-  findSite(_id: ID!): Site!
+  findSite(id: ID!): Site!
   findSites: [Site!]!
   sitesByPagination(input: ListInput!): [Site!]!
   listSitesWithCursor(args: ConnectionArgs!): ListSiteResponse!
-  findPage0(_id: ID!): Page0!
+  findPage0(id: ID!): Page0!
   findPage0BySlug(site: String!, slug: String!): Page0!
-  findPages0BySite(site: String!): [Page0!]!
+  findPages0BySite(siteID: String!): [Page0!]!
   findPages0: [Page0!]!
   listPages0WithCursor(args: ConnectionArgs!): ListPageResponse!
-  findPage1(_id: ID!): Page1!
+  findPage1(id: ID!): Page1!
   findPage1BySlug(site: String!, slug: String!): Page1!
   findPages1ByParent(parent: String!): [Page1!]!
-  findPages1BySite(site: String!): [Page1!]!
+  findPages1BySite(siteID: String!): [Page1!]!
   findPages1: [Page1!]!
   listPages1WithCursor(args: ConnectionArgs!): ListPageResponse!
-  findPage2(_id: ID!): Page2!
+  findPage2(id: ID!): Page2!
   findPage2BySlug(site: String!, slug: String!): Page2!
-  findPages2BySite(site: String!): [Page2!]!
+  findPages2BySite(siteID: String!): [Page2!]!
   findPages2: [Page2!]!
   listPages2WithCursor(args: ConnectionArgs!): ListPageResponse!
-  findPage3(_id: ID!): Page3!
+  findPage3(id: ID!): Page3!
   findPage3BySlug(site: String!, slug: String!): Page3!
-  findPages3BySite(site: String!): [Page3!]!
+  findPages3BySite(siteID: String!): [Page3!]!
   findPages3: [Page3!]!
   listPages3WithCursor(args: ConnectionArgs!): ListPageResponse!
-  findPage4(_id: ID!): Page4!
+  findPage4(id: ID!): Page4!
   findPages4: [Page4!]!
   findPage4BySlug(site: String!, slug: String!): Page4!
-  findPages4BySite(site: String!): [Page4!]!
-  findPage5(_id: ID!): Page5!
+  findPages4BySite(siteID: String!): [Page4!]!
+  findPage5(id: ID!): Page5!
   findPages5: [Page5!]!
   findPage5BySlug(site: String!, slug: String!): Page5!
-  findPages5BySite(site: String!): [Page5!]!
-  findArticle(_id: ID!): Article!
+  findPages5BySite(siteID: String!): [Page5!]!
+  findArticle(id: ID!): Article!
   findArticles: [Article!]!
   listArticlesWithCursor(args: ConnectionArgs!): ListArticleResponse!
 }
@@ -463,14 +463,14 @@ input ListInput {
 
 type Mutation {
   createProduct(input: CreateProduct!, type: String!): Product!
-  updateProduct(_id: ID!, input: UpdateProduct!, type: String!): Product!
-  updateProductImage(_id: ID!, input: [UpdateImage!]!, type: String!): Product!
-  deleteProduct(_id: ID!, type: String!): String!
-  deleteProducts(site: String!, type: String!): String!
-  createUser(input: CreateUserInput!): User!
-  updateUser(_id: ID!, input: UpdateUserInput!): User!
-  deleteUser(_id: ID!): String!
-  deleteUsers(site: String!): String!
+  updateProduct(id: ID!, input: UpdateProduct!, type: String!): Product!
+  updateProductImage(id: ID!, input: [UpdateImage!]!, type: String!): Product!
+  deleteProduct(id: ID!, type: String!): String!
+  deleteProducts(siteId: String!, type: String!): String!
+  createUser(input: CreateUser!): User!
+  updateUser(id: ID!, input: UpdateUser!): User!
+  deleteUser(id: ID!): String!
+  deleteUsers(siteId: String!): String!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
   removeComment(id: Int!): Comment!
@@ -481,31 +481,31 @@ type Mutation {
   updateCourse(updateCourseInput: UpdateCourseInput!): Course!
   removeCourse(id: Int!): Course!
   createSite(input: CreateSite!): Site!
-  updateSite(_id: ID!, input: UpdateSite!): Site!
-  updateDataBase(_id: ID!, input: [UpdateDataBase!]!): Site!
-  deleteSite(_id: ID!): String!
+  updateSite(id: ID!, input: UpdateSite!): Site!
+  updateDataBase(id: ID!, input: [UpdateDataBase!]!): Site!
+  deleteSite(id: ID!): String!
   deleteSites: String!
   createPage0(input: CreatePage!): Page0!
-  updatePage0(_id: ID!, input: UpdatePage!): Page0!
-  deletePage0(_id: ID!): String!
+  updatePage0(id: ID!, input: UpdatePage!): Page0!
+  deletePage0(id: ID!): String!
   createPage1(input: CreatePage!): Page1!
-  updatePage1(_id: ID!, input: UpdatePage!): Page1!
-  deletePage1(_id: ID!): String!
+  updatePage1(id: ID!, input: UpdatePage!): Page1!
+  deletePage1(id: ID!): String!
   createPage2(input: CreatePage!): Page2!
-  updatePage2(_id: ID!, input: UpdatePage!): Page2!
-  deletePage2(_id: ID!): String!
+  updatePage2(id: ID!, input: UpdatePage!): Page2!
+  deletePage2(id: ID!): String!
   createPage3(input: CreatePage!): Page3!
-  updatePage3(_id: ID!, input: UpdatePage!): Page3!
-  deletePage3(_id: ID!): String!
+  updatePage3(id: ID!, input: UpdatePage!): Page3!
+  deletePage3(id: ID!): String!
   createPage4(input: CreatePage!): Page4!
-  updatePage4(_id: ID!, input: UpdatePage!): Page4!
-  deletePage4(_id: ID!): String!
+  updatePage4(id: ID!, input: UpdatePage!): Page4!
+  deletePage4(id: ID!): String!
   createPage5(input: CreatePage!): Page5!
-  updatePage5(_id: ID!, input: UpdatePage!): Page5!
-  deletePage5(_id: ID!): String!
+  updatePage5(id: ID!, input: UpdatePage!): Page5!
+  deletePage5(id: ID!): String!
   createArticle(input: CreateArticle!): Article!
-  updateArticle(_id: ID!, input: UpdateArticle!): Article!
-  deleteArticle(_id: ID!): String!
+  updateArticle(id: ID!, input: UpdateArticle!): Article!
+  deleteArticle(id: ID!): String!
 }
 
 input CreateProduct {
@@ -521,13 +521,15 @@ input CreateProduct {
 }
 
 input UpdateProduct {
-  name: String!
-  mark: String!
-  description: String!
-  featured: String!
-  inStock: Float!
-  price: Float!
-  discountPrice: Float!
+  name: String
+  mark: String
+  description: String
+  featured: String
+  inStock: Float
+  price: Float
+  discountPrice: Float
+  site: String
+  parent: String
 }
 
 input UpdateImage {
@@ -536,7 +538,7 @@ input UpdateImage {
   alt: String!
 }
 
-input CreateUserInput {
+input CreateUser {
   name: String!
   site: String!
   image: String!
@@ -545,7 +547,7 @@ input CreateUserInput {
   role: String!
 }
 
-input UpdateUserInput {
+input UpdateUser {
   name: String
   site: String
   image: String
@@ -640,10 +642,12 @@ input CreateArticle {
 }
 
 input UpdateArticle {
-  title: String!
-  author: String!
-  description: String!
-  category: String!
+  title: String
+  author: String
+  description: String
+  site: String
+  parent: String
+  category: String
   src: String!
   alt: String!
   content: String!

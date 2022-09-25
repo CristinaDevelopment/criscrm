@@ -7,19 +7,19 @@ export class GetProductArgs {
   @IsString()
   @IsNotEmpty()
   @IsMongoId()
-  _id: string;
+  id: string;
 }
 
 
 @ArgsType()
 export class GetSite {
   @Field()
-  site: string;
+  siteId: string;
 }
 @ArgsType()
-export class GetPage {
+export class GetParent {
   @Field()
-  page: string;
+  parentId: string;
 }
 
 

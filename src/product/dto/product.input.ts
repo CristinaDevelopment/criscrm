@@ -31,10 +31,7 @@ export class CreateProduct {
 }
 
 @InputType()
-export class UpdateProduct extends OmitType(CreateProduct, [
-  'site',
-  'parent',
-] as const) {}
+export class UpdateProduct extends PartialType(CreateProduct) {}
 
 @InputType()
 export class UpdateSpecs {

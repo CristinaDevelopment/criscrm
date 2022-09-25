@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 
 @InputType()
-export class CreateUserInput {
+export class CreateUser {
 
   @Field()
   name: string;
@@ -36,4 +36,4 @@ export class CreateUserInput {
 }
 
 @InputType()
-export class UpdateUserInput extends PartialType(CreateUserInput) {}
+export class UpdateUser extends PartialType(CreateUser) {}

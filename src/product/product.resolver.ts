@@ -3,7 +3,7 @@ import { ProductService } from './product.service';
 
 import { CreateProduct, UpdateProduct, UpdateImage } from './dto/product.input';
 import { ListProductResponse, Product } from './entities/product.model';
-import { GetPage, GetProductArgs, GetSite } from './dto/product.args';
+import { GetParent, GetProductArgs, GetSite } from './dto/product.args';
 import ConnectionArgs, {
   getPagingParameters,
 } from 'src/common/pagination/relay/connection.args';
@@ -13,27 +13,24 @@ export class ProductResolver {
   constructor(private readonly productService: ProductService) {}
 
   @Mutation(() => Product, { name: 'createProduct' })
-  createProduct(
-    @Args('input') input: CreateProduct,
-    @Args('type') type: string,
-  ) {
-    return this.productService.createProduct(input, type);
+  create(@Args('input') input: CreateProduct, @Args('type') type: string) {
+    return this.productService.create(input, type);
   }
   @Mutation(() => Product, { name: 'updateProduct' })
-  updateProduct(
+  update(
     @Args() id: GetProductArgs,
     @Args('input') input: UpdateProduct,
     @Args('type') type: string,
   ) {
-    return this.productService.updateProduct(id, input, type);
+    return this.productService.update(id, input, type);
   }
   @Mutation(() => Product, { name: 'updateProductImage' })
-  updateProductImage(
+  updateImage(
     @Args() id: GetProductArgs,
     @Args('input', { type: () => [UpdateImage] }) input: UpdateImage[],
     @Args('type') type: string,
   ) {
-    return this.productService.updateProductImage(id, input, type);
+    return this.productService.updateImage(id, input, type);
   }
   @Mutation(() => String, { name: 'deleteProduct' })
   deleteProduct(@Args() id: GetProductArgs, @Args('type') type: string) {
@@ -45,34 +42,34 @@ export class ProductResolver {
     return this.productService.deleteProducts(site, type);
   }
 
-  @Query(() => Product, { name: 'getProduct' })
-  getProduct(@Args() id: GetProductArgs, @Args('type') type: string) {
-    return this.productService.getProduct(id, type);
+  @Query(() => Product, { name: 'findProduct' })
+  findProduct(@Args() id: GetProductArgs, @Args('type') type: string) {
+    return this.productService.findProduct(id, type);
   }
-  @Query(() => [Product], { name: 'getProducts' })
-  getProducts(@Args('type') type: string) {
-    return this.productService.getProducts(type);
+  @Query(() => [Product], { name: 'findProducts' })
+  findProducts(@Args('type') type: string) {
+    return this.productService.findProducts(type);
   }
-  @Query(() => [Product], { name: 'getAllProducts' })
-  getAllProducts() {
-    return this.productService.getAllProducts();
+  @Query(() => [Product], { name: 'findAllProducts' })
+  findAllProducts() {
+    return this.productService.findAllProducts();
   }
-  @Query(() => [Product], { name: 'getProductsClothing' })
-  getProductsClothing() {
-    return this.productService.getProductsClothing();
+  @Query(() => [Product], { name: 'findProductsClothing' })
+  findProductsClothing() {
+    return this.productService.findProductsClothing();
   }
-  @Query(() => [Product], { name: 'getProductsFurniture' })
-  getProductsFurniture() {
-    return this.productService.getProductsFurniture();
+  @Query(() => [Product], { name: 'findProductsFurniture' })
+  findProductsFurniture() {
+    return this.productService.findProductsFurniture();
   }
 
-  @Query(() => [Product], { name: 'getProductsBySite' })
-  getProductsBySite(@Args() site: GetSite, @Args('type') type: string) {
-    return this.productService.getProductsBySite(site, type);
+  @Query(() => [Product], { name: 'findProductsBySite' })
+  findProductsBySite(@Args() siteID: GetSite, @Args('type') type: string) {
+    return this.productService.findProductsBySite(siteID, type);
   }
-  @Query(() => [Product], { name: 'getProductsByPage' })
-  getProductsByPage(@Args() page: GetPage, @Args('type') type: string) {
-    return this.productService.getProductsByParent(page, type);
+  @Query(() => [Product], { name: 'findProductsByPage' })
+  findProductsByPage(@Args() parentID: GetParent, @Args('type') type: string) {
+    return this.productService.findProductsByParent(parentID, type);
   }
 
   @Query(() => ListProductResponse, { name: 'listProductWithCursor' })

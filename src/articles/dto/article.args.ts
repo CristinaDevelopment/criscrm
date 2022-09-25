@@ -7,5 +7,5 @@ export class GetArticle {
   @IsString()
   @IsNotEmpty()
   @IsMongoId()
-  _id: string;
+  id: string;
 }

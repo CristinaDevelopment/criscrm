@@ -1,6 +1,6 @@
 import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
-import { GetSite, GetUserArgs } from './dto/user.args';
-import { CreateUserInput, UpdateUserInput } from './dto/user.input';
+import { GetSite, GetUser } from './dto/user.args';
+import { CreateUser, UpdateUser } from './dto/user.input';
 import { UserService } from './user.service';
 import { User } from './entities/user.model';
 
@@ -9,35 +9,36 @@ export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Mutation(() => User, { name: 'createUser' })
-  createUser(@Args('input') input: CreateUserInput) {
-    return this.userService.createUser(input);
+  create(@Args('input') input: CreateUser) {
+    return this.userService.create(input);
   }
 
   @Mutation(() => User, { name: 'updateUser' })
-  updateUser(@Args() id: GetUserArgs, @Args('input') input: UpdateUserInput) {
-    return this.userService.updateUser(id, input);
+  update(@Args() id: GetUser, @Args('input') input: UpdateUser) {
+    return this.userService.update(id, input);
   }
 
   @Mutation(() => String, { name: 'deleteUser' })
-  deleteUser(@Args() id: GetUserArgs) {
+  delete(@Args() id: GetUser) {
     return this.userService.deleteUser(id);
   }
   @Mutation(() => String, { name: 'deleteUsers' })
-  deleteUsers(@Args() site: GetSite) {
+  deletes(@Args() site: GetSite) {
     return this.userService.deleteUsers(site);
   }
 
-  @Query(() => User, { name: 'getUser' })
-  async getUser(@Args() id: GetUserArgs) {
-    return this.userService.getUser(id);
+  @Query(() => User, { name: 'findUser' })
+  async findUser(@Args() id: GetUser) {
+    return this.userService.findUser(id);
   }
-  @Query(() => User, { name: 'getUserByEmail' })
-  async getUserByEmail(@Args('email') email: string) {
-    return this.userService.getUserByEmail(email);
+  
+  @Query(() => User, { name: 'findUserByEmail' })
+  async findUserByEmail(@Args('email') email: string) {
+    return this.userService.findUserByEmail(email);
   }
 
-  @Query(() => [User], { name: 'getUsers' })
-  async getUsers() {
+  @Query(() => [User], { name: 'findUsers' })
+  async findUsers() {
     return this.userService.findAll();
   }
 }

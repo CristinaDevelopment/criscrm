@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { uuidv3 } from 'src/utils';
 import { capitalizar, slug } from 'src/utils/function';
 import { ArticlesRepository } from './articles.repository';
@@ -17,21 +21,26 @@ export class ArticlesService {
   ) {}
 
   async create(input: CreateArticle) {
+    await this.validateSlugCreate(input);
     const data = await this.articleRepository.create(this.createArticle(input));
     const newPost = this.toModel(data);
     this.pubSub.publish('articleAdded', { articleAdded: newPost });
     return newPost;
   }
 
-  async update(id: GetArticle, input: UpdateArticle) {
-    const document = await this.articleRepository.findOneAndUpdate(id, {
-      $set: this.updateArticle(input),
-      $push: { 'updateDate.register': { updatedAt: new Date() } },
-    });
+  async update({ id }: GetArticle, input: UpdateArticle) {
+    await this.validateSlugUpdate(id, input);
+    const document = await this.articleRepository.findOneAndUpdate(
+      { _id: id },
+      {
+        $set: this.updateArticle(input),
+        $push: { 'updateDate.register': { updatedAt: new Date() } },
+      },
+    );
     return this.toModel(document);
   }
-  async findOne(id: GetArticle) {
-    const document = await this.articleRepository.findOne(id);
+  async findOne({ id }: GetArticle) {
+    const document = await this.articleRepository.findOne({ _id: id });
     return this.toModel(document);
   }
   findBySiteId(siteId) {
@@ -49,15 +58,40 @@ export class ArticlesService {
   all(pagination: ListInput) {
     return this.articleRepository.All(pagination);
   }
-
-  async deleteOne(id: GetArticle) {
+ 
+  async deleteOne({ id }: GetArticle) {
     // await this.validateSite(id);
-    await this.articleRepository.deleteOne(id);
-    return id._id;
+    await this.articleRepository.deleteOne({ _id: id });
+    return id;
   }
 
-  private createArticle(input: CreateArticle) {
-    const { title, description, author, site, category, parent } = input;
+  private async validateSlugCreate({ title, site, parent }: CreateArticle) {
+    await this.articleRepository.findOneBySlug({
+      'data.slug': slug(title),
+      site: site,
+      parent: parent,
+    });
+  }
+  private async validateSlugUpdate(
+    id: string,
+    { title, site, parent }: UpdateArticle,
+  ) {
+    await this.articleRepository.findOneBySlug({
+      _id: { $ne: id },
+      'data.slug': slug(title),
+      site: site,
+      parent: parent,
+    });
+  }
+
+  private createArticle({
+    title,
+    description,
+    author,
+    site,
+    category,
+    parent,
+  }: CreateArticle) {
     return {
       data: {
         title: capitalizar(title),
@@ -66,6 +100,7 @@ export class ArticlesService {
         category: category,
         author: author,
         content: '',
+        meta: '',
         tags: [],
         thumbnail: {
           uid: uuidv3(),
@@ -90,21 +125,20 @@ export class ArticlesService {
       },
     };
   }
-  private updateArticle(input: UpdateArticle) {
-    const {
-      title,
-      content,
-      description,
-      meta,
-      tags,
-      author,
-      src,
-      alt,
-      category,
-    } = input;
+  private updateArticle({
+    title,
+    content,
+    description,
+    meta,
+    tags,
+    author,
+    src,
+    alt,
+    category,
+  }: UpdateArticle) {
     return {
       data: {
-        title: capitalizar(input.title),
+        title: capitalizar(title),
         slug: slug(title),
         content: content,
         description: description,
@@ -122,7 +156,7 @@ export class ArticlesService {
           alt: alt,
         },
         seo: {
-          title: capitalizar(input.title),
+          title: capitalizar(title),
           href: slug(title),
           description: description,
           image: {

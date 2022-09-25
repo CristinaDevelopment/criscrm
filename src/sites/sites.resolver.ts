@@ -6,20 +6,26 @@ import {
   ResolveField,
   Parent,
 } from '@nestjs/graphql';
-import { ProductService } from 'src/product/product.service';
 import { GetSite } from '../sites/dto/site.args';
 import { CreateSite, UpdateSite } from '../sites/dto/site.input';
 import { ListSiteResponse, Site } from '../sites/entities/site.model';
 import { SitesService } from './sites.service';
 import { Pages0Service } from 'src/pages/service/pages0.service';
-import { Page, Page0 } from '../pages/entities/page.model';
+import { Page0 } from '../pages/entities/page.model';
 import { ListInput } from 'src/common/pagination/dto/list.input';
 import ConnectionArgs, {
   getPagingParameters,
 } from 'src/common/pagination/relay/connection.args';
 import { connectionFromArraySlice } from 'graphql-relay';
 import { UpdateDataBase } from '../sites/dto/site.input';
-import { Pages1Service } from 'src/pages/service';
+
+const page = {
+  title: 'home',
+  description: 'home description',
+  src: 'https://res.cloudinary.com/dqsbh2kn0/image/upload/v1663014890/zawkgpyjvvxrfwp9j7w1.jpg',
+  alt: 'image home description',
+  type: 'page-blank',
+};
 
 @Resolver(() => Site)
 export class SitesResolver {
@@ -29,8 +35,14 @@ export class SitesResolver {
   ) {}
 
   @Mutation(() => Site, { name: 'createSite' })
-  create(@Args('input') input: CreateSite) {
-    return this.siteService.create(input);
+  async create(@Args('input') input: CreateSite) {
+    const document = await this.siteService.create(input);
+    this.page0Service.create({
+      ...page,
+      parent: document._id,
+      site: document._id,
+    });
+    return document;
   }
 
   @Mutation(() => Site, { name: 'updateSite' })

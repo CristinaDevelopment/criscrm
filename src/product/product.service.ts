@@ -5,7 +5,7 @@ import {
   ProductRepositoryClothing,
   ProductRepositoryFurniture,
 } from './product.repository';
-import { GetPage, GetProductArgs, GetSite } from './dto/product.args';
+import { GetParent, GetProductArgs, GetSite } from './dto/product.args';
 import { capitalizar, slug } from 'src/utils/function';
 import { uuidv3 } from 'src/utils';
 import { ListInput } from 'src/common/pagination/dto/list.input';
@@ -17,7 +17,8 @@ export class ProductService {
     private readonly productRepositoryFurniture: ProductRepositoryFurniture,
   ) {}
 
-  async createProduct(input: CreateProduct, type: string) {
+  async create(input: CreateProduct, type: string) {
+    await this.validateSlugCreate(type, input);
     let data;
     if (type === 'clothing') {
       data = await this.productRepositoryClothing.create(
@@ -30,63 +31,76 @@ export class ProductService {
     }
     return this.toModel(data);
   }
-  async updateProduct(id: GetProductArgs, input: UpdateProduct, type: string) {
+  async update({ id }: GetProductArgs, input: UpdateProduct, type: string) {
+    await this.validateSlugUpdate(id, type, input);
     let data;
     if (type === 'clothing') {
-      data = await this.productRepositoryClothing.findOneAndUpdate(id, {
-        $set: this.productUpdated(input),
-        $push: { 'updateDate.register': { updatedAt: new Date() } },
-      });
+      data = await this.productRepositoryClothing.findOneAndUpdate(
+        { _id: id },
+        {
+          $set: this.productUpdated(input),
+          $push: { 'updateDate.register': { updatedAt: new Date() } },
+        },
+      );
     } else if (type === 'furniture') {
-      data = await this.productRepositoryFurniture.findOneAndUpdate(id, {
-        $set: this.productUpdated(input),
-        $push: { 'updateDate.register': { updatedAt: new Date() } },
-      });
+      data = await this.productRepositoryFurniture.findOneAndUpdate(
+        { _id: id },
+        {
+          $set: this.productUpdated(input),
+          $push: { 'updateDate.register': { updatedAt: new Date() } },
+        },
+      );
     }
     return this.toModel(data);
   }
-  async updateProductImage(
-    id: GetProductArgs,
+  async updateImage(
+    { id }: GetProductArgs,
     input: UpdateImage[],
     type: string,
   ) {
     let data;
     if (type === 'clothing') {
-      data = await this.productRepositoryClothing.findOneAndUpdate(id, {
-        $set: {
-          'article.image': input.map((data) => ({
-            uid: uuidv3(),
-            src: data.src,
-            alt: data.alt,
-          })),
+      data = await this.productRepositoryClothing.findOneAndUpdate(
+        { _id: id },
+        {
+          $set: {
+            'data.image': input.map((data) => ({
+              uid: uuidv3(),
+              src: data.src,
+              alt: data.alt,
+            })),
+          },
+          $push: { 'updateDate.register': { updatedAt: new Date() } },
         },
-        $push: { 'updateDate.register': { updatedAt: new Date() } },
-      });
+      );
     } else if (type === 'furniture') {
-      data = await this.productRepositoryFurniture.findOneAndUpdate(id, {
-        $set: {
-          'article.image': input.map((data) => ({
-            uid: uuidv3(),
-            src: data.src,
-            alt: data.alt,
-          })),
+      data = await this.productRepositoryFurniture.findOneAndUpdate(
+        { _id: id },
+        {
+          $set: {
+            'data.image': input.map((data) => ({
+              uid: uuidv3(),
+              src: data.src,
+              alt: data.alt,
+            })),
+          },
+          $push: { 'updateDate.register': { updatedAt: new Date() } },
         },
-        $push: { 'updateDate.register': { updatedAt: new Date() } },
-      });
+      );
     }
     return this.toModel(data);
   }
 
-  async getProduct(id: GetProductArgs, type: string) {
+  async findProduct({ id }: GetProductArgs, type: string) {
     let data;
     if (type === 'clothing') {
-      data = await this.productRepositoryClothing.findOne(id);
+      data = await this.productRepositoryClothing.findOne({ _id: id });
     } else if (type === 'furniture') {
-      data = await this.productRepositoryFurniture.findOne(id);
+      data = await this.productRepositoryFurniture.findOne({ _id: id });
     }
     return this.toModel(data);
   }
-  getProducts(type: string) {
+  findProducts(type: string) {
     let data;
     if (type === 'clothing') {
       data = this.productRepositoryClothing.find({});
@@ -95,53 +109,53 @@ export class ProductService {
     }
     return data;
   }
-  getProductsClothing() {
+  findProductsClothing() {
     return this.productRepositoryClothing.find({});
   }
-  getProductsFurniture() {
+  findProductsFurniture() {
     return this.productRepositoryFurniture.find({});
   }
 
-  async getAllProducts() {
+  async findAllProducts() {
     const clothings = await this.productRepositoryClothing.find({});
     const furnituries = await this.productRepositoryFurniture.find({});
 
     return [clothings, furnituries].flat(1);
   }
 
-  async getProductsBySite(site: GetSite, type: string) {
+  async findProductsBySite({ siteId }: GetSite, type: string) {
     let data;
     if (type === 'clothing') {
-      data = await this.productRepositoryClothing.find(site);
+      data = await this.productRepositoryClothing.find({ site: siteId });
     } else if (type === 'furniture') {
-      data = await this.productRepositoryFurniture.find(site);
+      data = await this.productRepositoryFurniture.find({ site: siteId });
     }
     return data;
   }
-  async getProductsByParent(page: GetPage, type: string) {
+  async findProductsByParent({ parentId }: GetParent, type: string) {
     let data;
     if (type === 'clothing') {
-      data = await this.productRepositoryClothing.find(page);
+      data = await this.productRepositoryClothing.find({ parent: parentId });
     } else if (type === 'furniture') {
-      data = await this.productRepositoryFurniture.find(page);
+      data = await this.productRepositoryFurniture.find({ parent: parentId });
     }
     return data;
   }
 
-  async deleteProduct(id: GetProductArgs, type: string) {
+  async deleteProduct({ id }: GetProductArgs, type: string) {
     if (type === 'clothing') {
-      await this.productRepositoryClothing.deleteOne(id);
+      await this.productRepositoryClothing.deleteOne({ _id: id });
     } else if (type === 'furniture') {
-      await this.productRepositoryFurniture.deleteOne(id);
+      await this.productRepositoryFurniture.deleteOne({ _id: id });
     }
-    return id._id;
+    return id;
   }
 
-  async deleteProducts(site: GetSite, type: string) {
+  async deleteProducts({ siteId }: GetSite, type: string) {
     if (type === 'clothing') {
-      await this.productRepositoryClothing.deleteMany(site);
+      await this.productRepositoryClothing.deleteMany({ site: siteId });
     } else if (type === 'furniture') {
-      await this.productRepositoryFurniture.deleteOne(site);
+      await this.productRepositoryFurniture.deleteOne({ site: siteId });
     }
     return 'deleted products';
   }
@@ -186,12 +200,6 @@ export class ProductService {
     return data;
   }
 
-  findByChildrenUid(childrenUid) {
-    return this.productRepositoryClothing.find({
-      children: childrenUid,
-    });
-  }
-
   all(pagination: ListInput, type: string) {
     let data;
     if (type === 'clothing') {
@@ -202,25 +210,78 @@ export class ProductService {
     return data;
   }
 
-  private productCreated(input: CreateProduct, type: string) {
+  private async validateSlugCreate(
+    type: string,
+    { name, site, parent }: CreateProduct,
+  ) {
+    if (type === 'clothing') {
+      await this.productRepositoryClothing.findOneBySlug({
+        'data.slug': slug(name),
+        site: site,
+        parent: parent,
+      });
+    } else if (type === 'furniture') {
+      await this.productRepositoryFurniture.findOneBySlug({
+        'data.slug': slug(name),
+        site: site,
+        parent: parent,
+      });
+    }
+  }
+  private async validateSlugUpdate(
+    id: string,
+    type: string,
+    { name, site, parent }: UpdateProduct,
+  ) {
+    if (type === 'clothing') {
+      await this.productRepositoryClothing.findOneBySlug({
+        _id: { $ne: id },
+        'data.slug': slug(name),
+        site: site,
+        parent: parent,
+      });
+    } else if (type === 'furniture') {
+      await this.productRepositoryFurniture.findOneBySlug({
+        _id: { $ne: id },
+        'data.slug': slug(name),
+        site: site,
+        parent: parent,
+      });
+    }
+  }
+
+  private productCreated(
+    {
+      name,
+      mark,
+      inStock,
+      price,
+      discountPrice,
+      description,
+      featured,
+      site,
+      parent,
+    }: CreateProduct,
+    type: string,
+  ) {
     return {
-      article: {
-        name: capitalizar(input.name),
-        slug: slug(input.name),
-        mark: input.mark,
-        inStock: input.inStock,
-        price: input.price,
-        discountPrice: input.discountPrice,
-        description: input.description,
+      data: {
+        name: capitalizar(name),
+        slug: slug(name),
+        mark: mark,
+        inStock: inStock,
+        price: price,
+        discountPrice: discountPrice,
+        description: description,
         featured: {
-          name: capitalizar(input.featured),
-          href: slug(input.featured),
+          name: capitalizar(featured),
+          href: slug(featured),
         },
         image: [],
         seo: {
-          title: capitalizar(input.name),
-          href: slug(input.name),
-          description: input.description,
+          title: capitalizar(name),
+          href: slug(name),
+          description: description,
           image: {
             uid: uuidv3(),
             src: 'https://res.cloudinary.com/dvcyhn0lj/image/upload/v1655217461/14.1_no-image.jpg_gkwtld.jpg',
@@ -228,31 +289,39 @@ export class ProductService {
           },
         },
       },
-      site: input.site,
-      parent: input.parent,
+      site: site,
+      parent: parent,
       type: type === 'clothing' ? 'clothing' : 'furniture',
       updateDate: {
         createdAt: new Date(),
       },
     };
   }
-  private productUpdated(input: UpdateProduct) {
+  private productUpdated({
+    name,
+    mark,
+    inStock,
+    price,
+    discountPrice,
+    description,
+    featured,
+  }: UpdateProduct) {
     return {
-      'article.name': capitalizar(input.name),
-      'article.slug': slug(input.name),
-      'article.mark': input.mark,
-      'article.inStock': input.inStock,
-      'article.price': input.price,
-      'article.discountPrice': input.discountPrice,
-      'article.description': input.description,
-      'article.featured': {
-        name: capitalizar(input.featured),
-        href: slug(input.featured),
+      'data.name': capitalizar(name),
+      'data.slug': slug(name),
+      'data.mark': mark,
+      'data.inStock': inStock,
+      'data.price': price,
+      'data.discountPrice': discountPrice,
+      'data.description': description,
+      'data.featured': {
+        name: capitalizar(featured),
+        href: slug(featured),
       },
-      'article.seo': {
-        title: capitalizar(input.name),
-        href: slug(input.name),
-        description: input.description,
+      'data.seo': {
+        title: capitalizar(name),
+        href: slug(name),
+        description: description,
         image: {
           uid: uuidv3(),
           src: 'https://res.cloudinary.com/dvcyhn0lj/image/upload/v1655217461/14.1_no-image.jpg_gkwtld.jpg',
@@ -265,7 +334,7 @@ export class ProductService {
   private toModel(productDocument: ProductDocument) {
     return {
       _id: productDocument._id.toHexString(),
-      article: productDocument.article,
+      data: productDocument.data,
       site: productDocument.site,
       parent: productDocument.parent,
       type: productDocument.type,

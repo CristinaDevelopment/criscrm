@@ -16,20 +16,22 @@ export class Pages3Service {
     const document = await this.pageRepository.create(this.pageCreated(input));
     return this.toModel(document);
   }
-
-  async update(id: GetPage, input: UpdatePage) {
-    const document = await this.pageRepository.findOneAndUpdate(id, {
-      $set: this.pageUpdate(input),
-      $push: { 'updateDate.register': { updatedAt: new Date() } },
-
-    });
+  async update({ id }: GetPage, input: UpdatePage) {
+    const document = await this.pageRepository.findOneAndUpdate(
+      { _id: id },
+      {
+        $set: this.pageUpdate(input),
+        $push: { 'updateDate.register': { updatedAt: new Date() } },
+      },
+    );
     return this.toModel(document);
   }
 
-  async findPage(id: GetPage) {
-    const document = await this.pageRepository.findOne(id);
+  async findPage({ id }: GetPage) {
+    const document = await this.pageRepository.findOne({ _id: id });
     return this.toModel(document);
   }
+  
   async findPageBySlug(site: string, slug: string) {
     const document = await this.pageRepository.findOne({
       site: site,
@@ -37,19 +39,19 @@ export class Pages3Service {
     });
     return this.toModel(document);
   }
-  findPagesBySite(site: GetSite) {
-    return this.pageRepository.find(site);
+
+  findPagesBySite({ siteID }: GetSite) {
+    return this.pageRepository.find({ site: siteID });
   }
 
   findPages() {
     return this.pageRepository.find({});
   }
 
-
-  async deletePage(id: GetPage) {
+  async deletePage({ id }: GetPage) {
     // await this.validateSite(id);
-    await this.pageRepository.deleteOne(id);
-    return id._id;
+    await this.pageRepository.deleteOne({ _id: id });
+    return id;
   }
 
   findPage3(parentId) {
@@ -60,46 +62,55 @@ export class Pages3Service {
     return this.pageRepository.All(pagination);
   }
 
-  private pageCreated(input: CreatePage) {
+  private pageCreated({
+    type,
+    title,
+    description,
+    src,
+    alt,
+    parent,
+    site,
+  }: CreatePage) {
     return {
       data: {
-        type: input.type,
+        type: type,
         seo: {
-          title: capitalizar(input.title),
-          href: slug(input.title),
-          description: input.description,
+          title: capitalizar(title),
+          href: slug(title) === 'home' ? '' : slug(title),
+          description: description,
           image: {
-            src: input.src,
-            alt: input.alt,
+            src: src,
+            alt: alt,
           },
         },
       },
-      parent: input.parent,
-      site: input.site,
+      parent: parent,
+      site: site,
       updateDate: {
         createdAt: new Date(),
       },
-      slug: slug(input.title),
+      slug: slug(title),
       section: [],
     };
   }
-  private pageUpdate(input: UpdatePage) {
+
+  private pageUpdate({ type, title, description, src, alt }: UpdatePage) {
     return {
       data: {
-        type: input.type,
+        type: type,
         seo: {
-          title: capitalizar(input.title),
-          href: slug(input.title),
-          description: input.description,
+          title: capitalizar(title),
+          href: slug(title),
+          description: description,
           image: {
-            src: input.src,
-            alt: input.alt,
+            src: src,
+            alt: alt,
           },
         },
       },
 
-      slug: slug(input.title),
-    }
+      slug: slug(title),
+    };
   }
 
   private toModel(pageDocument: PageDocument): Page3 {

@@ -15,13 +15,13 @@ import { AuthenticationError } from 'apollo-server-express';
 
 @Injectable()
 export class GqlAuthGuard extends AuthGuard('jwt') {
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    try {
-      return (await super.canActivate(context)) as boolean;
-    } catch (e) {
-      throw new AuthenticationError('You are not logged-in.');
-    }
-  }
+  // async canActivate(context: ExecutionContext): Promise<boolean> {
+  //   try {
+  //     return (await super.canActivate(context)) as boolean;
+  //   } catch (e) {
+  //     throw new AuthenticationError('You are not logged-in.');
+  //   }
+  // }
 
   getRequest(context: ExecutionContext) {
     const ctx = GqlExecutionContext.create(context);

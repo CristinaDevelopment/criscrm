@@ -19,57 +19,51 @@ import { SitesRepository } from '../sites/sites.repository';
 export class SitesService {
   constructor(
     private readonly siteRepository: SitesRepository, // @Inject('PRODUCT_SERVICE') // private readonly communicationCliente: ClientProxy,
-    private readonly page0Repository: Pages0Repository, // @Inject('PRODUCT_SERVICE') // private readonly communicationCliente: ClientProxy,
   ) {}
 
   async create(input: CreateSite) {
     const document = await this.siteRepository.create(
       this.documentCreate(input),
     );
-    // await this.page0Repository.create(
-    //   this.pageCreated({
-    //     title: 'home',
-    //     description: 'home description',
-    //     src: 'https://res.cloudinary.com/dqsbh2kn0/image/upload/v1663014890/zawkgpyjvvxrfwp9j7w1.jpg',
-    //     alt: 'image description',
-    //     type: 'page-blank',
-    //     parent: document._id.toString(),
-    //     site: document._id.toString(),
-    //   }),
-    // );
     return this.toModel(document);
   }
-  async update(id: GetSite, input: UpdateSite) {
-    const document = await this.siteRepository.findOneAndUpdate(id, {
-      $set: this.documentUpdate(input),
-      $push: {
-        'updateDate.register': {
-          uid: input.uid,
-          change: input.change,
-          updatedAt: new Date(),
+  async update({ id }: GetSite, input: UpdateSite) {
+    const document = await this.siteRepository.findOneAndUpdate(
+      { _id: id },
+      {
+        $set: this.documentUpdate(input),
+        $push: {
+          'updateDate.register': {
+            uid: input.uid,
+            change: input.change,
+            updatedAt: new Date(),
+          },
         },
       },
-    });
+    );
     return this.toModel(document);
   }
 
-  async updateDataBase(id: GetSite, input: UpdateDataBase[]) {
-    const document = await this.siteRepository.findOneAndUpdate(id, {
-      $set: {
-        'data.dataBase': input.map((data) => ({
-          uid: uuidv3(),
-          label: capitalizar(data.type),
-          value: slug(data.type),
-        })),
+  async updateDataBase({ id }: GetSite, input: UpdateDataBase[]) {
+    const document = await this.siteRepository.findOneAndUpdate(
+      { _id: id },
+      {
+        $set: {
+          'data.dataBase': input.map((data) => ({
+            uid: uuidv3(),
+            label: capitalizar(data.type),
+            value: slug(data.type),
+          })),
+        },
       },
-    });
+    );
     return this.toModel(document);
   }
 
-  async deleteSite(id: GetSite) {
+  async deleteSite({ id }: GetSite) {
     // await this.validateSite(id);
-    await this.siteRepository.deleteOne(id);
-    return id._id;
+    await this.siteRepository.deleteOne({ _id: id });
+    return id;
   }
 
   async deleteSites() {
@@ -77,8 +71,8 @@ export class SitesService {
     return 'sites deleted';
   }
 
-  async findSite(id: GetSite) {
-    const document = await this.siteRepository.findOne(id);
+  async findSite({ id }: GetSite) {
+    const document = await this.siteRepository.findOne({ _id: id });
     return this.toModel(document);
   }
 
@@ -90,30 +84,37 @@ export class SitesService {
     return this.siteRepository.All(pagination);
   }
 
-  private documentCreate(input: CreateSite) {
-    const web = input.domain.split('.');
+  private documentCreate({
+    domain,
+    name,
+    description,
+    type,
+    client,
+    uid,
+  }: CreateSite) {
+    const web = domain.split('.');
     const nameDomain = web[0];
     web.shift();
     const dlt = web.join('.');
     return {
       data: {
-        name: input.name,
-        description: input.description,
+        name: name,
+        description: description,
         dataBase: [],
         users: [],
         domain: {
           name: nameDomain,
           dlt: dlt,
         },
-        type: input.type,
+        type: type,
       },
-      client: input.client,
-      url: input.domain,
+      client: client,
+      url: domain,
       updateDate: {
         createdAt: new Date(),
         register: [
           {
-            uid: input.uid,
+            uid: uid,
             change: 'created',
             updatedAt: new Date(),
           },
@@ -121,20 +122,20 @@ export class SitesService {
       },
     };
   }
-  private documentUpdate(input: UpdateSite) {
-    const web = input.domain.split('.');
+  private documentUpdate({ domain, name, description, type }: UpdateSite) {
+    const web = domain.split('.');
     const nameDomain = web[0];
     web.shift();
     const dlt = web.join('.');
     return {
-      'data.name': input.name,
+      'data.name': name,
       'data.domain': {
         name: nameDomain,
         dlt: dlt,
       },
-      'data.description': input.description,
-      'data.type': input.type,
-      url: input.domain,
+      'data.description': description,
+      'data.type': type,
+      url: domain,
     };
   }
 

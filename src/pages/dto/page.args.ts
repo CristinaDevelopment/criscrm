@@ -6,10 +6,10 @@ export class GetPage {
   @IsString()
   @IsNotEmpty()
   @IsMongoId()
-  _id: string;
+  id: string;
 }
 @ArgsType()
 export class GetSite {
   @Field()
-  site: string;
+  siteID: string;
 }
