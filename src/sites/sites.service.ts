@@ -12,7 +12,6 @@ import {
   UpdateDataBase,
   UpdateSite,
 } from '../sites/dto/site.input';
-import { Site } from '../sites/entities/site.model';
 import { SiteDocument } from '../sites/entities/site.schema';
 import { SitesRepository } from '../sites/sites.repository';
 

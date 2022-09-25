@@ -108,7 +108,11 @@ export class ArticlesService {
         description: description,
         category: category,
         meta: meta,
-        tags: tags.map((data) => ({ uid: uuidv3(), text: data })),
+        tags: tags.map((data) => ({
+          uid: uuidv3(),
+          text: data,
+          href: slug(data),
+        })),
         author: author,
         thumbnail: {
           uid: uuidv3(),

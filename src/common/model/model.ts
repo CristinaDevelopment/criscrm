@@ -46,4 +46,6 @@ export class Tags {
   readonly uid: string;
   @Field()
   readonly text: string;
+  @Field()
+  readonly href: string;
 }
