@@ -37,7 +37,7 @@ export class ArticlesService {
   findBySiteId(siteId) {
     return this.articleRepository.find({ site: siteId });
   }
-  
+
   findByParentId(parentId) {
     return this.articleRepository.find({ parent: parentId });
   }
@@ -62,17 +62,20 @@ export class ArticlesService {
       data: {
         title: capitalizar(title),
         slug: slug(title),
-        // content: content,
         description: description,
         category: category,
-        // meta: meta,
-        // tags: tags.map((data) => ({ uid: uuidv3(), text: data })),
         author: author,
+        thumbnail: {
+          uid: uuidv3(),
+          src: 'https://res.cloudinary.com/dqsbh2kn0/image/upload/v1663014890/zawkgpyjvvxrfwp9j7w1.jpg',
+          alt: description,
+        },
         seo: {
           title: capitalizar(title),
           href: slug(title),
           description: description,
           image: {
+            uid: uuidv3(),
             src: 'https://res.cloudinary.com/dqsbh2kn0/image/upload/v1663014890/zawkgpyjvvxrfwp9j7w1.jpg',
             alt: description,
           },
@@ -107,12 +110,17 @@ export class ArticlesService {
         meta: meta,
         tags: tags.map((data) => ({ uid: uuidv3(), text: data })),
         author: author,
-        thumbnail: { src: src, alt: alt },
+        thumbnail: {
+          uid: uuidv3(),
+          src: src,
+          alt: alt,
+        },
         seo: {
           title: capitalizar(input.title),
           href: slug(title),
           description: description,
           image: {
+            uid: uuidv3(),
             src: src,
             alt: alt,
           },
