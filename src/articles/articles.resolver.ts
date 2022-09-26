@@ -8,7 +8,7 @@ import ConnectionArgs, {
   getPagingParameters,
 } from 'src/common/pagination/relay/connection.args';
 import { connectionFromArraySlice } from 'graphql-relay';
-import { UsePipes, ValidationPipe } from '@nestjs/common';
+import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 
 @Resolver(() => Article)
 export class ArticlesResolver {
@@ -24,7 +24,7 @@ export class ArticlesResolver {
   }
 
   @Subscription(() => Article)
-  blogAdded() {
+  articleAdded() {
     return this.pubSub.asyncIterator('articleAdded');
   }
 
@@ -37,6 +37,7 @@ export class ArticlesResolver {
   findOne(@Args() id: GetArticle) {
     return this.blogService.findOne(id);
   }
+
 
   @Query(() => [Article], { name: 'findArticles' })
   findAll() {

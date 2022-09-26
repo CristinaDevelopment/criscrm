@@ -1,5 +1,6 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 import { AbstractModel } from 'src/common/abstract';
+import { Image, UpdateDate } from 'src/common/model/model';
 
 @ObjectType()
 export class User extends AbstractModel {
@@ -11,32 +12,37 @@ export class User extends AbstractModel {
   readonly password: string;
   @Field()
   readonly site: string;
-  @Field(() => UpdateDateUser)
-  readonly updateDate: UpdateDateUser | string;
-  
+  @Field(() => UpdateDate)
+  readonly updateDate: UpdateDate | string;
 }
 
-@ObjectType()
-export class UpdateDateUser {
-  @Field()
-  createdAt: Date;
-  @Field()
-  updatedAt: Date;
-}
+// @ObjectType()
+// export class UpdateDateUser {
+//   @Field()
+//   createdAt: Date;
+//   @Field()
+//   updatedAt: Date;
+// }
 
 @ObjectType()
 export class DataUser {
   @Field()
-  readonly name: string;
+  readonly username: string;
 
   @Field()
   readonly role: string;
   
-  @Field()
-  readonly image: string;
+  @Field(() => Image)
+  readonly image: Image | string;
   
   @Field(() => Boolean)
   readonly status: boolean;
-  @Field(() => Boolean)
-  readonly google: boolean;
+  @Field(() => OAuth)
+  readonly oAuth: OAuth | string;
+}
+
+@ObjectType()
+export class OAuth {
+  @Field()
+  provider: string
 }

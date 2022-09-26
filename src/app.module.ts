@@ -12,8 +12,10 @@ import { CoursesModule } from './courses/courses.module';
 import { SitesModule } from './sites/sites.module';
 import { PagesModule } from './pages/pages.module';
 import { ArticlesModule } from './articles/articles.module';
-import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { LoggingInterceptor } from './common/interceptors/logginf.interceptor';
+import { UsersModule } from './users/users.module';
+import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -21,7 +23,7 @@ import { LoggingInterceptor } from './common/interceptors/logginf.interceptor';
     UserModule,
     CommentModule,
     CommonModule,
-    AuthModule,
+    // AuthModule,
     PubSubModule,
     BeveragesModule,
     UploadModule,
@@ -29,6 +31,7 @@ import { LoggingInterceptor } from './common/interceptors/logginf.interceptor';
     SitesModule,
     PagesModule,
     ArticlesModule,
+    // UsersModule,
   ],
   controllers: [],
   providers: [
@@ -36,10 +39,11 @@ import { LoggingInterceptor } from './common/interceptors/logginf.interceptor';
       provide: APP_PIPE,
       useClass: ValidationPipe,
     },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: LoggingInterceptor,
-    },
+
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: LoggingInterceptor,
+    // },
   ],
 })
 export class AppModule {}

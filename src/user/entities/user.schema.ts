@@ -1,6 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { AbstractDocument } from 'src/common/abstract';
-import { DataUser, UpdateDateUser } from './user.model';
+import { UpdateDate } from 'src/common/model/model';
+import { DataUser } from './user.model';
 
 @Schema({ versionKey: false })
 export class UserDocument extends AbstractDocument {
@@ -12,8 +13,8 @@ export class UserDocument extends AbstractDocument {
   password: string;
   @Prop()
   site: string;
-  @Prop({ type: UpdateDateUser })
-  updateDate: UpdateDateUser;
+  @Prop({ type: UpdateDate })
+  updateDate: UpdateDate;
 
 }
 export const UserSchema = SchemaFactory.createForClass(UserDocument);

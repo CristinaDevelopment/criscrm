@@ -9,6 +9,7 @@ import { User } from './entities/user.model';
 import { UserDocument } from './entities/user.schema';
 import { UserRepository } from './user.repository';
 import * as bcrypt from 'bcrypt';
+import { uuidv3 } from '../utils/index';
 
 @Injectable()
 export class UserService {
@@ -20,14 +21,18 @@ export class UserService {
     const dataDocument = await this.userRepository.create({
       data: {
         role: input.role,
-        image: input.image,
-        name: input.name,
+        image: {
+          src: input.image,
+          alt: input.username,
+        },
+        username: input.username,
         status: true,
-        google: false,
+        oAuth: {
+          provider: input.oAuth ? input.oAuth : 'credentials',
+        },
       },
       updateDate: {
         createdAt: new Date(),
-        updatedAt: new Date(),
       },
       email: input.email.toLowerCase(),
       password: await bcrypt.hash(input.password, 10),
@@ -42,12 +47,14 @@ export class UserService {
       { _id: id },
       {
         $set: {
-          'data.name': input.name,
-          'data.role': input.role,
-          email: input.email.toLowerCase(),
-          password: await bcrypt.hash(input.password, 10),
-          'updateDate.updatedAt': new Date(),
+          'data.username': input.username,
+          'data.image.src': input.image,
+          'data.image.alt': input.username,
+
+          // email: input.email.toLowerCase(),
+          // password: await bcrypt.hash(input.password, 10),
         },
+        $push: { 'updateDate.register': { updatedAt: new Date() } },
       },
     );
     return this.toModel(dataDocument);
@@ -68,8 +75,6 @@ export class UserService {
     const dataDocument = await this.userRepository.findOne({ _id: id });
     return this.toModel(dataDocument);
   }
-
-
 
   async deleteUser({ id }: GetUser) {
     await this.userRepository.deleteOne({ _id: id });

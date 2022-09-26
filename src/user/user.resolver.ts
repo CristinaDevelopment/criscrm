@@ -31,7 +31,7 @@ export class UserResolver {
   async findUser(@Args() id: GetUser) {
     return this.userService.findUser(id);
   }
-  
+
   @Query(() => User, { name: 'findUserByEmail' })
   async findUserByEmail(@Args('email') email: string) {
     return this.userService.findUserByEmail(email);

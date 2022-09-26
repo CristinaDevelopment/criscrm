@@ -115,20 +115,19 @@ type User {
   email: String!
   password: String!
   site: String!
-  updateDate: UpdateDateUser!
-}
-
-type UpdateDateUser {
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  updateDate: UpdateDate!
 }
 
 type DataUser {
-  name: String!
+  username: String!
   role: String!
-  image: String!
+  image: Image!
   status: Boolean!
-  google: Boolean!
+  oAuth: OAuth!
+}
+
+type OAuth {
+  provider: String!
 }
 
 type Comment {
@@ -539,21 +538,20 @@ input UpdateImage {
 }
 
 input CreateUser {
-  name: String!
+  username: String!
   site: String!
   image: String!
   email: String!
   password: String!
   role: String!
+  oAuth: String
 }
 
 input UpdateUser {
-  name: String
-  site: String
-  image: String
-  email: String
-  password: String
-  role: String
+  username: String!
+  image: String!
+  email: String!
+  oAuth: String
 }
 
 input CreateCommentInput {
@@ -656,5 +654,5 @@ input UpdateArticle {
 }
 
 type Subscription {
-  blogAdded: Article!
+  articleAdded: Article!
 }

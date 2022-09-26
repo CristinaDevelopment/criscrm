@@ -1,45 +1,30 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
-import { UserModule } from '../user/user.module';
+import { UsersModule } from '../users/users.module';
 import { PassportModule } from '@nestjs/passport';
-import { LocalStrategy } from './strategies/local.strategy';
+import { LocalStrategy } from './strategy/local.strategy';
+import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtStrategy } from './strategies/jwt.strategy';
-import { APP_GUARD } from '@nestjs/core';
-import JwtAuthGuard from './guards/jwt-auth.guard';
-import { GqlAuthGuard } from './guards/gql-auth.guard';
+import { jwtConstants } from './constants';
+import { JwtStrategy } from './strategy/jwt.strategy';
+import { MongooseModule } from '@nestjs/mongoose';
+import { User, UserSchema } from 'src/users/entities/user.entity';
 
 @Module({
   imports: [
-    UserModule,
+    UsersModule,
     PassportModule,
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
-        signOptions: {
-          expiresIn: `${configService.get('JWT_EXPIRATION')}s`,
-          algorithm: 'HS384',
-        },
-        verifyOptions: {
-          algorithms: ['HS384'],
-        },
-      }),
-      inject: [ConfigService],
+    JwtModule.register({
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: '3600s' },
     }),
+    // MongooseModule.forFeature(
+    //   [{ name: User.name, schema: UserSchema }],
+    //   'usersDB',
+    // ),
   ],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    LocalStrategy,
-    JwtStrategy,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: GqlAuthGuard,
-    // },
-  ],
+  exports: [AuthService],
 })
 export class AuthModule {}

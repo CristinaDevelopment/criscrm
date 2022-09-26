@@ -1,66 +1,51 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Injectable, NotAcceptableException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { Response } from 'express';
-import { DataUser, User } from '../user/entities/user.model';
+import { UsersService } from 'src/users/users.service';
+import { UserRepository } from 'src/user/user.repository';
+import { User } from 'src/users/entities/user.entity';
 
-export interface TokenPayload {
-  userId: string;
-  name: string;
+export interface JWTPayload {
+  sub: string;
+  email: string;
   role: string;
-  image: string;
 }
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly configService: ConfigService,
-    private readonly jwtService: JwtService,
-    
+    private readonly usersService: UsersService,
+    private jwtService: JwtService,
   ) {}
+  async validateUser(email: string, password: string): Promise<User | null> {
+    const user = await this.usersService.findUserByEmail(email);
+    if (!user) return null;
+    const passwordValid = await bcrypt.compare(password, user.password);
+    if (!user) {
+      throw new NotAcceptableException('could not find the user');
+    }
+    if (user && passwordValid) {
+      return user;
+    }
+    return null;
+  }
 
-  async login(user: User, response: Response) {
-    const { _id, data } = user;
-    const { name, role, image } = data as DataUser;
-    const tokenPayload: TokenPayload = {
-      userId: _id,
-      name: name,
-      role: role,
-      image: image,
+  async generateAccessToken(email: string) {
+    const user = await this.usersService.findUserByEmail(email);
+    const payload: JWTPayload = {
+      sub: user._id,
+      email: user.email,
+      role: user.data.role,
     };
-
-    const expires = new Date();
-    expires.setSeconds(
-      expires.getSeconds() + this.configService.get('JWT_EXPIRATION'),
-    );
-
-    const token = this.jwtService.sign(tokenPayload);
-
-    response.cookie('Authentication', token, {
-      httpOnly: true,
-      expires,
-    });
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 
-  // async verifyPayload(payload: JwtPayload): Promise<User> {
-  //   let user: User;
-
-  //   try {
-  //     user = await this.userService.findOne({ where: { email: payload.sub } });
-  //   } catch (error) {
-  //     throw new UnauthorizedException(
-  //       `There isn't any user with email: ${payload.sub}`,
-  //     );
-  //   }
-  //   delete user.password;
-
-  //   return user;
+  // async login(user: any) {
+  //   const payload = { email: user.email, sub: user._id };
+  //   return {
+  //     access_token: this.jwtService.sign(payload),
+  //   };
   // }
-
-  logout(response: Response) {
-    response.cookie('Authentication', '', {
-      httpOnly: true,
-      expires: new Date(),
-    });
-  }
 }

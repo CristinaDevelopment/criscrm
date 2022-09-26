@@ -2,6 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,6 +13,7 @@ async function bootstrap() {
       // forbidNonWhitelisted: true,
     }),
   );
+  app.use(cookieParser());
   app.enableCors({
     origin: [
       'https://crisjs.vercel.app',
@@ -19,6 +21,7 @@ async function bootstrap() {
       'https://terrakota.vercel.app',
       'https://regalosterrakota.vercel.app',
       'http://localhost:3001',
+      'http://localhost:6001',
       'http://localhost:3000',
     ],
   });

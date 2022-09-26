@@ -1,39 +1,62 @@
-import { Controller, UseGuards, Post, Res, Get, Request } from '@nestjs/common';
-import { Response } from 'express';
-
-import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './guards/local-auth.guard';
-import { CurrentUser } from './current-user.decorator';
-import JwtAuthGuard from './guards/jwt-auth.guard';
-import { User } from 'src/user/entities/user.model';
-import { GqlAuthGuard } from './guards/gql-auth.guard';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  Res,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Response } from 'express';
+import { User } from 'src/users/entities/user.entity';
+import { UsersService } from 'src/users/users.service';
+import { AuthService } from './auth.service';
+import { LoginDTO } from './dto/login.dto';
+import { JwtAuthGuard } from './guard/jwt-auth.guard';
+import { LocalAuthGuard } from './guard/local-auth.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private usersService: UsersService,
+  ) {}
 
-  // @UseGuards(LocalAuthGuard)
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(
-    @CurrentUser() user: User,
-    @Res({ passthrough: true }) response: Response,
-  ) {
-    await this.authService.login(user, response);
-    response.send(user);
+  async login(@Request() req) {
+    return req;
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get()
-  isAuthenticated() {
-    return true;
+  @UseGuards(LocalAuthGuard)
+  @Post('signin')
+  async signin(@Body() loginDTO: LoginDTO): Promise<{ access_token: string }> {
+    const { email, password } = loginDTO;
+    const valid = await this.authService.validateUser(email, password);
+    if (!valid) {
+      throw new UnauthorizedException();
+    }
+    return await this.authService.generateAccessToken(email);
   }
 
-  @Post('logout')
-  @UseGuards(JwtAuthGuard)
-  logout(@Res({ passthrough: true }) response: Response) {
-    this.authService.logout(response);
-    response.json({});
+  @Get('/me')
+  // @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  async getUserById(@Request() req: any): Promise<User> {
+    const { id } = req.user;
+    return await this.usersService.findUserById(id);
   }
+  // @UseGuards(LocalAuthGuard)
+  // @Post('login')
+  // async login(@Request() req) {
+  //   return this.authService.login(req.user);
+  // }
+
+  // @UseGuards(JwtAuthGuard)
+  // @Get('profile')
+  // getProfile(@Request() req) {
+  //   return req.user;
+  // }
 }
