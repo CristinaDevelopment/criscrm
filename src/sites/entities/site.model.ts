@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Image, UpdateDate } from 'src/common/model/model';
+import { Image, Seo, UpdateDate } from 'src/common/model/model';
 import { RelayTypes } from 'src/common/pagination/relay/relay.types';
 import { Page } from 'src/pages/entities/page.model';
 import { Product } from 'src/product/entities/product.model';
@@ -46,6 +46,8 @@ export class Data {
   readonly logo?: Image | string;
   @Field(() => Image, { nullable: true })
   readonly icon?: Image | string;
+  @Field(() => Seo)
+  readonly seo: Seo | string;
 }
 
 @ObjectType()

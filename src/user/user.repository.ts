@@ -9,7 +9,7 @@ import { UserDocument } from './entities/user.schema';
 export class UserRepository extends AbstractRepository<UserDocument> {
   protected readonly logger = new Logger(UserRepository.name);
   constructor(
-    @InjectModel(User.name, 'sitesDB') userModel: Model<UserDocument>,
+    @InjectModel(User.name, 'usersDB') userModel: Model<UserDocument>,
   ) {
     super(userModel);
   }

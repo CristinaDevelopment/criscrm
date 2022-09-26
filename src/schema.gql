@@ -348,6 +348,7 @@ type Data {
   image: Image
   logo: Image
   icon: Image
+  seo: Seo!
 }
 
 type DataBase {
