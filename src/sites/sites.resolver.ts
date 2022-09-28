@@ -103,9 +103,7 @@ export class SitesResolver {
 
   @ResolveField('page', () => [Page0], { nullable: 'itemsAndList' })
   getPage0(@Parent() { _id }: Site) {
-    // console.log('site name', url, 'site id', _id.toString());
-
-    return this.page0Service.findPage0(_id.toString());
+    return this.page0Service.findByParentId(_id.toString());
   }
 }
 

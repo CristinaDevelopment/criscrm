@@ -7,6 +7,8 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { connectionFromArraySlice } from 'graphql-relay';
+import { ArticlesService } from 'src/articles/articles.service';
+import { Article } from 'src/articles/entities/article.model';
 import ConnectionArgs, {
   getPagingParameters,
 } from 'src/common/pagination/relay/connection.args';
@@ -30,6 +32,8 @@ export class Pages1Resolver {
     private readonly page1Service: Pages1Service,
     private readonly page2Service: Pages2Service,
     private readonly productService: ProductService,
+    private readonly articleService: ArticlesService,
+
   ) {}
 
   @Mutation(() => Page1, { name: 'createPage1' })
@@ -52,10 +56,10 @@ export class Pages1Resolver {
     return this.page1Service.findPageBySlug(site, slug);
   }
 
-  @Query(() => [Page1], { name: 'findPages1ByParent' })
-  findPagesByParent(@Args('parent') parent: string) {
-    return this.page1Service.findPage1(parent);
-  }
+  // @Query(() => [Page1], { name: 'findPages1ByParent' })
+  // findPagesByParent(@Args('parent') parent: string) {
+  //   return this.page1Service.findByParentId(parent);
+  // }
 
   @Query(() => [Page1], { name: 'findPages1BySite' })
   findPagesBySite(@Args() site: GetSite) {
@@ -91,16 +95,18 @@ export class Pages1Resolver {
 
   @ResolveField('page', () => [Page2], { nullable: 'itemsAndList' })
   getPage(@Parent() { _id }: Page1) {
-    return this.page2Service.findPage2(_id.toString());
+    return this.page2Service.findByParentId(_id.toString());
   }
 
-  // @ResolveField('blog', () => [Blog])
-  // getBlog(@Parent() page: Page) {
-  //   const { _id } = page;
-
-  //   return this.blogService.findByPageId(_id);
-  // }
-
+  @ResolveField('article', () => [Article], { nullable: 'itemsAndList' })
+  getArticle(@Parent() { _id }: Page1) {
+    return this.articleService.findByParentId(_id.toString());
+  }
+  @ResolveField('product', () => [Product], { nullable: 'itemsAndList' })
+  getProduct(@Parent() { _id, data }: Page1) {
+    const { type } = data as DataPage;
+    return this.productService.findByParentId(_id.toString(), type);
+  }
   // @ResolveField('product', () => [Product])
   // getProduct(@Parent() page: Page) {
   //   const { _id, data } = page;

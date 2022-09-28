@@ -33,6 +33,7 @@ export class Pages0Resolver {
     private readonly page0Service: Pages0Service,
     private readonly page1Service: Pages1Service,
     private readonly articleService: ArticlesService,
+    private readonly productService: ProductService,
   ) {}
 
   @Mutation(() => Page0, { name: 'createPage0' })
@@ -95,19 +96,18 @@ export class Pages0Resolver {
 
   @ResolveField('page', () => [Page1], { nullable: 'itemsAndList' })
   getPage1(@Parent() { _id }: Page0) {
-    // console.log(' "slug":', slug, ' "id":', _id.toString());
-    return this.page1Service.findPage1(_id.toString());
+    return this.page1Service.findByParentId(_id.toString());
   }
 
-  @ResolveField('article', () => [Article])
+  @ResolveField('article', () => [Article], { nullable: 'itemsAndList' })
   getArticle(@Parent() { _id }: Page0) {
     return this.articleService.findByParentId(_id.toString());
   }
 
-  //   @ResolveField('product', () => [Product])
-  //   getProduct(@Parent() page: Page) {
-  //     const { _id, data } = page;
-  //     const { type } = data as DataPage;
-  //     return this.productService.findByPageUid(_id, type);
-  //   }
+  @ResolveField('product', () => [Product], { nullable: 'itemsAndList' })
+  getProduct(@Parent() { _id, data }: Page0) {
+    const { type } = data as DataPage;
+    return this.productService.findByParentId(_id.toString(), type);
+  }
+
 }

@@ -171,7 +171,7 @@ export class ProductService {
     }
     return data;
   }
-  findByParentUid(parentUi: string, type: string) {
+  findByParentId(parentUi: string, type: string) {
     let data;
     if (type === 'clothing') {
       data = this.productRepositoryClothing.find({ parent: parentUi });

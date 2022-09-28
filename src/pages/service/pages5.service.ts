@@ -54,7 +54,7 @@ export class Pages5Service {
     return id;
   }
 
-  findPage5(parentId) {
+  findByParentId(parentId) {
     return this.pageRepository.find({ parent: parentId });
   }
 

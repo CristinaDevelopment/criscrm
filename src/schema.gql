@@ -197,8 +197,8 @@ type Page {
   section: [ComponentPage!]!
   updateDate: UpdateDate!
   page: [Page!]!
-  product: [Product]!
-  article: [Article!]
+  product: [Product!]!
+  article: [Article!]!
 }
 
 type DataPage {
@@ -222,8 +222,8 @@ type Page0 {
   section: [ComponentPage!]!
   updateDate: UpdateDate!
   page: [Page1]
-  product: [Product]!
-  article: [Article!]!
+  product: [Product]
+  article: [Article]
 }
 
 type Page1 {
@@ -235,8 +235,8 @@ type Page1 {
   section: [ComponentPage!]!
   updateDate: UpdateDate!
   page: [Page2]
-  product: [Product]!
-  article: [Article!]
+  product: [Product]
+  article: [Article]
 }
 
 type Page2 {
@@ -249,7 +249,7 @@ type Page2 {
   updateDate: UpdateDate!
   page: [Page3]
   product: [Product]
-  article: [Article!]
+  article: [Article]
 }
 
 type Page3 {
@@ -260,9 +260,9 @@ type Page3 {
   parent: String!
   section: [ComponentPage!]!
   updateDate: UpdateDate!
-  page: [Page4!]!
-  product: [Product!]!
-  article: [Article!]
+  page: [Page4]
+  product: [Product]
+  article: [Article]
 }
 
 type Page4 {
@@ -273,9 +273,9 @@ type Page4 {
   parent: String!
   section: [ComponentPage!]!
   updateDate: UpdateDate!
-  page: [Page5!]!
-  product: [Product]!
-  article: [Article!]
+  page: [Page5]
+  product: [Product]
+  article: [Article]
 }
 
 type Page5 {
@@ -286,9 +286,9 @@ type Page5 {
   parent: String!
   section: [ComponentPage!]!
   updateDate: UpdateDate!
-  page: [Page6!]!
-  product: [Product]!
-  article: [Article!]
+  page: [Page6]
+  product: [Product]
+  article: [Article]
 }
 
 type Page6 {
@@ -300,8 +300,8 @@ type Page6 {
   section: [ComponentPage!]!
   updateDate: UpdateDate!
   page: [Page!]!
-  product: [Product]!
-  article: [Article!]
+  product: [Product!]!
+  article: [Article!]!
 }
 
 type ListPageResponse {
@@ -412,7 +412,6 @@ type Query {
   listPages0WithCursor(args: ConnectionArgs!): ListPageResponse!
   findPage1(id: ID!): Page1!
   findPage1BySlug(site: String!, slug: String!): Page1!
-  findPages1ByParent(parent: String!): [Page1!]!
   findPages1BySite(siteID: String!): [Page1!]!
   findPages1: [Page1!]!
   listPages1WithCursor(args: ConnectionArgs!): ListPageResponse!

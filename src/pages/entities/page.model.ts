@@ -21,9 +21,9 @@ export class Page extends AbstractModel {
   readonly updateDate: UpdateDate | string;
   @Field(() => [Page])
   readonly page?: Page[];
-  @Field(() => [Product], { nullable: 'items' })
+  @Field(() => [Product])
   readonly product?: Product[];
-  @Field(() => [Article], { nullable: true })
+  @Field(() => [Article])
   readonly article?: Article[];
 }
 

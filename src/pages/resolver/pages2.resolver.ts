@@ -8,6 +8,8 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { connectionFromArraySlice } from 'graphql-relay';
+import { ArticlesService } from 'src/articles/articles.service';
+import { Article } from 'src/articles/entities/article.model';
 import ConnectionArgs, {
   getPagingParameters,
 } from 'src/common/pagination/relay/connection.args';
@@ -31,6 +33,8 @@ export class Pages2Resolver {
     private readonly page2Service: Pages2Service,
     private readonly page3Service: Pages3Service,
     private readonly productService: ProductService,
+    private readonly articleService: ArticlesService,
+
   ) {}
 
   @Mutation(() => Page2, { name: 'createPage2' })
@@ -87,24 +91,18 @@ export class Pages2Resolver {
 
   @ResolveField('page', () => [Page3], { nullable: 'itemsAndList' })
   getPage(@Parent() { _id }: Page2) {
-    return this.page3Service.findPage3(_id.toString());
+    return this.page3Service.findByParentId(_id.toString());
+  }
+  @ResolveField('article', () => [Article], { nullable: 'itemsAndList' })
+  getArticle(@Parent() { _id }: Page2) {
+    return this.articleService.findByParentId(_id.toString());
   }
 
-  // @ResolveField('blog', () => [Blog])
-  // getBlog(@Parent() page: Page2) {
-  //   const { _id } = page;
-  //   return this.blogService.findByPageId(_id);
-  // }
-
-  // @ResolveField('product', () => [Product], { nullable: 'itemsAndList' })
-  // getProduct(@Parent() { _id, data }: Page) {
-  //   const { type } = data as DataPage;
-  //   return this.productService.findByPageUid(_id.toString(), type);
-  // }
   @ResolveField('product', () => [Product], { nullable: 'itemsAndList' })
   getProduct(@Parent() { _id, data }: Page2) {
     const { type } = data as DataPage;
-    console.log(_id.toString(), type);
-    return this.productService.findByParentUid(_id.toString(), type);
+    return this.productService.findByParentId(_id.toString(), type);
   }
+
+
 }
