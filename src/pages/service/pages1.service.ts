@@ -31,6 +31,7 @@ export class Pages1Service {
     const document = await this.pageRepository.findOne({ _id: id });
     return this.toModel(document);
   }
+  
   async findPageBySlug(site: string, slug: string) {
     const document = await this.pageRepository.findOne({
       site: site,

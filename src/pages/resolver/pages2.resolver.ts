@@ -57,6 +57,12 @@ export class Pages2Resolver {
     return this.page2Service.findPageBySlug(site, slug);
   }
 
+  @Query(() => [Page2], { name: 'findPages2ByParent' })
+  findPagesByParent(@Args('parentId') parentId: string) {
+    return this.page2Service.findByParentId(parentId);
+  }
+
+
   @Query(() => [Page2], { name: 'findPages2BySite' })
   findPagesBySite(@Args() site: GetSite) {
     return this.page2Service.findPagesBySite(site);

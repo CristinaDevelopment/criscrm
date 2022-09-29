@@ -51,6 +51,10 @@ export class Pages3Resolver {
   findPage(@Args() id: GetPage) {
     return this.page3Service.findPage(id);
   }
+  @Query(() => [Page3], { name: 'findPages3ByParent' })
+  findPagesByParent(@Args('parentId') parentId: string) {
+    return this.page3Service.findByParentId(parentId);
+  }
 
   @Query(() => Page3, { name: 'findPage3BySlug' })
   findPageBySlug(@Args('site') site: string, @Args('slug') slug: string) {

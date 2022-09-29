@@ -56,6 +56,10 @@ export class Pages0Resolver {
     return this.page0Service.findPageBySlug(site, slug);
   }
 
+  @Query(() => [Page0], { name: 'findPages0ByParent' })
+  findPagesByParent(@Args('parentId') parentId: string) {
+    return this.page0Service.findByParentId(parentId);
+  }
   @Query(() => [Page0], { name: 'findPages0BySite' })
   findPagesBySite(@Args() site: GetSite) {
     return this.page0Service.findPagesBySite(site);
@@ -109,5 +113,4 @@ export class Pages0Resolver {
     const { type } = data as DataPage;
     return this.productService.findByParentId(_id.toString(), type);
   }
-
 }

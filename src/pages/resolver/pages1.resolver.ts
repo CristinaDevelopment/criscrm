@@ -56,10 +56,10 @@ export class Pages1Resolver {
     return this.page1Service.findPageBySlug(site, slug);
   }
 
-  // @Query(() => [Page1], { name: 'findPages1ByParent' })
-  // findPagesByParent(@Args('parent') parent: string) {
-  //   return this.page1Service.findByParentId(parent);
-  // }
+  @Query(() => [Page1], { name: 'findPages1ByParent' })
+  findPagesByParent(@Args('parentId') parentId: string) {
+    return this.page1Service.findByParentId(parentId);
+  }
 
   @Query(() => [Page1], { name: 'findPages1BySite' })
   findPagesBySite(@Args() site: GetSite) {

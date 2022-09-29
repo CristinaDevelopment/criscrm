@@ -137,6 +137,7 @@ export class ProductService {
     }
     return this.toModel(data);
   }
+  
   findProducts(type: string) {
     let data;
     if (type === 'clothing') {
@@ -219,17 +220,6 @@ export class ProductService {
     return 'deleted products';
   }
 
-  // findByPageUid(pageUi: string, type: string) {
-  //   let data;
-  //   if (type === 'clothing') {
-  //     data = this.productRepositoryClothing.find({ page: pageUi });
-  //   } else if (type === 'furniture') {
-  //     data = this.productRepositoryFurniture.find({ page: pageUi });
-  //   } else {
-  //     data = [];
-  //   }
-  //   return data;
-  // }
   findByParentId(parentUi: string, type: string) {
     let data;
     if (type === 'clothing') {
@@ -368,7 +358,7 @@ export class ProductService {
       },
       site: site,
       parent: parent,
-      type: type === 'clothing' ? 'clothing' : 'furniture',
+      type: type,
       updateDate: {
         createdAt: new Date(),
       },

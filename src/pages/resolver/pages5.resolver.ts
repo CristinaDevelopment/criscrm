@@ -54,6 +54,10 @@ export class Pages5Resolver {
   findPages() {
     return this.page5Service.findPages();
   }
+  @Query(() => [Page5], { name: 'findPages5ByParent' })
+  findPagesByParent(@Args('parentId') parentId: string) {
+    return this.page5Service.findByParentId(parentId);
+  }
   @Query(() => Page5, { name: 'findPage5BySlug' })
   findPageBySlug(@Args('site') site: string, @Args('slug') slug: string) {
     return this.page5Service.findPageBySlug(site, slug);
