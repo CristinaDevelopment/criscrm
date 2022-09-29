@@ -23,4 +23,7 @@ export class ProductDocument extends AbstractDocument {
 }
 
 export const ClothingSchema = SchemaFactory.createForClass(ProductDocument);
+export const BackpackSchema = SchemaFactory.createForClass(ProductDocument);
+export const HandbagSchema = SchemaFactory.createForClass(ProductDocument);
+
 export const FurnitureSchema = SchemaFactory.createForClass(ProductDocument);

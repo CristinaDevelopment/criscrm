@@ -2,11 +2,18 @@ import { Module } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductResolver } from './product.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Clothing, Furniture } from './entities/product.model';
+import {
+  Backpack,
+  Clothing,
+  Furniture,
+  Handbag,
+} from './entities/product.model';
 import { ClothingSchema, FurnitureSchema } from './entities/product.schema';
+import { ProductRepositoryBackpack } from './product.repository';
 import {
   ProductRepositoryClothing,
   ProductRepositoryFurniture,
+  ProductRepositoryHandbag,
 } from './product.repository';
 
 @Module({
@@ -14,8 +21,13 @@ import {
     MongooseModule.forFeature(
       [
         { name: Clothing.name, schema: ClothingSchema },
-        { name: Furniture.name, schema: FurnitureSchema },
+        { name: Backpack.name, schema: ClothingSchema },
+        { name: Handbag.name, schema: ClothingSchema },
       ],
+      'wearsDB',
+    ),
+    MongooseModule.forFeature(
+      [{ name: Furniture.name, schema: FurnitureSchema }],
       'productsDB',
     ),
   ],
@@ -23,6 +35,8 @@ import {
     ProductResolver,
     ProductService,
     ProductRepositoryClothing,
+    ProductRepositoryHandbag,
+    ProductRepositoryBackpack,
     ProductRepositoryFurniture,
   ],
   exports: [ProductService],

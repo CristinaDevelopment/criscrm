@@ -124,6 +124,10 @@ export class SizesProduct {
 @ObjectType()
 export class Clothing extends Product {}
 @ObjectType()
+export class Backpack extends Product {}
+@ObjectType()
+export class Handbag extends Product {}
+@ObjectType()
 export class Furniture extends Product {}
 
 @ObjectType()

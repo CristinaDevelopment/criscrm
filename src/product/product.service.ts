@@ -2,8 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { CreateProduct, UpdateImage, UpdateProduct } from './dto/product.input';
 import { ProductDocument } from './entities/product.schema';
 import {
+  ProductRepositoryBackpack,
   ProductRepositoryClothing,
   ProductRepositoryFurniture,
+  ProductRepositoryHandbag,
 } from './product.repository';
 import { GetParent, GetProductArgs, GetSite } from './dto/product.args';
 import { capitalizar, slug } from 'src/utils/function';
@@ -14,6 +16,8 @@ import { ListInput } from 'src/common/pagination/dto/list.input';
 export class ProductService {
   constructor(
     private readonly productRepositoryClothing: ProductRepositoryClothing,
+    private readonly productRepositoryBackpack: ProductRepositoryBackpack,
+    private readonly productRepositoryHandbag: ProductRepositoryHandbag,
     private readonly productRepositoryFurniture: ProductRepositoryFurniture,
   ) {}
 
@@ -22,6 +26,14 @@ export class ProductService {
     let data;
     if (type === 'clothing') {
       data = await this.productRepositoryClothing.create(
+        this.productCreated(input, type),
+      );
+    } else if (type === 'backpack') {
+      data = await this.productRepositoryBackpack.create(
+        this.productCreated(input, type),
+      );
+    } else if (type === 'handbag') {
+      data = await this.productRepositoryHandbag.create(
         this.productCreated(input, type),
       );
     } else if (type === 'furniture') {
@@ -36,6 +48,22 @@ export class ProductService {
     let data;
     if (type === 'clothing') {
       data = await this.productRepositoryClothing.findOneAndUpdate(
+        { _id: id },
+        {
+          $set: this.productUpdated(input),
+          $push: { 'updateDate.register': { updatedAt: new Date() } },
+        },
+      );
+    } else if (type === 'backpack') {
+      data = await this.productRepositoryBackpack.findOneAndUpdate(
+        { _id: id },
+        {
+          $set: this.productUpdated(input),
+          $push: { 'updateDate.register': { updatedAt: new Date() } },
+        },
+      );
+    } else if (type === 'handbag') {
+      data = await this.productRepositoryHandbag.findOneAndUpdate(
         { _id: id },
         {
           $set: this.productUpdated(input),
@@ -63,13 +91,23 @@ export class ProductService {
       data = await this.productRepositoryClothing.findOneAndUpdate(
         { _id: id },
         {
-          $set: {
-            'data.image': input.map((data) => ({
-              uid: uuidv3(),
-              src: data.src,
-              alt: data.alt,
-            })),
-          },
+          $set: this.productImage(input),
+          $push: { 'updateDate.register': { updatedAt: new Date() } },
+        },
+      );
+    } else if (type === 'handbag') {
+      data = await this.productRepositoryHandbag.findOneAndUpdate(
+        { _id: id },
+        {
+          $set: this.productImage(input),
+          $push: { 'updateDate.register': { updatedAt: new Date() } },
+        },
+      );
+    } else if (type === 'backpack') {
+      data = await this.productRepositoryBackpack.findOneAndUpdate(
+        { _id: id },
+        {
+          $set: this.productImage(input),
           $push: { 'updateDate.register': { updatedAt: new Date() } },
         },
       );
@@ -77,17 +115,12 @@ export class ProductService {
       data = await this.productRepositoryFurniture.findOneAndUpdate(
         { _id: id },
         {
-          $set: {
-            'data.image': input.map((data) => ({
-              uid: uuidv3(),
-              src: data.src,
-              alt: data.alt,
-            })),
-          },
+          $set: this.productImage(input),
           $push: { 'updateDate.register': { updatedAt: new Date() } },
         },
       );
     }
+
     return this.toModel(data);
   }
 
@@ -95,6 +128,10 @@ export class ProductService {
     let data;
     if (type === 'clothing') {
       data = await this.productRepositoryClothing.findOne({ _id: id });
+    } else if (type === 'handbag') {
+      data = await this.productRepositoryHandbag.findOne({ _id: id });
+    } else if (type === 'backpack') {
+      data = await this.productRepositoryBackpack.findOne({ _id: id });
     } else if (type === 'furniture') {
       data = await this.productRepositoryFurniture.findOne({ _id: id });
     }
@@ -104,6 +141,10 @@ export class ProductService {
     let data;
     if (type === 'clothing') {
       data = this.productRepositoryClothing.find({});
+    } else if (type === 'handbag') {
+      data = this.productRepositoryHandbag.find({});
+    } else if (type === 'backpack') {
+      data = this.productRepositoryBackpack.find({});
     } else if (type === 'furniture') {
       data = this.productRepositoryFurniture.find({});
     }
@@ -118,15 +159,21 @@ export class ProductService {
 
   async findAllProducts() {
     const clothings = await this.productRepositoryClothing.find({});
+    const handbags = await this.productRepositoryHandbag.find({});
+    const backpacks = await this.productRepositoryBackpack.find({});
     const furnituries = await this.productRepositoryFurniture.find({});
 
-    return [clothings, furnituries].flat(1);
+    return [clothings, furnituries, handbags, backpacks].flat(1);
   }
 
   async findProductsBySite({ siteId }: GetSite, type: string) {
     let data;
     if (type === 'clothing') {
       data = await this.productRepositoryClothing.find({ site: siteId });
+    } else if (type === 'handbag') {
+      data = await this.productRepositoryHandbag.find({ site: siteId });
+    } else if (type === 'backpack') {
+      data = await this.productRepositoryBackpack.find({ site: siteId });
     } else if (type === 'furniture') {
       data = await this.productRepositoryFurniture.find({ site: siteId });
     }
@@ -136,6 +183,10 @@ export class ProductService {
     let data;
     if (type === 'clothing') {
       data = await this.productRepositoryClothing.find({ parent: parentId });
+    } else if (type === 'handbag') {
+      data = await this.productRepositoryHandbag.find({ parent: parentId });
+    } else if (type === 'backpack') {
+      data = await this.productRepositoryBackpack.find({ parent: parentId });
     } else if (type === 'furniture') {
       data = await this.productRepositoryFurniture.find({ parent: parentId });
     }
@@ -145,6 +196,10 @@ export class ProductService {
   async deleteProduct({ id }: GetProductArgs, type: string) {
     if (type === 'clothing') {
       await this.productRepositoryClothing.deleteOne({ _id: id });
+    } else if (type === 'handbag') {
+      await this.productRepositoryHandbag.deleteOne({ _id: id });
+    } else if (type === 'backpack') {
+      await this.productRepositoryBackpack.deleteOne({ _id: id });
     } else if (type === 'furniture') {
       await this.productRepositoryFurniture.deleteOne({ _id: id });
     }
@@ -154,27 +209,35 @@ export class ProductService {
   async deleteProducts({ siteId }: GetSite, type: string) {
     if (type === 'clothing') {
       await this.productRepositoryClothing.deleteMany({ site: siteId });
+    } else if (type === 'handbag') {
+      await this.productRepositoryHandbag.deleteOne({ site: siteId });
+    } else if (type === 'backpack') {
+      await this.productRepositoryBackpack.deleteOne({ site: siteId });
     } else if (type === 'furniture') {
       await this.productRepositoryFurniture.deleteOne({ site: siteId });
     }
     return 'deleted products';
   }
 
-  findByPageUid(pageUi: string, type: string) {
-    let data;
-    if (type === 'clothing') {
-      data = this.productRepositoryClothing.find({ page: pageUi });
-    } else if (type === 'furniture') {
-      data = this.productRepositoryFurniture.find({ page: pageUi });
-    } else {
-      data = [];
-    }
-    return data;
-  }
+  // findByPageUid(pageUi: string, type: string) {
+  //   let data;
+  //   if (type === 'clothing') {
+  //     data = this.productRepositoryClothing.find({ page: pageUi });
+  //   } else if (type === 'furniture') {
+  //     data = this.productRepositoryFurniture.find({ page: pageUi });
+  //   } else {
+  //     data = [];
+  //   }
+  //   return data;
+  // }
   findByParentId(parentUi: string, type: string) {
     let data;
     if (type === 'clothing') {
       data = this.productRepositoryClothing.find({ parent: parentUi });
+    } else if (type === 'handbag') {
+      data = this.productRepositoryHandbag.find({ parent: parentUi });
+    } else if (type === 'backpack') {
+      data = this.productRepositoryBackpack.find({ parent: parentUi });
     } else if (type === 'furniture') {
       data = this.productRepositoryFurniture.find({ parent: parentUi });
     } else {
@@ -186,6 +249,12 @@ export class ProductService {
   findByParentClothing(pageUi) {
     return this.productRepositoryClothing.find({ parent: pageUi });
   }
+  findByParentHandbag(pageUi) {
+    return this.productRepositoryHandbag.find({ parent: pageUi });
+  }
+  findByParentBackpack(pageUi) {
+    return this.productRepositoryBackpack.find({ parent: pageUi });
+  }
   findByParentFurniture(pageUi) {
     return this.productRepositoryFurniture.find({ parent: pageUi });
   }
@@ -194,6 +263,10 @@ export class ProductService {
     let data;
     if (type === 'clothing') {
       data = this.productRepositoryClothing.find({ site: siteId });
+    } else if (type === 'handbag') {
+      data = this.productRepositoryHandbag.find({ site: siteId });
+    } else if (type === 'backpack') {
+      data = this.productRepositoryBackpack.find({ site: siteId });
     } else if (type === 'furniture') {
       data = this.productRepositoryFurniture.find({ site: siteId });
     }
@@ -204,6 +277,10 @@ export class ProductService {
     let data;
     if (type === 'clothing') {
       data = this.productRepositoryClothing.All(pagination);
+    } else if (type === 'handbag') {
+      data = this.productRepositoryHandbag.All(pagination);
+    } else if (type === 'backpack') {
+      data = this.productRepositoryBackpack.All(pagination);
     } else if (type === 'furniture') {
       data = this.productRepositoryFurniture.All(pagination);
     }
@@ -295,6 +372,15 @@ export class ProductService {
       updateDate: {
         createdAt: new Date(),
       },
+    };
+  }
+  private productImage(input: UpdateImage[]) {
+    return {
+      'data.image': input.map((data) => ({
+        uid: uuidv3(),
+        src: data.src,
+        alt: data.alt,
+      })),
     };
   }
   private productUpdated({
