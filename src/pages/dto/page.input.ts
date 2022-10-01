@@ -6,12 +6,12 @@ export class CreatePage {
   readonly title: string;
   @Field()
   readonly description: string;
-  @Field({ nullable: true })
-  readonly icon?: string;
-  @Field()
-  readonly src: string;
-  @Field()
-  readonly alt: string;
+  // @Field({ nullable: true })
+  // readonly icon?: string;
+  // @Field()
+  // readonly src: string;
+  // @Field()
+  // readonly alt: string;
   @Field()
   readonly type: string;
   @Field()

@@ -436,6 +436,7 @@ type Query {
   findPages4BySite(siteID: String!): [Page4!]!
   findPage5(id: ID!): Page5!
   findPages5: [Page5!]!
+  findPages5ByParent(parentId: String!): [Page5!]!
   findPage5BySlug(site: String!, slug: String!): Page5!
   findPages5BySite(siteID: String!): [Page5!]!
   findArticle(id: ID!): Article!
@@ -618,9 +619,6 @@ input UpdateDataBase {
 input CreatePage {
   title: String!
   description: String!
-  icon: String
-  src: String!
-  alt: String!
   type: String!
   parent: String!
   site: String!
@@ -629,9 +627,6 @@ input CreatePage {
 input UpdatePage {
   title: String!
   description: String!
-  icon: String
-  src: String!
-  alt: String!
   type: String!
 }
 

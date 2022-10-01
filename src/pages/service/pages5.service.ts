@@ -62,15 +62,7 @@ export class Pages5Service {
     return this.pageRepository.All(pagination);
   }
 
-  private pageCreated({
-    type,
-    title,
-    description,
-    src,
-    alt,
-    parent,
-    site,
-  }: CreatePage) {
+  private pageCreated({ type, title, description, parent, site }: CreatePage) {
     return {
       data: {
         type: type,
@@ -79,8 +71,8 @@ export class Pages5Service {
           href: slug(title) === 'home' ? '' : slug(title),
           description: description,
           image: {
-            src: src,
-            alt: alt,
+            src: 'https://res.cloudinary.com/dqsbh2kn0/image/upload/v1663014890/zawkgpyjvvxrfwp9j7w1.jpg',
+            alt: description,
           },
         },
       },
@@ -94,7 +86,7 @@ export class Pages5Service {
     };
   }
 
-  private pageUpdate({ type, title, description, src, alt }: UpdatePage) {
+  private pageUpdate({ type, title, description }: UpdatePage) {
     return {
       data: {
         type: type,
@@ -102,13 +94,8 @@ export class Pages5Service {
           title: capitalizar(title),
           href: slug(title),
           description: description,
-          image: {
-            src: src,
-            alt: alt,
-          },
         },
       },
-
       slug: slug(title),
     };
   }

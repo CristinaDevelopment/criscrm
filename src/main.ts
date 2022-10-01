@@ -18,6 +18,7 @@ async function bootstrap() {
     origin: [
       'https://crisjs.vercel.app',
       'https://criscrm.vercel.app',
+      'https://criscms.vercel.app',
       'https://terrakota.vercel.app',
       'https://regalosterrakota.vercel.app',
       'http://localhost:3001',

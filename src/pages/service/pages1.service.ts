@@ -61,15 +61,7 @@ export class Pages1Service {
     return this.pageRepository.All(pagination);
   }
 
-  private pageCreated({
-    type,
-    title,
-    description,
-    src,
-    alt,
-    parent,
-    site,
-  }: CreatePage) {
+  private pageCreated({ type, title, description, parent, site }: CreatePage) {
     return {
       data: {
         type: type,
@@ -78,8 +70,8 @@ export class Pages1Service {
           href: slug(title) === 'home' ? '' : slug(title),
           description: description,
           image: {
-            src: src,
-            alt: alt,
+            src: 'https://res.cloudinary.com/dqsbh2kn0/image/upload/v1663014890/zawkgpyjvvxrfwp9j7w1.jpg',
+            alt: description,
           },
         },
       },
@@ -92,7 +84,8 @@ export class Pages1Service {
       section: [],
     };
   }
-  private pageUpdate({ type, title, description, src, alt }: UpdatePage) {
+
+  private pageUpdate({ type, title, description }: UpdatePage) {
     return {
       data: {
         type: type,
@@ -100,17 +93,11 @@ export class Pages1Service {
           title: capitalizar(title),
           href: slug(title),
           description: description,
-          image: {
-            src: src,
-            alt: alt,
-          },
         },
       },
-
       slug: slug(title),
     };
   }
-
   private toModel(pageDocument: PageDocument): Page1 {
     return {
       _id: pageDocument._id.toHexString(),
