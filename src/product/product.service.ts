@@ -137,7 +137,7 @@ export class ProductService {
     }
     return this.toModel(data);
   }
-  
+
   findProducts(type: string) {
     let data;
     if (type === 'clothing') {
@@ -164,7 +164,7 @@ export class ProductService {
     const backpacks = await this.productRepositoryBackpack.find({});
     const furnituries = await this.productRepositoryFurniture.find({});
 
-    return [clothings, furnituries, handbags, backpacks].flat(1);
+    return [...clothings, ...furnituries, ...handbags, ...backpacks];
   }
 
   async findProductsBySite({ siteId }: GetSite, type: string) {
@@ -180,7 +180,7 @@ export class ProductService {
     }
     return data;
   }
-  async findProductsByParent({ parentId }: GetParent, type: string) {
+  async findProductsByParent(parentId: string, type: string) {
     let data;
     if (type === 'clothing') {
       data = await this.productRepositoryClothing.find({ parent: parentId });
@@ -192,6 +192,20 @@ export class ProductService {
       data = await this.productRepositoryFurniture.find({ parent: parentId });
     }
     return data;
+  }
+  async findAllProductsByParent(parentId: string) {
+    const clothings = await this.productRepositoryClothing.find({
+      parent: parentId,
+    });
+    const handbags = await this.productRepositoryHandbag.find({
+      parent: parentId,
+    });
+    const backpacks = await this.productRepositoryBackpack.find({
+      parent: parentId,
+    });
+    // const furnituries = await this.productRepositoryFurniture.find({ parent: parentId });
+
+    return [...clothings, ...handbags, ...backpacks];
   }
 
   async deleteProduct({ id }: GetProductArgs, type: string) {

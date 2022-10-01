@@ -388,10 +388,8 @@ type Query {
   findProduct(id: ID!, type: String!): Product!
   findProducts(type: String!): [Product!]!
   findAllProducts: [Product!]!
-  findProductsClothing: [Product!]!
-  findProductsFurniture: [Product!]!
-  findProductsBySite(siteId: String!, type: String!): [Product!]!
-  findProductsByPage(parentId: String!, type: String!): [Product!]!
+  findProductsByParent(parentId: String!, type: String!): [Product!]!
+  findAllProductsByParent(parentId: String!): [Product!]!
   listProductWithCursor(args: ConnectionArgs!, type: String!): ListProductResponse!
   findUser(id: ID!): User!
   findUserByEmail(email: String!): User!

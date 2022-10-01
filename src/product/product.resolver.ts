@@ -54,22 +54,29 @@ export class ProductResolver {
   findAllProducts() {
     return this.productService.findAllProducts();
   }
-  @Query(() => [Product], { name: 'findProductsClothing' })
-  findProductsClothing() {
-    return this.productService.findProductsClothing();
-  }
-  @Query(() => [Product], { name: 'findProductsFurniture' })
-  findProductsFurniture() {
-    return this.productService.findProductsFurniture();
-  }
+  // @Query(() => [Product], { name: 'findProductsClothing' })
+  // findProductsClothing() {
+  //   return this.productService.findProductsClothing();
+  // }
+  // @Query(() => [Product], { name: 'findProductsFurniture' })
+  // findProductsFurniture() {
+  //   return this.productService.findProductsFurniture();
+  // }
 
-  @Query(() => [Product], { name: 'findProductsBySite' })
-  findProductsBySite(@Args() siteID: GetSite, @Args('type') type: string) {
-    return this.productService.findProductsBySite(siteID, type);
+  // @Query(() => [Product], { name: 'findProductsBySite' })
+  // findProductsBySite(@Args() siteID: GetSite, @Args('type') type: string) {
+  //   return this.productService.findProductsBySite(siteID, type);
+  // }
+  @Query(() => [Product], { name: 'findProductsByParent' })
+  findProductsByParent(
+    @Args() { parentId }: GetParent,
+    @Args('type') type: string,
+  ) {
+    return this.productService.findProductsByParent(parentId, type);
   }
-  @Query(() => [Product], { name: 'findProductsByPage' })
-  findProductsByPage(@Args() parentID: GetParent, @Args('type') type: string) {
-    return this.productService.findProductsByParent(parentID, type);
+  @Query(() => [Product], { name: 'findAllProductsByParent' })
+  findAllProductsByParent(@Args() { parentId }: GetParent) {
+    return this.productService.findAllProductsByParent(parentId);
   }
 
   @Query(() => ListProductResponse, { name: 'listProductWithCursor' })
