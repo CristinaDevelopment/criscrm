@@ -28,6 +28,10 @@ export class CreateProduct {
   readonly site: string;
   @Field()
   readonly parent: string;
+  @Field()
+  readonly change: string;
+  @Field()
+  readonly uid: string;
 }
 
 @InputType()
@@ -42,11 +46,11 @@ export class UpdateSpecs {
 @InputType()
 export class UpdateImage {
   @Field({ nullable: true })
-  uid?: string;
+  readonly uid?: string;
   @Field()
-  src: string;
+  readonly src: string;
   @Field()
-  alt: string;
+  readonly alt: string;
 }
 
 @InputType()

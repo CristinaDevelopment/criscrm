@@ -467,7 +467,7 @@ input ListInput {
 type Mutation {
   createProduct(input: CreateProduct!, type: String!): Product!
   updateProduct(id: ID!, input: UpdateProduct!, type: String!): Product!
-  updateProductImage(id: ID!, input: [UpdateImage!]!, type: String!): Product!
+  updateProductImage(id: ID!, input: [UpdateImage!]!, type: String!, uid: String!): Product!
   deleteProduct(id: ID!, type: String!): String!
   deleteProducts(siteId: String!, type: String!): String!
   createUser(input: CreateUser!): User!
@@ -521,6 +521,8 @@ input CreateProduct {
   discountPrice: Float!
   site: String!
   parent: String!
+  change: String!
+  uid: String!
 }
 
 input UpdateProduct {
@@ -533,6 +535,8 @@ input UpdateProduct {
   discountPrice: Float
   site: String
   parent: String
+  change: String
+  uid: String
 }
 
 input UpdateImage {

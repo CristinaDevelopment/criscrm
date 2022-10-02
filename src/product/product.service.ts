@@ -51,7 +51,13 @@ export class ProductService {
         { _id: id },
         {
           $set: this.productUpdated(input),
-          $push: { 'updateDate.register': { updatedAt: new Date() } },
+          $push: {
+            'updateDate.register': {
+              uid: input.uid,
+              change: input.change,
+              updatedAt: new Date(),
+            },
+          },
         },
       );
     } else if (type === 'backpack') {
@@ -59,7 +65,13 @@ export class ProductService {
         { _id: id },
         {
           $set: this.productUpdated(input),
-          $push: { 'updateDate.register': { updatedAt: new Date() } },
+          $push: {
+            'updateDate.register': {
+              uid: input.uid,
+              change: input.change,
+              updatedAt: new Date(),
+            },
+          },
         },
       );
     } else if (type === 'handbag') {
@@ -67,7 +79,13 @@ export class ProductService {
         { _id: id },
         {
           $set: this.productUpdated(input),
-          $push: { 'updateDate.register': { updatedAt: new Date() } },
+          $push: {
+            'updateDate.register': {
+              uid: input.uid,
+              change: input.change,
+              updatedAt: new Date(),
+            },
+          },
         },
       );
     } else if (type === 'furniture') {
@@ -75,7 +93,13 @@ export class ProductService {
         { _id: id },
         {
           $set: this.productUpdated(input),
-          $push: { 'updateDate.register': { updatedAt: new Date() } },
+          $push: {
+            'updateDate.register': {
+              uid: input.uid,
+              change: input.change,
+              updatedAt: new Date(),
+            },
+          },
         },
       );
     }
@@ -85,6 +109,7 @@ export class ProductService {
     { id }: GetProductArgs,
     input: UpdateImage[],
     type: string,
+    uid: string,
   ) {
     let data;
     if (type === 'clothing') {
@@ -92,7 +117,13 @@ export class ProductService {
         { _id: id },
         {
           $set: this.productImage(input),
-          $push: { 'updateDate.register': { updatedAt: new Date() } },
+          $push: {
+            'updateDate.register': {
+              uid: uid,
+              change: 'image update',
+              updatedAt: new Date(),
+            },
+          },
         },
       );
     } else if (type === 'handbag') {
@@ -100,7 +131,13 @@ export class ProductService {
         { _id: id },
         {
           $set: this.productImage(input),
-          $push: { 'updateDate.register': { updatedAt: new Date() } },
+          $push: {
+            'updateDate.register': {
+              uid: uid,
+              change: 'image update',
+              updatedAt: new Date(),
+            },
+          },
         },
       );
     } else if (type === 'backpack') {
@@ -108,7 +145,13 @@ export class ProductService {
         { _id: id },
         {
           $set: this.productImage(input),
-          $push: { 'updateDate.register': { updatedAt: new Date() } },
+          $push: {
+            'updateDate.register': {
+              uid: uid,
+              change: 'image update',
+              updatedAt: new Date(),
+            },
+          },
         },
       );
     } else if (type === 'furniture') {
@@ -116,7 +159,13 @@ export class ProductService {
         { _id: id },
         {
           $set: this.productImage(input),
-          $push: { 'updateDate.register': { updatedAt: new Date() } },
+          $push: {
+            'updateDate.register': {
+              uid: uid,
+              change: 'image update',
+              updatedAt: new Date(),
+            },
+          },
         },
       );
     }
@@ -342,6 +391,7 @@ export class ProductService {
       featured,
       site,
       parent,
+      uid,
     }: CreateProduct,
     type: string,
   ) {
@@ -375,6 +425,13 @@ export class ProductService {
       type: type,
       updateDate: {
         createdAt: new Date(),
+        register: [
+          {
+            uid: uid,
+            change: 'created',
+            updatedAt: new Date(),
+          },
+        ],
       },
     };
   }

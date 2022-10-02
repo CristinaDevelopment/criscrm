@@ -29,8 +29,9 @@ export class ProductResolver {
     @Args() id: GetProductArgs,
     @Args('input', { type: () => [UpdateImage] }) input: UpdateImage[],
     @Args('type') type: string,
+    @Args('uid') uid: string,
   ) {
-    return this.productService.updateImage(id, input, type);
+    return this.productService.updateImage(id, input, type, uid);
   }
   @Mutation(() => String, { name: 'deleteProduct' })
   deleteProduct(@Args() id: GetProductArgs, @Args('type') type: string) {
