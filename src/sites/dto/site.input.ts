@@ -26,3 +26,13 @@ export class UpdateDataBase {
   @Field()
   readonly type: string;
 }
+
+@InputType()
+export class UpdateImageSite {
+  @Field({ nullable: true })
+  readonly uid?: string;
+  @Field()
+  readonly src: string;
+  @Field()
+  readonly alt: string;
+}

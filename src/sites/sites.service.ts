@@ -10,6 +10,7 @@ import { GetSite } from '../sites/dto/site.args';
 import {
   CreateSite,
   UpdateDataBase,
+  UpdateImageSite,
   UpdateSite,
 } from '../sites/dto/site.input';
 import { SiteDocument } from '../sites/entities/site.schema';
@@ -40,6 +41,18 @@ export class SitesService {
           },
         },
       },
+    );
+    return this.toModel(document);
+  }
+  async updateImage(
+    { id }: GetSite,
+    input: UpdateImageSite,
+    type: string,
+    uid: string,
+  ) {
+    const document = await this.siteRepository.findOneAndUpdate(
+      { _id: id },
+      this.documentImage(input, type, uid),
     );
     return this.toModel(document);
   }
@@ -153,43 +166,46 @@ export class SitesService {
           alt: description,
         },
       },
-      // 'data.seo.name': name,
-      // 'data.seo.description': description,
       url: domain,
     };
   }
 
-  // private pageCreated(input: CreatePage) {
-  //   return {
-  //     data: {
-  //       type: input.type,
-  //       seo: {
-  //         title: capitalizar(input.title),
-  //         href: slug(input.title),
-  //         description: input.description,
-  //         image: {
-  //           src: input.src,
-  //           alt: input.alt,
-  //         },
-  //       },
-  //     },
-  //     parent: input.parent,
-  //     site: input.site,
-  //     updateDate: {
-  //       createdAt: new Date(),
-  //     },
-  //     slug: slug(input.title),
-  //     section: [],
-  //   };
-  // }
-
-  // private toModelPage(pageDocument: PageDocument) {
-  //   return {
-  //     _id: pageDocument._id.toHexString(),
-  //     data: pageDocument.data,
-  //     slug: pageDocument.slug,
-  //   };
-  // }
+  private documentImage(
+    { src, alt }: UpdateImageSite,
+    type: string,
+    uid: string,
+  ) {
+    return {
+      $set:
+        type === 'logo'
+          ? {
+              'data.logo': {
+                src: src,
+                alt: alt,
+              },
+            }
+          : type === 'site'
+          ? {
+              'data.image': {
+                src: src,
+                alt: alt,
+              },
+            }
+          : {
+              'data.icon': {
+                src: src,
+                alt: alt,
+              },
+            },
+      $push: {
+        'updateDate.register': {
+          uid: uid,
+          change: `${type} image update`,
+          updatedAt: new Date(),
+        },
+      },
+    };
+  }
 
   private toModel(siteDocument: SiteDocument) {
     return {

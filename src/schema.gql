@@ -485,6 +485,7 @@ type Mutation {
   removeCourse(id: Int!): Course!
   createSite(input: CreateSite!): Site!
   updateSite(id: ID!, input: UpdateSite!): Site!
+  updateSiteImage(id: ID!, input: UpdateImageSite!, type: String!, uid: String!): Site!
   updateDataBase(id: ID!, input: [UpdateDataBase!]!): Site!
   deleteSite(id: ID!): String!
   deleteSites: String!
@@ -612,6 +613,12 @@ input UpdateSite {
   type: String!
   change: String!
   uid: String!
+}
+
+input UpdateImageSite {
+  uid: String
+  src: String!
+  alt: String!
 }
 
 input UpdateDataBase {

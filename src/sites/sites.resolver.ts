@@ -7,7 +7,11 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { GetSite } from '../sites/dto/site.args';
-import { CreateSite, UpdateSite } from '../sites/dto/site.input';
+import {
+  CreateSite,
+  UpdateImageSite,
+  UpdateSite,
+} from '../sites/dto/site.input';
 import { ListSiteResponse, Site } from '../sites/entities/site.model';
 import { SitesService } from './sites.service';
 import { Pages0Service } from 'src/pages/service/pages0.service';
@@ -48,6 +52,15 @@ export class SitesResolver {
   @Mutation(() => Site, { name: 'updateSite' })
   update(@Args() id: GetSite, @Args('input') input: UpdateSite) {
     return this.siteService.update(id, input);
+  }
+  @Mutation(() => Site, { name: 'updateSiteImage' })
+  updateImage(
+    @Args() id: GetSite,
+    @Args('input') input: UpdateImageSite,
+    @Args('type') type: string,
+    @Args('uid') uid: string,
+  ) {
+    return this.siteService.updateImage(id, input, type, uid);
   }
   @Mutation(() => Site, { name: 'updateDataBase' })
   updateDataBase(
@@ -106,14 +119,3 @@ export class SitesResolver {
     return this.page0Service.findByParentId(_id.toString());
   }
 }
-
-// @Resolver('page')
-// export class Pages0Resolver {
-//   constructor(private readonly page1Service: Pages1Service) {}
-//   @ResolveField('page', () => [Page])
-//   getPage(@Parent() site: Page) {
-//     const { _id } = site;
-//     const id = _id.toString();
-//     return this.page1Service.findPage1(id);
-//   }
-// }
