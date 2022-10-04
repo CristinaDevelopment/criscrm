@@ -190,8 +190,8 @@ export class SitesService {
                 src: src,
                 alt: alt,
               },
-              'data.seo.image.src': { src: src },
-              'data.seo.image.alt': { src: alt },
+              'data.seo.image.src': src,
+              'data.seo.image.alt': alt,
             }
           : {
               'data.icon': {
