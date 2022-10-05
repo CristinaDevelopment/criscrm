@@ -454,6 +454,7 @@ export class ProductService {
     discountPrice,
     description,
     featured,
+    details,
   }: UpdateProduct) {
     return {
       'data.name': capitalizar(name),
@@ -467,6 +468,7 @@ export class ProductService {
         name: capitalizar(featured),
         href: slug(featured),
       },
+      'data.details': details,
       'data.seo.title': capitalizar(name),
       'data.seo.href': slug(name),
       'data.seo.description': description,

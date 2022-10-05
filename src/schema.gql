@@ -61,7 +61,7 @@ type DataProduct {
   discountPrice: Float!
   description: String!
   featured: Featured!
-  details: Detail
+  details: String
   specs: [SpecsProduct!]!
   tags: [Tags!]!
   image: [Image!]!
@@ -71,15 +71,6 @@ type DataProduct {
 type Featured {
   name: String!
   href: String!
-}
-
-type Detail {
-  material: String!
-  color: String!
-  finishing: String!
-  logo: String!
-  accessories: String!
-  dimensions: [String!]!
 }
 
 type SpecsProduct {
@@ -538,6 +529,7 @@ input UpdateProduct {
   parent: String
   change: String
   uid: String
+  details: String!
 }
 
 input UpdateImage {

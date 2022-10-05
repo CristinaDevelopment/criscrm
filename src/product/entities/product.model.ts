@@ -38,8 +38,8 @@ export class DataProduct {
   readonly description: string;
   @Field(() => Featured)
   readonly featured: Featured | string;
-  @Field(() => Detail, { nullable: true })
-  readonly details?: Detail | string;
+  @Field({ nullable: true })
+  readonly details?: string;
 
   @Field(() => [SpecsProduct])
   readonly specs?: SpecsProduct[];
