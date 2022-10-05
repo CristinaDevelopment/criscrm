@@ -13,7 +13,8 @@ export class CreateProduct {
   readonly description: string;
 
   @Field()
-  readonly featured: string;
+  readonly promotion: string;
+
 
   @Field()
   readonly inStock: number;
@@ -38,6 +39,8 @@ export class CreateProduct {
 export class UpdateProduct extends PartialType(CreateProduct) {
   @Field()
   readonly details: string;
+  @Field()
+  readonly featured: string;
 }
 
 @InputType()

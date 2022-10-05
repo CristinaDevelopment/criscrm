@@ -60,22 +60,17 @@ type DataProduct {
   price: Float!
   discountPrice: Float!
   description: String!
-  featured: Featured!
+  promotion: Promotion!
   details: String
-  specs: [SpecsProduct!]!
+  featured: String
   tags: [Tags!]!
   image: [Image!]!
   seo: Seo!
 }
 
-type Featured {
+type Promotion {
   name: String!
   href: String!
-}
-
-type SpecsProduct {
-  uid: String!
-  text: String!
 }
 
 type ListProductResponse {
@@ -507,7 +502,7 @@ input CreateProduct {
   name: String!
   mark: String!
   description: String!
-  featured: String!
+  promotion: String!
   inStock: Float!
   price: Float!
   discountPrice: Float!
@@ -521,7 +516,7 @@ input UpdateProduct {
   name: String
   mark: String
   description: String
-  featured: String
+  promotion: String
   inStock: Float
   price: Float
   discountPrice: Float
@@ -530,6 +525,7 @@ input UpdateProduct {
   change: String
   uid: String
   details: String!
+  featured: String!
 }
 
 input UpdateImage {

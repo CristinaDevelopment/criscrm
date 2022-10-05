@@ -388,7 +388,7 @@ export class ProductService {
       price,
       discountPrice,
       description,
-      featured,
+      promotion,
       site,
       parent,
       uid,
@@ -404,9 +404,9 @@ export class ProductService {
         price: price,
         discountPrice: discountPrice,
         description: description,
-        featured: {
-          name: capitalizar(featured),
-          href: slug(featured),
+        promotion: {
+          name: capitalizar(promotion),
+          href: slug(promotion),
         },
         image: [],
         seo: {
@@ -453,7 +453,7 @@ export class ProductService {
     price,
     discountPrice,
     description,
-    featured,
+    promotion,
     details,
   }: UpdateProduct) {
     return {
@@ -464,9 +464,9 @@ export class ProductService {
       'data.price': price,
       'data.discountPrice': discountPrice,
       'data.description': description,
-      'data.featured': {
-        name: capitalizar(featured),
-        href: slug(featured),
+      'data.promotion': {
+        name: capitalizar(promotion),
+        href: slug(promotion),
       },
       'data.details': details,
       'data.seo.title': capitalizar(name),

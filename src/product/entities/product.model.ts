@@ -10,6 +10,7 @@ export class Product extends AbstractModel {
 
   @Field()
   readonly site: string;
+
   @Field()
   readonly type: string;
 
@@ -36,13 +37,12 @@ export class DataProduct {
   readonly discountPrice: number;
   @Field()
   readonly description: string;
-  @Field(() => Featured)
-  readonly featured: Featured | string;
+  @Field(() => Promotion)
+  readonly promotion: Promotion | string;
   @Field({ nullable: true })
   readonly details?: string;
-
-  @Field(() => [SpecsProduct])
-  readonly specs?: SpecsProduct[];
+  @Field({ nullable: true })
+  readonly featured?: string;
 
   @Field(() => [Tags])
   readonly tags?: Tags[];
@@ -57,37 +57,37 @@ export class DataProduct {
 
 
 @ObjectType()
-export class Featured {
+export class Promotion {
   @Field()
   name: string;
   @Field()
   href: string;
 }
-@ObjectType()
-export class Detail {
-  @Field()
-  material: string;
-  @Field()
-  color: string;
-  @Field()
-  finishing: string;
-  @Field()
-  logo: string;
-  @Field()
-  accessories: string;
-  @Field(() => [String])
-  dimensions: string[];
-}
+// @ObjectType()
+// export class Detail {
+//   @Field()
+//   material: string;
+//   @Field()
+//   color: string;
+//   @Field()
+//   finishing: string;
+//   @Field()
+//   logo: string;
+//   @Field()
+//   accessories: string;
+//   @Field(() => [String])
+//   dimensions: string[];
+// }
 
 
 
-@ObjectType()
-export class SpecsProduct {
-  @Field()
-  readonly uid: string;
-  @Field()
-  readonly text: string;
-}
+// @ObjectType()
+// export class SpecsProduct {
+//   @Field()
+//   readonly uid: string;
+//   @Field()
+//   readonly text: string;
+// }
 @ObjectType()
 export class Route {
   @Field()
