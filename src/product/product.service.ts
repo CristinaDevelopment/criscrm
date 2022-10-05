@@ -442,6 +442,8 @@ export class ProductService {
         src: data.src,
         alt: data.alt,
       })),
+      'data.seo.image': input[0].src,
+      'data.seo.alt': input[0].alt,
     };
   }
   private productUpdated({
@@ -465,16 +467,9 @@ export class ProductService {
         name: capitalizar(featured),
         href: slug(featured),
       },
-      'data.seo': {
-        title: capitalizar(name),
-        href: slug(name),
-        description: description,
-        image: {
-          uid: uuidv3(),
-          src: 'https://res.cloudinary.com/dvcyhn0lj/image/upload/v1655217461/14.1_no-image.jpg_gkwtld.jpg',
-          alt: 'image description',
-        },
-      },
+      'data.seo.title': capitalizar(name),
+      'data.seo.href': slug(name),
+      'data.seo.description': description,
     };
   }
 
