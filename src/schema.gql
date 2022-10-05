@@ -63,6 +63,7 @@ type DataProduct {
   promotion: Promotion!
   details: String
   featured: String
+  specs: String
   tags: [Tags!]!
   image: [Image!]!
   seo: Seo!

@@ -2,7 +2,14 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { AbstractRepository } from 'src/common/abstract';
-import { Backpack, Clothing, Furniture, Handbag } from './entities/product.model';
+import {
+  Backpack,
+  Clothing,
+  Furniture,
+  Glasses,
+  Handbag,
+  HardwareStore,
+} from './entities/product.model';
 import { ProductDocument } from './entities/product.schema';
 
 @Injectable()
@@ -40,6 +47,26 @@ export class ProductRepositoryFurniture extends AbstractRepository<ProductDocume
   protected readonly logger = new Logger(ProductRepositoryFurniture.name);
   constructor(
     @InjectModel(Furniture.name, 'productsDB')
+    productModel: Model<ProductDocument>,
+  ) {
+    super(productModel);
+  }
+}
+@Injectable()
+export class ProductRepositoryHardwareStore extends AbstractRepository<ProductDocument> {
+  protected readonly logger = new Logger(ProductRepositoryHardwareStore.name);
+  constructor(
+    @InjectModel(HardwareStore.name, 'toolsDB')
+    productModel: Model<ProductDocument>,
+  ) {
+    super(productModel);
+  }
+}
+@Injectable()
+export class ProductRepositoryGlasses extends AbstractRepository<ProductDocument> {
+  protected readonly logger = new Logger(ProductRepositoryGlasses.name);
+  constructor(
+    @InjectModel(Glasses.name, 'glassesDB')
     productModel: Model<ProductDocument>,
   ) {
     super(productModel);

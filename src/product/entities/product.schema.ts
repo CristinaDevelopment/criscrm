@@ -13,13 +13,12 @@ export class ProductDocument extends AbstractDocument {
 
   @Prop({ trim: true })
   parent: string;
-  
+
   @Prop({ trim: true })
   type: string;
 
   @Prop({ type: UpdateDate })
   updateDate: UpdateDate;
-
 }
 
 export const ClothingSchema = SchemaFactory.createForClass(ProductDocument);
@@ -27,3 +26,6 @@ export const BackpackSchema = SchemaFactory.createForClass(ProductDocument);
 export const HandbagSchema = SchemaFactory.createForClass(ProductDocument);
 
 export const FurnitureSchema = SchemaFactory.createForClass(ProductDocument);
+export const HardwareStoreSchema =
+  SchemaFactory.createForClass(ProductDocument);
+export const GlassesSchema = SchemaFactory.createForClass(ProductDocument);

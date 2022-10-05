@@ -6,10 +6,21 @@ import {
   Backpack,
   Clothing,
   Furniture,
+  Glasses,
   Handbag,
 } from './entities/product.model';
-import { ClothingSchema, FurnitureSchema } from './entities/product.schema';
-import { ProductRepositoryBackpack } from './product.repository';
+import {
+  ClothingSchema,
+  FurnitureSchema,
+  GlassesSchema,
+  HardwareStoreSchema,
+} from './entities/product.schema';
+import {
+  ProductRepositoryBackpack,
+  ProductRepositoryGlasses,
+  ProductRepositoryHardwareStore,
+} from './product.repository';
+import { HardwareStore } from './entities/product.model';
 import {
   ProductRepositoryClothing,
   ProductRepositoryFurniture,
@@ -30,6 +41,14 @@ import {
       [{ name: Furniture.name, schema: FurnitureSchema }],
       'productsDB',
     ),
+    MongooseModule.forFeature(
+      [{ name: HardwareStore.name, schema: HardwareStoreSchema }],
+      'toolsDB',
+    ),
+    MongooseModule.forFeature(
+      [{ name: Glasses.name, schema: GlassesSchema }],
+      'glassesDB',
+    ),
   ],
   providers: [
     ProductResolver,
@@ -38,6 +57,8 @@ import {
     ProductRepositoryHandbag,
     ProductRepositoryBackpack,
     ProductRepositoryFurniture,
+    ProductRepositoryHardwareStore,
+    ProductRepositoryGlasses,
   ],
   exports: [ProductService],
 })

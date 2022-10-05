@@ -39,10 +39,15 @@ export class DataProduct {
   readonly description: string;
   @Field(() => Promotion)
   readonly promotion: Promotion | string;
+
   @Field({ nullable: true })
   readonly details?: string;
+
   @Field({ nullable: true })
   readonly featured?: string;
+
+  @Field({ nullable: true })
+  readonly specs?: string;
 
   @Field(() => [Tags])
   readonly tags?: Tags[];
@@ -127,8 +132,15 @@ export class Clothing extends Product {}
 export class Backpack extends Product {}
 @ObjectType()
 export class Handbag extends Product {}
+
 @ObjectType()
 export class Furniture extends Product {}
+
+@ObjectType()
+export class HardwareStore extends Product {}
+
+@ObjectType()
+export class Glasses extends Product {}
 
 @ObjectType()
 export class ListProductResponse extends RelayTypes<Product>(Product) {}

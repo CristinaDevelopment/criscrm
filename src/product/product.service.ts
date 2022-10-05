@@ -5,9 +5,11 @@ import {
   ProductRepositoryBackpack,
   ProductRepositoryClothing,
   ProductRepositoryFurniture,
+  ProductRepositoryGlasses,
   ProductRepositoryHandbag,
+  ProductRepositoryHardwareStore,
 } from './product.repository';
-import { GetParent, GetProductArgs, GetSite } from './dto/product.args';
+import { GetProductArgs, GetSite } from './dto/product.args';
 import { capitalizar, slug } from 'src/utils/function';
 import { uuidv3 } from 'src/utils';
 import { ListInput } from 'src/common/pagination/dto/list.input';
@@ -19,6 +21,8 @@ export class ProductService {
     private readonly productRepositoryBackpack: ProductRepositoryBackpack,
     private readonly productRepositoryHandbag: ProductRepositoryHandbag,
     private readonly productRepositoryFurniture: ProductRepositoryFurniture,
+    private readonly productRepositoryHardwareStore: ProductRepositoryHardwareStore,
+    private readonly productRepositoryGlasses: ProductRepositoryGlasses,
   ) {}
 
   async create(input: CreateProduct, type: string) {
@@ -40,6 +44,14 @@ export class ProductService {
       data = await this.productRepositoryFurniture.create(
         this.productCreated(input, type),
       );
+    } else if (type === 'hardware-store') {
+      data = await this.productRepositoryHardwareStore.create(
+        this.productCreated(input, type),
+      );
+    } else if (type === 'glasses') {
+      data = await this.productRepositoryGlasses.create(
+        this.productCreated(input, type),
+      );
     }
     return this.toModel(data);
   }
@@ -49,62 +61,37 @@ export class ProductService {
     if (type === 'clothing') {
       data = await this.productRepositoryClothing.findOneAndUpdate(
         { _id: id },
-        {
-          $set: this.productUpdated(input),
-          $push: {
-            'updateDate.register': {
-              uid: input.uid,
-              change: input.change,
-              updatedAt: new Date(),
-            },
-          },
-        },
+        this.productUpdated(input),
       );
     } else if (type === 'backpack') {
       data = await this.productRepositoryBackpack.findOneAndUpdate(
         { _id: id },
-        {
-          $set: this.productUpdated(input),
-          $push: {
-            'updateDate.register': {
-              uid: input.uid,
-              change: input.change,
-              updatedAt: new Date(),
-            },
-          },
-        },
+        this.productUpdated(input),
       );
     } else if (type === 'handbag') {
       data = await this.productRepositoryHandbag.findOneAndUpdate(
         { _id: id },
-        {
-          $set: this.productUpdated(input),
-          $push: {
-            'updateDate.register': {
-              uid: input.uid,
-              change: input.change,
-              updatedAt: new Date(),
-            },
-          },
-        },
+        this.productUpdated(input),
       );
     } else if (type === 'furniture') {
       data = await this.productRepositoryFurniture.findOneAndUpdate(
         { _id: id },
-        {
-          $set: this.productUpdated(input),
-          $push: {
-            'updateDate.register': {
-              uid: input.uid,
-              change: input.change,
-              updatedAt: new Date(),
-            },
-          },
-        },
+        this.productUpdated(input),
+      );
+    } else if (type === 'harware-store') {
+      data = await this.productRepositoryHardwareStore.findOneAndUpdate(
+        { _id: id },
+        this.productUpdated(input),
+      );
+    } else if (type === 'glasses') {
+      data = await this.productRepositoryGlasses.findOneAndUpdate(
+        { _id: id },
+        this.productUpdated(input),
       );
     }
     return this.toModel(data);
   }
+
   async updateImage(
     { id }: GetProductArgs,
     input: UpdateImage[],
@@ -115,58 +102,32 @@ export class ProductService {
     if (type === 'clothing') {
       data = await this.productRepositoryClothing.findOneAndUpdate(
         { _id: id },
-        {
-          $set: this.productImage(input),
-          $push: {
-            'updateDate.register': {
-              uid: uid,
-              change: 'image update',
-              updatedAt: new Date(),
-            },
-          },
-        },
+        this.productImage(input, uid),
       );
     } else if (type === 'handbag') {
       data = await this.productRepositoryHandbag.findOneAndUpdate(
         { _id: id },
-        {
-          $set: this.productImage(input),
-          $push: {
-            'updateDate.register': {
-              uid: uid,
-              change: 'image update',
-              updatedAt: new Date(),
-            },
-          },
-        },
+        this.productImage(input, uid),
       );
     } else if (type === 'backpack') {
       data = await this.productRepositoryBackpack.findOneAndUpdate(
         { _id: id },
-        {
-          $set: this.productImage(input),
-          $push: {
-            'updateDate.register': {
-              uid: uid,
-              change: 'image update',
-              updatedAt: new Date(),
-            },
-          },
-        },
+        this.productImage(input, uid),
       );
     } else if (type === 'furniture') {
       data = await this.productRepositoryFurniture.findOneAndUpdate(
         { _id: id },
-        {
-          $set: this.productImage(input),
-          $push: {
-            'updateDate.register': {
-              uid: uid,
-              change: 'image update',
-              updatedAt: new Date(),
-            },
-          },
-        },
+        this.productImage(input, uid),
+      );
+    } else if (type === 'hardware-store') {
+      data = await this.productRepositoryHardwareStore.findOneAndUpdate(
+        { _id: id },
+        this.productImage(input, uid),
+      );
+    } else if (type === 'glasses') {
+      data = await this.productRepositoryGlasses.findOneAndUpdate(
+        { _id: id },
+        this.productImage(input, uid),
       );
     }
 
@@ -183,6 +144,10 @@ export class ProductService {
       data = await this.productRepositoryBackpack.findOne({ _id: id });
     } else if (type === 'furniture') {
       data = await this.productRepositoryFurniture.findOne({ _id: id });
+    } else if (type === 'hardware-store') {
+      data = await this.productRepositoryHardwareStore.findOne({ _id: id });
+    } else if (type === 'glasses') {
+      data = await this.productRepositoryGlasses.findOne({ _id: id });
     }
     return this.toModel(data);
   }
@@ -197,6 +162,10 @@ export class ProductService {
       data = this.productRepositoryBackpack.find({});
     } else if (type === 'furniture') {
       data = this.productRepositoryFurniture.find({});
+    } else if (type === 'hardware-store') {
+      data = this.productRepositoryHardwareStore.find({});
+    } else if (type === 'glasses') {
+      data = this.productRepositoryGlasses.find({});
     }
     return data;
   }
@@ -212,8 +181,17 @@ export class ProductService {
     const handbags = await this.productRepositoryHandbag.find({});
     const backpacks = await this.productRepositoryBackpack.find({});
     const furnituries = await this.productRepositoryFurniture.find({});
+    const hardwareStore = await this.productRepositoryHardwareStore.find({});
+    const glasses = await this.productRepositoryGlasses.find({});
 
-    return [...clothings, ...furnituries, ...handbags, ...backpacks];
+    return [
+      ...clothings,
+      ...furnituries,
+      ...handbags,
+      ...backpacks,
+      ...hardwareStore,
+      ...glasses,
+    ];
   }
 
   async findProductsBySite({ siteId }: GetSite, type: string) {
@@ -226,6 +204,10 @@ export class ProductService {
       data = await this.productRepositoryBackpack.find({ site: siteId });
     } else if (type === 'furniture') {
       data = await this.productRepositoryFurniture.find({ site: siteId });
+    } else if (type === 'hardware-store') {
+      data = await this.productRepositoryHardwareStore.find({ site: siteId });
+    } else if (type === 'glasses') {
+      data = await this.productRepositoryGlasses.find({ site: siteId });
     }
     return data;
   }
@@ -239,6 +221,12 @@ export class ProductService {
       data = await this.productRepositoryBackpack.find({ parent: parentId });
     } else if (type === 'furniture') {
       data = await this.productRepositoryFurniture.find({ parent: parentId });
+    } else if (type === 'hardware-store') {
+      data = await this.productRepositoryHardwareStore.find({
+        parent: parentId,
+      });
+    } else if (type === 'glasses') {
+      data = await this.productRepositoryGlasses.find({ parent: parentId });
     }
     return data;
   }
@@ -252,9 +240,21 @@ export class ProductService {
     const backpacks = await this.productRepositoryBackpack.find({
       parent: parentId,
     });
+    const hardwareStores = await this.productRepositoryHardwareStore.find({
+      parent: parentId,
+    });
+    const glasses = await this.productRepositoryGlasses.find({
+      parent: parentId,
+    });
     // const furnituries = await this.productRepositoryFurniture.find({ parent: parentId });
 
-    return [...clothings, ...handbags, ...backpacks];
+    return [
+      ...clothings,
+      ...handbags,
+      ...backpacks,
+      ...hardwareStores,
+      ...glasses,
+    ];
   }
 
   async deleteProduct({ id }: GetProductArgs, type: string) {
@@ -266,6 +266,10 @@ export class ProductService {
       await this.productRepositoryBackpack.deleteOne({ _id: id });
     } else if (type === 'furniture') {
       await this.productRepositoryFurniture.deleteOne({ _id: id });
+    } else if (type === 'hardware-store') {
+      await this.productRepositoryHardwareStore.deleteOne({ _id: id });
+    } else if (type === 'glasses') {
+      await this.productRepositoryGlasses.deleteOne({ _id: id });
     }
     return id;
   }
@@ -279,6 +283,10 @@ export class ProductService {
       await this.productRepositoryBackpack.deleteOne({ site: siteId });
     } else if (type === 'furniture') {
       await this.productRepositoryFurniture.deleteOne({ site: siteId });
+    } else if (type === 'hardware-store') {
+      await this.productRepositoryHardwareStore.deleteOne({ site: siteId });
+    } else if (type === 'glasses') {
+      await this.productRepositoryGlasses.deleteOne({ site: siteId });
     }
     return 'deleted products';
   }
@@ -293,6 +301,10 @@ export class ProductService {
       data = this.productRepositoryBackpack.find({ parent: parentUi });
     } else if (type === 'furniture') {
       data = this.productRepositoryFurniture.find({ parent: parentUi });
+    } else if (type === 'hardware-store') {
+      data = this.productRepositoryHardwareStore.find({ parent: parentUi });
+    } else if (type === 'glasses') {
+      data = this.productRepositoryGlasses.find({ parent: parentUi });
     } else {
       data = [];
     }
@@ -311,6 +323,12 @@ export class ProductService {
   findByParentFurniture(pageUi) {
     return this.productRepositoryFurniture.find({ parent: pageUi });
   }
+  findByParentHardwareStore(pageUi) {
+    return this.productRepositoryHardwareStore.find({ parent: pageUi });
+  }
+  findByParentGlasses(pageUi) {
+    return this.productRepositoryGlasses.find({ parent: pageUi });
+  }
 
   findBySiteId(siteId: string, type: string) {
     let data;
@@ -322,6 +340,10 @@ export class ProductService {
       data = this.productRepositoryBackpack.find({ site: siteId });
     } else if (type === 'furniture') {
       data = this.productRepositoryFurniture.find({ site: siteId });
+    } else if (type === 'hardware-store') {
+      data = this.productRepositoryHardwareStore.find({ site: siteId });
+    } else if (type === 'glasses') {
+      data = this.productRepositoryGlasses.find({ site: siteId });
     }
     return data;
   }
@@ -336,6 +358,10 @@ export class ProductService {
       data = this.productRepositoryBackpack.All(pagination);
     } else if (type === 'furniture') {
       data = this.productRepositoryFurniture.All(pagination);
+    } else if (type === 'hardware-store') {
+      data = this.productRepositoryHardwareStore.All(pagination);
+    } else if (type === 'glasses') {
+      data = this.productRepositoryGlasses.All(pagination);
     }
     return data;
   }
@@ -435,18 +461,29 @@ export class ProductService {
       },
     };
   }
-  private productImage(input: UpdateImage[]) {
+  private productImage(input: UpdateImage[], uid: string) {
     return {
-      'data.image': input.map((data) => ({
-        uid: uuidv3(),
-        src: data.src,
-        alt: data.alt,
-      })),
-      'data.seo.image.src': input[0].src,
-      'data.seo.image.alt': input[0].alt,
+      $set: {
+        'data.image': input.map((data) => ({
+          uid: uuidv3(),
+          src: data.src,
+          alt: data.alt,
+        })),
+        'data.seo.image.src': input[0].src,
+        'data.seo.image.alt': input[0].alt,
+      },
+      $push: {
+        'updateDate.register': {
+          uid: uid,
+          change: 'image update',
+          updatedAt: new Date(),
+        },
+      },
     };
   }
   private productUpdated({
+    uid,
+    change,
     name,
     mark,
     inStock,
@@ -457,21 +494,30 @@ export class ProductService {
     details,
   }: UpdateProduct) {
     return {
-      'data.name': capitalizar(name),
-      'data.slug': slug(name),
-      'data.mark': mark,
-      'data.inStock': inStock,
-      'data.price': price,
-      'data.discountPrice': discountPrice,
-      'data.description': description,
-      'data.promotion': {
-        name: capitalizar(promotion),
-        href: slug(promotion),
+      $set: {
+        'data.name': capitalizar(name),
+        'data.slug': slug(name),
+        'data.mark': mark,
+        'data.inStock': inStock,
+        'data.price': price,
+        'data.discountPrice': discountPrice,
+        'data.description': description,
+        'data.promotion': {
+          name: capitalizar(promotion),
+          href: slug(promotion),
+        },
+        'data.details': details,
+        'data.seo.title': capitalizar(name),
+        'data.seo.href': slug(name),
+        'data.seo.description': description,
       },
-      'data.details': details,
-      'data.seo.title': capitalizar(name),
-      'data.seo.href': slug(name),
-      'data.seo.description': description,
+      $push: {
+        'updateDate.register': {
+          uid: uid,
+          change: change,
+          updatedAt: new Date(),
+        },
+      },
     };
   }
 

@@ -23,19 +23,17 @@ export class GetParent {
 }
 
 
-@ArgsType()
-export class GetClothingArgs extends GetProductArgs {}
-@ArgsType()
-export class GetFurnitureArgs extends GetProductArgs {}
-@ArgsType()
-export class GetHomeApplianceArgs extends GetProductArgs {}
-@ArgsType()
-export class GetHardwareArgs extends GetProductArgs {}
-@ArgsType()
-export class GetWearArgs extends GetProductArgs {}
-@ArgsType()
-export class GetGiftArgs extends GetProductArgs {}
-@ArgsType()
-export class GetJewelerArgs extends GetProductArgs {}
-@ArgsType()
-export class GetTeddyArgs extends GetProductArgs {}
+// @ArgsType()
+// export class GetClothingArgs extends GetProductArgs {}
+// @ArgsType()
+// export class GetFurnitureArgs extends GetProductArgs {}
+// @ArgsType()
+// export class GetHomeApplianceArgs extends GetProductArgs {}
+// @ArgsType()
+// export class GetHardwareArgs extends GetProductArgs {}
+// @ArgsType()
+// export class GetGiftArgs extends GetProductArgs {}
+// @ArgsType()
+// export class GetJewelerArgs extends GetProductArgs {}
+// @ArgsType()
+// export class GetTeddyArgs extends GetProductArgs {}
