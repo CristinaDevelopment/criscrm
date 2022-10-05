@@ -442,8 +442,8 @@ export class ProductService {
         src: data.src,
         alt: data.alt,
       })),
-      'data.seo.image': input[0].src,
-      'data.seo.alt': input[0].alt,
+      'data.seo.image.src': input[0].src,
+      'data.seo.image.alt': input[0].alt,
     };
   }
   private productUpdated({
