@@ -366,46 +366,79 @@ export class ProductService {
     return data;
   }
 
-  private async validateSlugCreate(
-    type: string,
-    { name, site, parent }: CreateProduct,
-  ) {
+  private async validateSlugCreate(type: string, input: CreateProduct) {
     if (type === 'clothing') {
-      await this.productRepositoryClothing.findOneBySlug({
-        'data.slug': slug(name),
-        site: site,
-        parent: parent,
-      });
+      await this.productRepositoryClothing.findOneBySlug(
+        this.slugValidCreated(input),
+      );
+    } else if (type === 'handbag') {
+      await this.productRepositoryHandbag.findOneBySlug(
+        this.slugValidCreated(input),
+      );
+    } else if (type === 'backpack') {
+      await this.productRepositoryBackpack.findOneBySlug(
+        this.slugValidCreated(input),
+      );
     } else if (type === 'furniture') {
-      await this.productRepositoryFurniture.findOneBySlug({
-        'data.slug': slug(name),
-        site: site,
-        parent: parent,
-      });
+      await this.productRepositoryFurniture.findOneBySlug(
+        this.slugValidCreated(input),
+      );
+    } else if (type === 'hardware-store') {
+      await this.productRepositoryHardwareStore.findOneBySlug(
+        this.slugValidCreated(input),
+      );
+    } else if (type === 'glasses') {
+      await this.productRepositoryGlasses.findOneBySlug(
+        this.slugValidCreated(input),
+      );
     }
   }
   private async validateSlugUpdate(
     id: string,
     type: string,
-    { name, site, parent }: UpdateProduct,
+    input: UpdateProduct,
   ) {
     if (type === 'clothing') {
-      await this.productRepositoryClothing.findOneBySlug({
-        _id: { $ne: id },
-        'data.slug': slug(name),
-        site: site,
-        parent: parent,
-      });
+      await this.productRepositoryClothing.findOneBySlug(
+        this.slugValidUpdated(input, id),
+      );
+    } else if (type === 'handbag') {
+      await this.productRepositoryHandbag.findOneBySlug(
+        this.slugValidUpdated(input, id),
+      );
+    } else if (type === 'backpack') {
+      await this.productRepositoryBackpack.findOneBySlug(
+        this.slugValidUpdated(input, id),
+      );
     } else if (type === 'furniture') {
-      await this.productRepositoryFurniture.findOneBySlug({
-        _id: { $ne: id },
-        'data.slug': slug(name),
-        site: site,
-        parent: parent,
-      });
+      await this.productRepositoryFurniture.findOneBySlug(
+        this.slugValidUpdated(input, id),
+      );
+    } else if (type === 'hardware-store') {
+      await this.productRepositoryHardwareStore.findOneBySlug(
+        this.slugValidUpdated(input, id),
+      );
+    } else if (type === 'glasses') {
+      await this.productRepositoryGlasses.findOneBySlug(
+        this.slugValidUpdated(input, id),
+      );
     }
   }
-
+  private slugValidCreated({ name, site, parent }: CreateProduct) {
+    return {
+      'data.slug': slug(name),
+      site: site,
+      parent: parent,
+    };
+  }
+  private slugValidUpdated({ name, site, parent }: UpdateProduct, id: string) {
+    return {
+      _id: { $ne: id },
+      'data.slug': slug(name),
+      site: site,
+      parent: parent,
+    };
+  }
   private productCreated(
     {
       name,

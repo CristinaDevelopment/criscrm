@@ -59,21 +59,21 @@ export class UpdateImage {
   readonly alt: string;
 }
 
-@InputType()
-export class UpdateDetails {
-  @Field()
-  readonly material: string;
-  @Field()
-  readonly color: string;
-  @Field()
-  readonly finishing: string;
-  @Field()
-  readonly logo: string;
-  @Field()
-  readonly accessories: string;
-  @Field(() => [String])
-  readonly dimensions: string[];
-}
+// @InputType()
+// export class UpdateDetails {
+//   @Field()
+//   readonly material: string;
+//   @Field()
+//   readonly color: string;
+//   @Field()
+//   readonly finishing: string;
+//   @Field()
+//   readonly logo: string;
+//   @Field()
+//   readonly accessories: string;
+//   @Field(() => [String])
+//   readonly dimensions: string[];
+// }
 
 @InputType()
 export class UpdateTags extends PartialType(UpdateSpecs) {}
