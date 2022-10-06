@@ -26,6 +26,9 @@ export const BackpackSchema = SchemaFactory.createForClass(ProductDocument);
 export const HandbagSchema = SchemaFactory.createForClass(ProductDocument);
 
 export const FurnitureSchema = SchemaFactory.createForClass(ProductDocument);
+
 export const HardwareStoreSchema =
   SchemaFactory.createForClass(ProductDocument);
+
 export const GlassesSchema = SchemaFactory.createForClass(ProductDocument);
+export const EngineSchema = SchemaFactory.createForClass(ProductDocument);

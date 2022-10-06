@@ -4,6 +4,7 @@ import { ProductDocument } from './entities/product.schema';
 import {
   ProductRepositoryBackpack,
   ProductRepositoryClothing,
+  ProductRepositoryEngine,
   ProductRepositoryFurniture,
   ProductRepositoryGlasses,
   ProductRepositoryHandbag,
@@ -23,6 +24,7 @@ export class ProductService {
     private readonly productRepositoryFurniture: ProductRepositoryFurniture,
     private readonly productRepositoryHardwareStore: ProductRepositoryHardwareStore,
     private readonly productRepositoryGlasses: ProductRepositoryGlasses,
+    private readonly productRepositoryEngine: ProductRepositoryEngine,
   ) {}
 
   async create(input: CreateProduct, type: string) {
@@ -50,6 +52,10 @@ export class ProductService {
       );
     } else if (type === 'glasses') {
       data = await this.productRepositoryGlasses.create(
+        this.productCreated(input, type),
+      );
+    } else if (type === 'engine') {
+      data = await this.productRepositoryEngine.create(
         this.productCreated(input, type),
       );
     }
@@ -85,6 +91,11 @@ export class ProductService {
       );
     } else if (type === 'glasses') {
       data = await this.productRepositoryGlasses.findOneAndUpdate(
+        { _id: id },
+        this.productUpdated(input),
+      );
+    } else if (type === 'engine') {
+      data = await this.productRepositoryEngine.findOneAndUpdate(
         { _id: id },
         this.productUpdated(input),
       );
@@ -129,6 +140,11 @@ export class ProductService {
         { _id: id },
         this.productImage(input, uid),
       );
+    } else if (type === 'engine') {
+      data = await this.productRepositoryEngine.findOneAndUpdate(
+        { _id: id },
+        this.productImage(input, uid),
+      );
     }
 
     return this.toModel(data);
@@ -148,6 +164,8 @@ export class ProductService {
       data = await this.productRepositoryHardwareStore.findOne({ _id: id });
     } else if (type === 'glasses') {
       data = await this.productRepositoryGlasses.findOne({ _id: id });
+    } else if (type === 'engine') {
+      data = await this.productRepositoryEngine.findOne({ _id: id });
     }
     return this.toModel(data);
   }
@@ -166,6 +184,8 @@ export class ProductService {
       data = this.productRepositoryHardwareStore.find({});
     } else if (type === 'glasses') {
       data = this.productRepositoryGlasses.find({});
+    } else if (type === 'engine') {
+      data = this.productRepositoryEngine.find({});
     }
     return data;
   }
@@ -183,6 +203,7 @@ export class ProductService {
     const furnituries = await this.productRepositoryFurniture.find({});
     const hardwareStore = await this.productRepositoryHardwareStore.find({});
     const glasses = await this.productRepositoryGlasses.find({});
+    const enginies = await this.productRepositoryEngine.find({});
 
     return [
       ...clothings,
@@ -191,6 +212,7 @@ export class ProductService {
       ...backpacks,
       ...hardwareStore,
       ...glasses,
+      ...enginies,
     ];
   }
 
@@ -208,6 +230,8 @@ export class ProductService {
       data = await this.productRepositoryHardwareStore.find({ site: siteId });
     } else if (type === 'glasses') {
       data = await this.productRepositoryGlasses.find({ site: siteId });
+    } else if (type === 'engine') {
+      data = await this.productRepositoryEngine.find({ site: siteId });
     }
     return data;
   }
@@ -227,6 +251,8 @@ export class ProductService {
       });
     } else if (type === 'glasses') {
       data = await this.productRepositoryGlasses.find({ parent: parentId });
+    } else if (type === 'engine') {
+      data = await this.productRepositoryEngine.find({ parent: parentId });
     }
     return data;
   }
@@ -246,6 +272,9 @@ export class ProductService {
     const glasses = await this.productRepositoryGlasses.find({
       parent: parentId,
     });
+    const enginies = await this.productRepositoryEngine.find({
+      parent: parentId,
+    });
     // const furnituries = await this.productRepositoryFurniture.find({ parent: parentId });
 
     return [
@@ -254,6 +283,7 @@ export class ProductService {
       ...backpacks,
       ...hardwareStores,
       ...glasses,
+      ...enginies,
     ];
   }
 
@@ -270,6 +300,8 @@ export class ProductService {
       await this.productRepositoryHardwareStore.deleteOne({ _id: id });
     } else if (type === 'glasses') {
       await this.productRepositoryGlasses.deleteOne({ _id: id });
+    } else if (type === 'engine') {
+      await this.productRepositoryEngine.deleteOne({ _id: id });
     }
     return id;
   }
@@ -287,6 +319,8 @@ export class ProductService {
       await this.productRepositoryHardwareStore.deleteOne({ site: siteId });
     } else if (type === 'glasses') {
       await this.productRepositoryGlasses.deleteOne({ site: siteId });
+    } else if (type === 'engine') {
+      await this.productRepositoryEngine.deleteOne({ site: siteId });
     }
     return 'deleted products';
   }
@@ -305,6 +339,8 @@ export class ProductService {
       data = this.productRepositoryHardwareStore.find({ parent: parentUi });
     } else if (type === 'glasses') {
       data = this.productRepositoryGlasses.find({ parent: parentUi });
+    } else if (type === 'engine') {
+      data = this.productRepositoryEngine.find({ parent: parentUi });
     } else {
       data = [];
     }
@@ -329,6 +365,9 @@ export class ProductService {
   findByParentGlasses(pageUi) {
     return this.productRepositoryGlasses.find({ parent: pageUi });
   }
+  findByParentEngine(pageUi) {
+    return this.productRepositoryEngine.find({ parent: pageUi });
+  }
 
   findBySiteId(siteId: string, type: string) {
     let data;
@@ -344,6 +383,8 @@ export class ProductService {
       data = this.productRepositoryHardwareStore.find({ site: siteId });
     } else if (type === 'glasses') {
       data = this.productRepositoryGlasses.find({ site: siteId });
+    } else if (type === 'engine') {
+      data = this.productRepositoryEngine.find({ site: siteId });
     }
     return data;
   }
@@ -362,6 +403,8 @@ export class ProductService {
       data = this.productRepositoryHardwareStore.All(pagination);
     } else if (type === 'glasses') {
       data = this.productRepositoryGlasses.All(pagination);
+    } else if (type === 'engine') {
+      data = this.productRepositoryEngine.All(pagination);
     }
     return data;
   }
@@ -389,6 +432,10 @@ export class ProductService {
       );
     } else if (type === 'glasses') {
       await this.productRepositoryGlasses.findOneBySlug(
+        this.slugValidCreated(input),
+      );
+    } else if (type === 'engine') {
+      await this.productRepositoryEngine.findOneBySlug(
         this.slugValidCreated(input),
       );
     }
@@ -420,6 +467,10 @@ export class ProductService {
       );
     } else if (type === 'glasses') {
       await this.productRepositoryGlasses.findOneBySlug(
+        this.slugValidUpdated(input, id),
+      );
+    } else if (type === 'engine') {
+      await this.productRepositoryEngine.findOneBySlug(
         this.slugValidUpdated(input, id),
       );
     }
@@ -484,6 +535,7 @@ export class ProductService {
       type: type,
       updateDate: {
         createdAt: new Date(),
+        lastUpdatedAt: new Date(),
         register: [
           {
             uid: uid,
@@ -504,6 +556,7 @@ export class ProductService {
         })),
         'data.seo.image.src': input[0].src,
         'data.seo.image.alt': input[0].alt,
+        'updateAt.lastUpdatedAt': new Date(),
       },
       $push: {
         'updateDate.register': {
@@ -543,6 +596,7 @@ export class ProductService {
         'data.seo.title': capitalizar(name),
         'data.seo.href': slug(name),
         'data.seo.description': description,
+        'updateAt.lastUpdatedAt': new Date(),
       },
       $push: {
         'updateDate.register': {

@@ -26,6 +26,8 @@ export class Seo {
 export class UpdateDate {
   @Field()
   createdAt: Date;
+  @Field({ nullable: true })
+  lastUpdatedAt?: Date;
   @Field(() => [Register], { nullable: true })
   readonly register?: Register[];
 }

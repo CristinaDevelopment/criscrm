@@ -70,7 +70,12 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
 
   findAll(paginationQuery: ListInput) {
     const { limit, offset } = paginationQuery;
-    return this.model.find().skip(offset).limit(limit).exec();
+    return this.model
+      .find()
+      .sort({ 'updateDate.lastUpdatedAt': -1 })
+      .skip(offset)
+      .limit(limit)
+      .exec();
   }
 
   async All(paginationQuery: ListInput) {

@@ -5,6 +5,7 @@ import { AbstractRepository } from 'src/common/abstract';
 import {
   Backpack,
   Clothing,
+  Engine,
   Furniture,
   Glasses,
   Handbag,
@@ -67,6 +68,16 @@ export class ProductRepositoryGlasses extends AbstractRepository<ProductDocument
   protected readonly logger = new Logger(ProductRepositoryGlasses.name);
   constructor(
     @InjectModel(Glasses.name, 'glassesDB')
+    productModel: Model<ProductDocument>,
+  ) {
+    super(productModel);
+  }
+}
+@Injectable()
+export class ProductRepositoryEngine extends AbstractRepository<ProductDocument> {
+  protected readonly logger = new Logger(ProductRepositoryEngine.name);
+  constructor(
+    @InjectModel(Engine.name, 'enginiesDB')
     productModel: Model<ProductDocument>,
   ) {
     super(productModel);

@@ -93,16 +93,16 @@ export class Promotion {
 //   @Field()
 //   readonly text: string;
 // }
-@ObjectType()
-export class Route {
-  @Field()
-  readonly uid: string;
-  @Field()
-  readonly name: string;
-  @Field()
-  readonly href: string;
-}
-//TODO: articleType
+// @ObjectType()
+// export class Route {
+//   @Field()
+//   readonly uid: string;
+//   @Field()
+//   readonly name: string;
+//   @Field()
+//   readonly href: string;
+// }
+// //TODO: articleType
 
 @ObjectType()
 export class ColorProduct {
@@ -141,6 +141,8 @@ export class HardwareStore extends Product {}
 
 @ObjectType()
 export class Glasses extends Product {}
+@ObjectType()
+export class Engine extends Product {}
 
 @ObjectType()
 export class ListProductResponse extends RelayTypes<Product>(Product) {}

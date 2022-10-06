@@ -5,18 +5,21 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   Backpack,
   Clothing,
+  Engine,
   Furniture,
   Glasses,
   Handbag,
 } from './entities/product.model';
 import {
   ClothingSchema,
+  EngineSchema,
   FurnitureSchema,
   GlassesSchema,
   HardwareStoreSchema,
 } from './entities/product.schema';
 import {
   ProductRepositoryBackpack,
+  ProductRepositoryEngine,
   ProductRepositoryGlasses,
   ProductRepositoryHardwareStore,
 } from './product.repository';
@@ -49,6 +52,10 @@ import {
       [{ name: Glasses.name, schema: GlassesSchema }],
       'glassesDB',
     ),
+    MongooseModule.forFeature(
+      [{ name: Engine.name, schema: EngineSchema }],
+      'enginiesDB',
+    ),
   ],
   providers: [
     ProductResolver,
@@ -59,6 +66,7 @@ import {
     ProductRepositoryFurniture,
     ProductRepositoryHardwareStore,
     ProductRepositoryGlasses,
+    ProductRepositoryEngine,
   ],
   exports: [ProductService],
 })

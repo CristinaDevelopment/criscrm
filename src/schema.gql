@@ -17,6 +17,7 @@ type Seo {
 
 type UpdateDate {
   createdAt: DateTime!
+  lastUpdatedAt: DateTime
   register: [Register!]
 }
 
