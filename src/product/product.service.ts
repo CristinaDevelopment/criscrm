@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { CreateProduct, UpdateImage, UpdateProduct } from './dto/product.input';
 import { ProductDocument } from './entities/product.schema';
 import {
@@ -28,77 +28,68 @@ export class ProductService {
   ) {}
 
   async create(input: CreateProduct, type: string) {
-    await this.validateSlugCreate(type, input);
     let data;
-    if (type === 'clothing') {
-      data = await this.productRepositoryClothing.create(
-        this.productCreated(input, type),
-      );
-    } else if (type === 'backpack') {
-      data = await this.productRepositoryBackpack.create(
-        this.productCreated(input, type),
-      );
-    } else if (type === 'handbag') {
-      data = await this.productRepositoryHandbag.create(
-        this.productCreated(input, type),
-      );
-    } else if (type === 'furniture') {
-      data = await this.productRepositoryFurniture.create(
-        this.productCreated(input, type),
-      );
-    } else if (type === 'hardware-store') {
-      data = await this.productRepositoryHardwareStore.create(
-        this.productCreated(input, type),
-      );
-    } else if (type === 'glasses') {
-      data = await this.productRepositoryGlasses.create(
-        this.productCreated(input, type),
-      );
-    } else if (type === 'engine') {
-      data = await this.productRepositoryEngine.create(
-        this.productCreated(input, type),
-      );
+    switch (type) {
+      case 'clothing':
+        data = await this.productRepositoryClothing.add(input, type);
+        break;
+      case 'backpack':
+        data = await this.productRepositoryBackpack.add(input, type);
+        break;
+      case 'handbag':
+        data = await this.productRepositoryHandbag.add(input, type);
+        break;
+      case 'furniture':
+        data = await this.productRepositoryFurniture.add(input, type);
+        break;
+      case 'hardware-store':
+        data = await this.productRepositoryHardwareStore.add(input, type);
+        break;
+      case 'glasses':
+        data = await this.productRepositoryGlasses.add(input, type);
+        break;
+      case 'engine':
+        data = await this.productRepositoryEngine.add(input, type);
+        break;
+      default:
+        console.log(`Sorry, we are out of ${type}.`);
+        break;
+    }
+    if (!data) {
+      throw new UnprocessableEntityException(`there is no "${type}" category`);
     }
     return this.toModel(data);
   }
   async update({ id }: GetProductArgs, input: UpdateProduct, type: string) {
-    await this.validateSlugUpdate(id, type, input);
     let data;
-    if (type === 'clothing') {
-      data = await this.productRepositoryClothing.findOneAndUpdate(
-        { _id: id },
-        this.productUpdated(input),
-      );
-    } else if (type === 'backpack') {
-      data = await this.productRepositoryBackpack.findOneAndUpdate(
-        { _id: id },
-        this.productUpdated(input),
-      );
-    } else if (type === 'handbag') {
-      data = await this.productRepositoryHandbag.findOneAndUpdate(
-        { _id: id },
-        this.productUpdated(input),
-      );
-    } else if (type === 'furniture') {
-      data = await this.productRepositoryFurniture.findOneAndUpdate(
-        { _id: id },
-        this.productUpdated(input),
-      );
-    } else if (type === 'harware-store') {
-      data = await this.productRepositoryHardwareStore.findOneAndUpdate(
-        { _id: id },
-        this.productUpdated(input),
-      );
-    } else if (type === 'glasses') {
-      data = await this.productRepositoryGlasses.findOneAndUpdate(
-        { _id: id },
-        this.productUpdated(input),
-      );
-    } else if (type === 'engine') {
-      data = await this.productRepositoryEngine.findOneAndUpdate(
-        { _id: id },
-        this.productUpdated(input),
-      );
+    switch (type) {
+      case 'clothing':
+        data = await this.productRepositoryClothing.update(id, input);
+        break;
+      case 'backpack':
+        data = await this.productRepositoryBackpack.update(id, input);
+        break;
+      case 'handbag':
+        data = await this.productRepositoryHandbag.update(id, input);
+        break;
+      case 'furniture':
+        data = await this.productRepositoryFurniture.update(id, input);
+        break;
+      case 'hardware-store':
+        data = await this.productRepositoryHardwareStore.update(id, input);
+        break;
+      case 'glasses':
+        data = await this.productRepositoryGlasses.update(id, input);
+        break;
+      case 'engine':
+        data = await this.productRepositoryEngine.update(id, input);
+        break;
+      default:
+        console.log(`Sorry, we are out of ${type}.`);
+        break;
+    }
+    if (!data) {
+      throw new UnprocessableEntityException(`there is no "${type}" category`);
     }
     return this.toModel(data);
   }
@@ -110,83 +101,145 @@ export class ProductService {
     uid: string,
   ) {
     let data;
-    if (type === 'clothing') {
-      data = await this.productRepositoryClothing.findOneAndUpdate(
-        { _id: id },
-        this.productImage(input, uid),
-      );
-    } else if (type === 'handbag') {
-      data = await this.productRepositoryHandbag.findOneAndUpdate(
-        { _id: id },
-        this.productImage(input, uid),
-      );
-    } else if (type === 'backpack') {
-      data = await this.productRepositoryBackpack.findOneAndUpdate(
-        { _id: id },
-        this.productImage(input, uid),
-      );
-    } else if (type === 'furniture') {
-      data = await this.productRepositoryFurniture.findOneAndUpdate(
-        { _id: id },
-        this.productImage(input, uid),
-      );
-    } else if (type === 'hardware-store') {
-      data = await this.productRepositoryHardwareStore.findOneAndUpdate(
-        { _id: id },
-        this.productImage(input, uid),
-      );
-    } else if (type === 'glasses') {
-      data = await this.productRepositoryGlasses.findOneAndUpdate(
-        { _id: id },
-        this.productImage(input, uid),
-      );
-    } else if (type === 'engine') {
-      data = await this.productRepositoryEngine.findOneAndUpdate(
-        { _id: id },
-        this.productImage(input, uid),
-      );
+    switch (type) {
+      case 'clothing':
+        data = await this.productRepositoryClothing.updateImage(id, input, uid);
+        break;
+      case 'backpack':
+        data = await this.productRepositoryBackpack.updateImage(id, input, uid);
+        break;
+      case 'handbag':
+        data = await this.productRepositoryHandbag.updateImage(id, input, uid);
+        break;
+      case 'furniture':
+        data = await this.productRepositoryFurniture.updateImage(
+          id,
+          input,
+          uid,
+        );
+        break;
+      case 'hardware-store':
+        data = await this.productRepositoryHardwareStore.updateImage(
+          id,
+          input,
+          uid,
+        );
+        break;
+      case 'glasses':
+        data = await this.productRepositoryGlasses.updateImage(id, input, uid);
+        break;
+      case 'engine':
+        data = await this.productRepositoryEngine.updateImage(id, input, uid);
+        break;
+      default:
+        console.log(`Sorry, we are out of ${type}.`);
+        break;
     }
-
+    if (!data) {
+      throw new UnprocessableEntityException(`there is no "${type}" category`);
+    }
     return this.toModel(data);
   }
 
+  // async findProduct({ id }: GetProductArgs, type: string) {
+  //   let data;
+  //   if (type === 'clothing') {
+  //     data = await this.productRepositoryClothing.findOne({ _id: id });
+  //   } else if (type === 'handbag') {
+  //     data = await this.productRepositoryHandbag.findOne({ _id: id });
+  //   } else if (type === 'backpack') {
+  //     data = await this.productRepositoryBackpack.findOne({ _id: id });
+  //   } else if (type === 'furniture') {
+  //     data = await this.productRepositoryFurniture.findOne({ _id: id });
+  //   } else if (type === 'hardware-store') {
+  //     data = await this.productRepositoryHardwareStore.findOne({ _id: id });
+  //   } else if (type === 'glasses') {
+  //     data = await this.productRepositoryGlasses.findOne({ _id: id });
+  //   } else if (type === 'engine') {
+  //     data = await this.productRepositoryEngine.findOne({ _id: id });
+  //   }
+  //   return this.toModel(data);
+  // }
   async findProduct({ id }: GetProductArgs, type: string) {
     let data;
-    if (type === 'clothing') {
-      data = await this.productRepositoryClothing.findOne({ _id: id });
-    } else if (type === 'handbag') {
-      data = await this.productRepositoryHandbag.findOne({ _id: id });
-    } else if (type === 'backpack') {
-      data = await this.productRepositoryBackpack.findOne({ _id: id });
-    } else if (type === 'furniture') {
-      data = await this.productRepositoryFurniture.findOne({ _id: id });
-    } else if (type === 'hardware-store') {
-      data = await this.productRepositoryHardwareStore.findOne({ _id: id });
-    } else if (type === 'glasses') {
-      data = await this.productRepositoryGlasses.findOne({ _id: id });
-    } else if (type === 'engine') {
-      data = await this.productRepositoryEngine.findOne({ _id: id });
+    switch (type) {
+      case 'clothing':
+        data = await this.productRepositoryClothing.findOne({ _id: id });
+        break;
+      case 'backpack':
+        data = await this.productRepositoryBackpack.findOne({ _id: id });
+        break;
+      case 'handbag':
+        data = await this.productRepositoryHandbag.findOne({ _id: id });
+        break;
+      case 'furniture':
+        data = await this.productRepositoryFurniture.findOne({ _id: id });
+        break;
+      case 'hardware-store':
+        data = await this.productRepositoryHardwareStore.findOne({ _id: id });
+        break;
+      case 'glasses':
+        data = await this.productRepositoryGlasses.findOne({ _id: id });
+        break;
+      case 'engine':
+        data = await this.productRepositoryEngine.findOne({ _id: id });
+        break;
+      default:
+        console.log(`Sorry, we are out of ${type}.`);
+        break;
+    }
+    if (!data) {
+      throw new UnprocessableEntityException(`there is no "${type}" category`);
     }
     return this.toModel(data);
   }
 
   findProducts(type: string) {
     let data;
-    if (type === 'clothing') {
-      data = this.productRepositoryClothing.find({});
-    } else if (type === 'handbag') {
-      data = this.productRepositoryHandbag.find({});
-    } else if (type === 'backpack') {
-      data = this.productRepositoryBackpack.find({});
-    } else if (type === 'furniture') {
-      data = this.productRepositoryFurniture.find({});
-    } else if (type === 'hardware-store') {
-      data = this.productRepositoryHardwareStore.find({});
-    } else if (type === 'glasses') {
-      data = this.productRepositoryGlasses.find({});
-    } else if (type === 'engine') {
-      data = this.productRepositoryEngine.find({});
+    switch (type) {
+      case 'clothing':
+        data = this.productRepositoryClothing.find({});
+        break;
+      case 'backpack':
+        data = this.productRepositoryBackpack.find({});
+        break;
+      case 'handbag':
+        data = this.productRepositoryHandbag.find({});
+        break;
+      case 'furniture':
+        data = this.productRepositoryFurniture.find({});
+        break;
+      case 'hardware-store':
+        data = this.productRepositoryHardwareStore.find({});
+        break;
+      case 'glasses':
+        data = this.productRepositoryGlasses.find({});
+        break;
+      case 'engine':
+        data = this.productRepositoryEngine.find({});
+        break;
+      default:
+        console.log(`Sorry, we are out of ${type}.`);
+        break;
     }
+    if (!data) {
+      throw new UnprocessableEntityException(`there is no "${type}" category`);
+    }
+    // if (type === 'clothing') {
+    //   data = this.productRepositoryClothing.find({});
+    // } else if (type === 'handbag') {
+    //   data = this.productRepositoryHandbag.find({});
+    // } else if (type === 'backpack') {
+    //   data = this.productRepositoryBackpack.find({});
+    // } else if (type === 'furniture') {
+    //   data = this.productRepositoryFurniture.find({});
+    // } else if (type === 'hardware-store') {
+    //   data = this.productRepositoryHardwareStore.find({});
+    // } else if (type === 'glasses') {
+    //   data = this.productRepositoryGlasses.find({});
+    // } else if (type === 'engine') {
+    //   data = this.productRepositoryEngine.find({});
+    // }
     return data;
   }
   findProductsClothing() {
@@ -218,42 +271,102 @@ export class ProductService {
 
   async findProductsBySite({ siteId }: GetSite, type: string) {
     let data;
-    if (type === 'clothing') {
-      data = await this.productRepositoryClothing.find({ site: siteId });
-    } else if (type === 'handbag') {
-      data = await this.productRepositoryHandbag.find({ site: siteId });
-    } else if (type === 'backpack') {
-      data = await this.productRepositoryBackpack.find({ site: siteId });
-    } else if (type === 'furniture') {
-      data = await this.productRepositoryFurniture.find({ site: siteId });
-    } else if (type === 'hardware-store') {
-      data = await this.productRepositoryHardwareStore.find({ site: siteId });
-    } else if (type === 'glasses') {
-      data = await this.productRepositoryGlasses.find({ site: siteId });
-    } else if (type === 'engine') {
-      data = await this.productRepositoryEngine.find({ site: siteId });
+    switch (type) {
+      case 'clothing':
+        data = await this.productRepositoryClothing.find({ site: siteId });
+        break;
+      case 'backpack':
+        data = await this.productRepositoryBackpack.find({ site: siteId });
+        break;
+      case 'handbag':
+        data = await this.productRepositoryHandbag.find({ site: siteId });
+        break;
+      case 'furniture':
+        data = await this.productRepositoryFurniture.find({ site: siteId });
+        break;
+      case 'hardware-store':
+        data = await this.productRepositoryHardwareStore.find({ site: siteId });
+        break;
+      case 'glasses':
+        data = await this.productRepositoryGlasses.find({ site: siteId });
+        break;
+      case 'engine':
+        data = await this.productRepositoryEngine.find({ site: siteId });
+        break;
+      default:
+        console.log(`Sorry, we are out of ${type}.`);
+        break;
     }
+    if (!data) {
+      throw new UnprocessableEntityException(`there is no "${type}" category`);
+    }
+    // if (type === 'clothing') {
+    //   data = await this.productRepositoryClothing.find({ site: siteId });
+    // } else if (type === 'handbag') {
+    //   data = await this.productRepositoryHandbag.find({ site: siteId });
+    // } else if (type === 'backpack') {
+    //   data = await this.productRepositoryBackpack.find({ site: siteId });
+    // } else if (type === 'furniture') {
+    //   data = await this.productRepositoryFurniture.find({ site: siteId });
+    // } else if (type === 'hardware-store') {
+    //   data = await this.productRepositoryHardwareStore.find({ site: siteId });
+    // } else if (type === 'glasses') {
+    //   data = await this.productRepositoryGlasses.find({ site: siteId });
+    // } else if (type === 'engine') {
+    //   data = await this.productRepositoryEngine.find({ site: siteId });
+    // }
     return data;
   }
   async findProductsByParent(parentId: string, type: string) {
     let data;
-    if (type === 'clothing') {
-      data = await this.productRepositoryClothing.find({ parent: parentId });
-    } else if (type === 'handbag') {
-      data = await this.productRepositoryHandbag.find({ parent: parentId });
-    } else if (type === 'backpack') {
-      data = await this.productRepositoryBackpack.find({ parent: parentId });
-    } else if (type === 'furniture') {
-      data = await this.productRepositoryFurniture.find({ parent: parentId });
-    } else if (type === 'hardware-store') {
-      data = await this.productRepositoryHardwareStore.find({
-        parent: parentId,
-      });
-    } else if (type === 'glasses') {
-      data = await this.productRepositoryGlasses.find({ parent: parentId });
-    } else if (type === 'engine') {
-      data = await this.productRepositoryEngine.find({ parent: parentId });
+    switch (type) {
+      case 'clothing':
+        data = await this.productRepositoryClothing.find({ parent: parentId });
+        break;
+      case 'backpack':
+        data = await this.productRepositoryBackpack.find({ parent: parentId });
+        break;
+      case 'handbag':
+        data = await this.productRepositoryHandbag.find({ parent: parentId });
+        break;
+      case 'furniture':
+        data = await this.productRepositoryFurniture.find({ parent: parentId });
+        break;
+      case 'hardware-store':
+        data = await this.productRepositoryHardwareStore.find({
+          parent: parentId,
+        });
+        break;
+      case 'glasses':
+        data = await this.productRepositoryGlasses.find({ parent: parentId });
+        break;
+      case 'engine':
+        data = await this.productRepositoryEngine.find({ parent: parentId });
+        break;
+      default:
+        console.log(`Sorry, we are out of ${type}.`);
+        break;
     }
+    if (!data) {
+      throw new UnprocessableEntityException(`there is no "${type}" category`);
+    }
+    // if (type === 'clothing') {
+    //   data = await this.productRepositoryClothing.find({ parent: parentId });
+    // } else if (type === 'handbag') {
+    //   data = await this.productRepositoryHandbag.find({ parent: parentId });
+    // } else if (type === 'backpack') {
+    //   data = await this.productRepositoryBackpack.find({ parent: parentId });
+    // } else if (type === 'furniture') {
+    //   data = await this.productRepositoryFurniture.find({ parent: parentId });
+    // } else if (type === 'hardware-store') {
+    //   data = await this.productRepositoryHardwareStore.find({
+    //     parent: parentId,
+    //   });
+    // } else if (type === 'glasses') {
+    //   data = await this.productRepositoryGlasses.find({ parent: parentId });
+    // } else if (type === 'engine') {
+    //   data = await this.productRepositoryEngine.find({ parent: parentId });
+    // }
     return data;
   }
   async findAllProductsByParent(parentId: string) {
@@ -288,62 +401,144 @@ export class ProductService {
   }
 
   async deleteProduct({ id }: GetProductArgs, type: string) {
-    if (type === 'clothing') {
-      await this.productRepositoryClothing.deleteOne({ _id: id });
-    } else if (type === 'handbag') {
-      await this.productRepositoryHandbag.deleteOne({ _id: id });
-    } else if (type === 'backpack') {
-      await this.productRepositoryBackpack.deleteOne({ _id: id });
-    } else if (type === 'furniture') {
-      await this.productRepositoryFurniture.deleteOne({ _id: id });
-    } else if (type === 'hardware-store') {
-      await this.productRepositoryHardwareStore.deleteOne({ _id: id });
-    } else if (type === 'glasses') {
-      await this.productRepositoryGlasses.deleteOne({ _id: id });
-    } else if (type === 'engine') {
-      await this.productRepositoryEngine.deleteOne({ _id: id });
+    switch (type) {
+      case 'clothing':
+        await this.productRepositoryClothing.deleteOne({ _id: id });
+        break;
+      case 'backpack':
+        await this.productRepositoryBackpack.deleteOne({ _id: id });
+        break;
+      case 'handbag':
+        await this.productRepositoryHandbag.deleteOne({ _id: id });
+        break;
+      case 'furniture':
+        await this.productRepositoryFurniture.deleteOne({ _id: id });
+        break;
+      case 'hardware-store':
+        await this.productRepositoryHardwareStore.deleteOne({ _id: id });
+        break;
+      case 'glasses':
+        await this.productRepositoryGlasses.deleteOne({ _id: id });
+        break;
+      case 'engine':
+        await this.productRepositoryEngine.deleteOne({ _id: id });
+        break;
+      default:
+        console.log(`Sorry, we are out of ${type}.`);
+        break;
     }
+    // if (type === 'clothing') {
+    //   await this.productRepositoryClothing.deleteOne({ _id: id });
+    // } else if (type === 'handbag') {
+    //   await this.productRepositoryHandbag.deleteOne({ _id: id });
+    // } else if (type === 'backpack') {
+    //   await this.productRepositoryBackpack.deleteOne({ _id: id });
+    // } else if (type === 'furniture') {
+    //   await this.productRepositoryFurniture.deleteOne({ _id: id });
+    // } else if (type === 'hardware-store') {
+    //   await this.productRepositoryHardwareStore.deleteOne({ _id: id });
+    // } else if (type === 'glasses') {
+    //   await this.productRepositoryGlasses.deleteOne({ _id: id });
+    // } else if (type === 'engine') {
+    //   await this.productRepositoryEngine.deleteOne({ _id: id });
+    // }
     return id;
   }
 
   async deleteProducts({ siteId }: GetSite, type: string) {
-    if (type === 'clothing') {
-      await this.productRepositoryClothing.deleteMany({ site: siteId });
-    } else if (type === 'handbag') {
-      await this.productRepositoryHandbag.deleteOne({ site: siteId });
-    } else if (type === 'backpack') {
-      await this.productRepositoryBackpack.deleteOne({ site: siteId });
-    } else if (type === 'furniture') {
-      await this.productRepositoryFurniture.deleteOne({ site: siteId });
-    } else if (type === 'hardware-store') {
-      await this.productRepositoryHardwareStore.deleteOne({ site: siteId });
-    } else if (type === 'glasses') {
-      await this.productRepositoryGlasses.deleteOne({ site: siteId });
-    } else if (type === 'engine') {
-      await this.productRepositoryEngine.deleteOne({ site: siteId });
+    switch (type) {
+      case 'clothing':
+        await this.productRepositoryClothing.deleteMany({ site: siteId });
+        break;
+      case 'backpack':
+        await this.productRepositoryBackpack.deleteMany({ site: siteId });
+        break;
+      case 'handbag':
+        await this.productRepositoryHandbag.deleteMany({ site: siteId });
+        break;
+      case 'furniture':
+        await this.productRepositoryFurniture.deleteMany({ site: siteId });
+        break;
+      case 'hardware-store':
+        await this.productRepositoryHardwareStore.deleteMany({ site: siteId });
+        break;
+      case 'glasses':
+        await this.productRepositoryGlasses.deleteMany({ site: siteId });
+        break;
+      case 'engine':
+        await this.productRepositoryEngine.deleteMany({ site: siteId });
+        break;
+      default:
+        console.log(`Sorry, we are out of ${type}.`);
+        break;
     }
+    // if (type === 'clothing') {
+    //   await this.productRepositoryClothing.deleteMany({ site: siteId });
+    // } else if (type === 'handbag') {
+    //   await this.productRepositoryHandbag.deleteMany({ site: siteId });
+    // } else if (type === 'backpack') {
+    //   await this.productRepositoryBackpack.deleteMany({ site: siteId });
+    // } else if (type === 'furniture') {
+    //   await this.productRepositoryFurniture.deleteMany({ site: siteId });
+    // } else if (type === 'hardware-store') {
+    //   await this.productRepositoryHardwareStore.deleteMany({ site: siteId });
+    // } else if (type === 'glasses') {
+    //   await this.productRepositoryGlasses.deleteMany({ site: siteId });
+    // } else if (type === 'engine') {
+    //   await this.productRepositoryEngine.deleteMany({ site: siteId });
+    // }
     return 'deleted products';
   }
 
   findByParentId(parentUi: string, type: string) {
     let data;
-    if (type === 'clothing') {
-      data = this.productRepositoryClothing.find({ parent: parentUi });
-    } else if (type === 'handbag') {
-      data = this.productRepositoryHandbag.find({ parent: parentUi });
-    } else if (type === 'backpack') {
-      data = this.productRepositoryBackpack.find({ parent: parentUi });
-    } else if (type === 'furniture') {
-      data = this.productRepositoryFurniture.find({ parent: parentUi });
-    } else if (type === 'hardware-store') {
-      data = this.productRepositoryHardwareStore.find({ parent: parentUi });
-    } else if (type === 'glasses') {
-      data = this.productRepositoryGlasses.find({ parent: parentUi });
-    } else if (type === 'engine') {
-      data = this.productRepositoryEngine.find({ parent: parentUi });
-    } else {
-      data = [];
+    switch (type) {
+      case 'clothing':
+        data = this.productRepositoryClothing.find({ parent: parentUi });
+        break;
+      case 'backpack':
+        data = this.productRepositoryBackpack.find({ parent: parentUi });
+        break;
+      case 'handbag':
+        data = this.productRepositoryHandbag.find({ parent: parentUi });
+        break;
+      case 'furniture':
+        data = this.productRepositoryFurniture.find({ parent: parentUi });
+        break;
+      case 'hardware-store':
+        data = this.productRepositoryHardwareStore.find({ parent: parentUi });
+        break;
+      case 'glasses':
+        data = this.productRepositoryGlasses.find({ parent: parentUi });
+        break;
+      case 'engine':
+        data = this.productRepositoryEngine.find({ parent: parentUi });
+        break;
+      default:
+        data = [];
+        // console.log(`Sorry, we are out of ${type}.`);
+        break;
     }
+    if (!data) {
+      throw new UnprocessableEntityException(`there is no "${type}" category`);
+    }
+    // if (type === 'clothing') {
+    //   data = this.productRepositoryClothing.find({ parent: parentUi });
+    // } else if (type === 'handbag') {
+    //   data = this.productRepositoryHandbag.find({ parent: parentUi });
+    // } else if (type === 'backpack') {
+    //   data = this.productRepositoryBackpack.find({ parent: parentUi });
+    // } else if (type === 'furniture') {
+    //   data = this.productRepositoryFurniture.find({ parent: parentUi });
+    // } else if (type === 'hardware-store') {
+    //   data = this.productRepositoryHardwareStore.find({ parent: parentUi });
+    // } else if (type === 'glasses') {
+    //   data = this.productRepositoryGlasses.find({ parent: parentUi });
+    // } else if (type === 'engine') {
+    //   data = this.productRepositoryEngine.find({ parent: parentUi });
+    // } else {
+    //   data = [];
+    // }
     return data;
   }
 
@@ -371,125 +566,183 @@ export class ProductService {
 
   findBySiteId(siteId: string, type: string) {
     let data;
-    if (type === 'clothing') {
-      data = this.productRepositoryClothing.find({ site: siteId });
-    } else if (type === 'handbag') {
-      data = this.productRepositoryHandbag.find({ site: siteId });
-    } else if (type === 'backpack') {
-      data = this.productRepositoryBackpack.find({ site: siteId });
-    } else if (type === 'furniture') {
-      data = this.productRepositoryFurniture.find({ site: siteId });
-    } else if (type === 'hardware-store') {
-      data = this.productRepositoryHardwareStore.find({ site: siteId });
-    } else if (type === 'glasses') {
-      data = this.productRepositoryGlasses.find({ site: siteId });
-    } else if (type === 'engine') {
-      data = this.productRepositoryEngine.find({ site: siteId });
+    switch (type) {
+      case 'clothing':
+        data = this.productRepositoryClothing.find({ site: siteId });
+        break;
+      case 'backpack':
+        data = this.productRepositoryBackpack.find({ site: siteId });
+        break;
+      case 'handbag':
+        data = this.productRepositoryHandbag.find({ site: siteId });
+        break;
+      case 'furniture':
+        data = this.productRepositoryFurniture.find({ site: siteId });
+        break;
+      case 'hardware-store':
+        data = this.productRepositoryHardwareStore.find({ site: siteId });
+        break;
+      case 'glasses':
+        data = this.productRepositoryGlasses.find({ site: siteId });
+        break;
+      case 'engine':
+        data = this.productRepositoryEngine.find({ site: siteId });
+        break;
+      default:
+        console.log(`Sorry, we are out of ${type}.`);
+        break;
     }
+    if (!data) {
+      throw new UnprocessableEntityException(`there is no "${type}" category`);
+    }
+    // if (type === 'clothing') {
+    //   data = this.productRepositoryClothing.find({ site: siteId });
+    // } else if (type === 'handbag') {
+    //   data = this.productRepositoryHandbag.find({ site: siteId });
+    // } else if (type === 'backpack') {
+    //   data = this.productRepositoryBackpack.find({ site: siteId });
+    // } else if (type === 'furniture') {
+    //   data = this.productRepositoryFurniture.find({ site: siteId });
+    // } else if (type === 'hardware-store') {
+    //   data = this.productRepositoryHardwareStore.find({ site: siteId });
+    // } else if (type === 'glasses') {
+    //   data = this.productRepositoryGlasses.find({ site: siteId });
+    // } else if (type === 'engine') {
+    //   data = this.productRepositoryEngine.find({ site: siteId });
+    // }
     return data;
   }
 
   all(pagination: ListInput, type: string) {
     let data;
-    if (type === 'clothing') {
-      data = this.productRepositoryClothing.All(pagination);
-    } else if (type === 'handbag') {
-      data = this.productRepositoryHandbag.All(pagination);
-    } else if (type === 'backpack') {
-      data = this.productRepositoryBackpack.All(pagination);
-    } else if (type === 'furniture') {
-      data = this.productRepositoryFurniture.All(pagination);
-    } else if (type === 'hardware-store') {
-      data = this.productRepositoryHardwareStore.All(pagination);
-    } else if (type === 'glasses') {
-      data = this.productRepositoryGlasses.All(pagination);
-    } else if (type === 'engine') {
-      data = this.productRepositoryEngine.All(pagination);
+    switch (type) {
+      case 'clothing':
+        data = this.productRepositoryClothing.All(pagination);
+        break;
+      case 'backpack':
+        data = this.productRepositoryBackpack.All(pagination);
+        break;
+      case 'handbag':
+        data = this.productRepositoryHandbag.All(pagination);
+        break;
+      case 'furniture':
+        data = this.productRepositoryFurniture.All(pagination);
+        break;
+      case 'hardware-store':
+        data = this.productRepositoryHardwareStore.All(pagination);
+        break;
+      case 'glasses':
+        data = this.productRepositoryGlasses.All(pagination);
+        break;
+      case 'engine':
+        data = this.productRepositoryEngine.All(pagination);
+        break;
+      default:
+        console.log(`Sorry, we are out of ${type}.`);
+        break;
     }
+    if (!data) {
+      throw new UnprocessableEntityException(`there is no "${type}" category`);
+    }
+    // if (type === 'clothing') {
+    //   data = this.productRepositoryClothing.All(pagination);
+    // } else if (type === 'handbag') {
+    //   data = this.productRepositoryHandbag.All(pagination);
+    // } else if (type === 'backpack') {
+    //   data = this.productRepositoryBackpack.All(pagination);
+    // } else if (type === 'furniture') {
+    //   data = this.productRepositoryFurniture.All(pagination);
+    // } else if (type === 'hardware-store') {
+    //   data = this.productRepositoryHardwareStore.All(pagination);
+    // } else if (type === 'glasses') {
+    //   data = this.productRepositoryGlasses.All(pagination);
+    // } else if (type === 'engine') {
+    //   data = this.productRepositoryEngine.All(pagination);
+    // }
     return data;
   }
 
-  private async validateSlugCreate(type: string, input: CreateProduct) {
-    if (type === 'clothing') {
-      await this.productRepositoryClothing.findOneBySlug(
-        this.slugValidCreated(input),
-      );
-    } else if (type === 'handbag') {
-      await this.productRepositoryHandbag.findOneBySlug(
-        this.slugValidCreated(input),
-      );
-    } else if (type === 'backpack') {
-      await this.productRepositoryBackpack.findOneBySlug(
-        this.slugValidCreated(input),
-      );
-    } else if (type === 'furniture') {
-      await this.productRepositoryFurniture.findOneBySlug(
-        this.slugValidCreated(input),
-      );
-    } else if (type === 'hardware-store') {
-      await this.productRepositoryHardwareStore.findOneBySlug(
-        this.slugValidCreated(input),
-      );
-    } else if (type === 'glasses') {
-      await this.productRepositoryGlasses.findOneBySlug(
-        this.slugValidCreated(input),
-      );
-    } else if (type === 'engine') {
-      await this.productRepositoryEngine.findOneBySlug(
-        this.slugValidCreated(input),
-      );
-    }
-  }
-  private async validateSlugUpdate(
-    id: string,
-    type: string,
-    input: UpdateProduct,
-  ) {
-    if (type === 'clothing') {
-      await this.productRepositoryClothing.findOneBySlug(
-        this.slugValidUpdated(input, id),
-      );
-    } else if (type === 'handbag') {
-      await this.productRepositoryHandbag.findOneBySlug(
-        this.slugValidUpdated(input, id),
-      );
-    } else if (type === 'backpack') {
-      await this.productRepositoryBackpack.findOneBySlug(
-        this.slugValidUpdated(input, id),
-      );
-    } else if (type === 'furniture') {
-      await this.productRepositoryFurniture.findOneBySlug(
-        this.slugValidUpdated(input, id),
-      );
-    } else if (type === 'hardware-store') {
-      await this.productRepositoryHardwareStore.findOneBySlug(
-        this.slugValidUpdated(input, id),
-      );
-    } else if (type === 'glasses') {
-      await this.productRepositoryGlasses.findOneBySlug(
-        this.slugValidUpdated(input, id),
-      );
-    } else if (type === 'engine') {
-      await this.productRepositoryEngine.findOneBySlug(
-        this.slugValidUpdated(input, id),
-      );
-    }
-  }
-  private slugValidCreated({ name, site, parent }: CreateProduct) {
-    return {
-      'data.slug': slug(name),
-      site: site,
-      parent: parent,
-    };
-  }
-  private slugValidUpdated({ name, site, parent }: UpdateProduct, id: string) {
-    return {
-      _id: { $ne: id },
-      'data.slug': slug(name),
-      site: site,
-      parent: parent,
-    };
-  }
+  // private async validateSlugCreate(type: string, input: CreateProduct) {
+  //   if (type === 'clothing') {
+  //     await this.productRepositoryClothing.findOneBySlug(
+  //       this.slugValidCreated(input),
+  //     );
+  //   } else if (type === 'handbag') {
+  //     await this.productRepositoryHandbag.findOneBySlug(
+  //       this.slugValidCreated(input),
+  //     );
+  //   } else if (type === 'backpack') {
+  //     await this.productRepositoryBackpack.findOneBySlug(
+  //       this.slugValidCreated(input),
+  //     );
+  //   } else if (type === 'furniture') {
+  //     await this.productRepositoryFurniture.findOneBySlug(
+  //       this.slugValidCreated(input),
+  //     );
+  //   } else if (type === 'hardware-store') {
+  //     await this.productRepositoryHardwareStore.findOneBySlug(
+  //       this.slugValidCreated(input),
+  //     );
+  //   } else if (type === 'glasses') {
+  //     await this.productRepositoryGlasses.findOneBySlug(
+  //       this.slugValidCreated(input),
+  //     );
+  //   } else if (type === 'engine') {
+  //     await this.productRepositoryEngine.findOneBySlug(
+  //       this.slugValidCreated(input),
+  //     );
+  //   }
+  // }
+  // private async validateSlugUpdate(
+  //   id: string,
+  //   type: string,
+  //   input: UpdateProduct,
+  // ) {
+  //   if (type === 'clothing') {
+  //     await this.productRepositoryClothing.findOneBySlug(
+  //       this.slugValidUpdated(input, id),
+  //     );
+  //   } else if (type === 'handbag') {
+  //     await this.productRepositoryHandbag.findOneBySlug(
+  //       this.slugValidUpdated(input, id),
+  //     );
+  //   } else if (type === 'backpack') {
+  //     await this.productRepositoryBackpack.findOneBySlug(
+  //       this.slugValidUpdated(input, id),
+  //     );
+  //   } else if (type === 'furniture') {
+  //     await this.productRepositoryFurniture.findOneBySlug(
+  //       this.slugValidUpdated(input, id),
+  //     );
+  //   } else if (type === 'hardware-store') {
+  //     await this.productRepositoryHardwareStore.findOneBySlug(
+  //       this.slugValidUpdated(input, id),
+  //     );
+  //   } else if (type === 'glasses') {
+  //     await this.productRepositoryGlasses.findOneBySlug(
+  //       this.slugValidUpdated(input, id),
+  //     );
+  //   } else if (type === 'engine') {
+  //     await this.productRepositoryEngine.findOneBySlug(
+  //       this.slugValidUpdated(input, id),
+  //     );
+  //   }
+  // }
+  // private slugValidCreated({ name, site, parent }: CreateProduct) {
+  //   return {
+  //     'data.slug': slug(name),
+  //     site: site,
+  //     parent: parent,
+  //   };
+  // }
+  // private slugValidUpdated({ name, site, parent }: UpdateProduct, id: string) {
+  //   return {
+  //     _id: { $ne: id },
+  //     'data.slug': slug(name),
+  //     site: site,
+  //     parent: parent,
+  //   };
+  // }
   private productCreated(
     {
       name,
@@ -577,7 +830,6 @@ export class ProductService {
     discountPrice,
     description,
     promotion,
-    details,
   }: UpdateProduct) {
     return {
       $set: {
@@ -592,7 +844,6 @@ export class ProductService {
           name: capitalizar(promotion),
           href: slug(promotion),
         },
-        'data.details': details,
         'data.seo.title': capitalizar(name),
         'data.seo.href': slug(name),
         'data.seo.description': description,

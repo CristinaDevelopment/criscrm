@@ -37,10 +37,10 @@ export class CreateProduct {
 
 @InputType()
 export class UpdateProduct extends PartialType(CreateProduct) {
-  @Field()
-  readonly details: string;
-  @Field()
-  readonly featured: string;
+  // @Field()
+  // readonly details: string;
+  // @Field()
+  // readonly featured: string;
 }
 
 @InputType()

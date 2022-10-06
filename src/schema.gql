@@ -526,8 +526,6 @@ input UpdateProduct {
   parent: String
   change: String
   uid: String
-  details: String!
-  featured: String!
 }
 
 input UpdateImage {
