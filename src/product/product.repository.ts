@@ -47,7 +47,7 @@ export class ProductRepositoryHandbag extends AbstractRepository<ProductDocument
 export class ProductRepositoryFurniture extends AbstractRepository<ProductDocument> {
   protected readonly logger = new Logger(ProductRepositoryFurniture.name);
   constructor(
-    @InjectModel(Furniture.name, 'productsDB')
+    @InjectModel(Furniture.name, 'furnituriesDB')
     productModel: Model<ProductDocument>,
   ) {
     super(productModel);

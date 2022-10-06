@@ -42,7 +42,7 @@ import {
     ),
     MongooseModule.forFeature(
       [{ name: Furniture.name, schema: FurnitureSchema }],
-      'productsDB',
+      'furnituriesDB',
     ),
     MongooseModule.forFeature(
       [{ name: HardwareStore.name, schema: HardwareStoreSchema }],
