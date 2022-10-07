@@ -458,6 +458,7 @@ type Mutation {
   updateProductImage(id: ID!, input: [UpdateImage!]!, type: String!, uid: String!): Product!
   deleteProduct(id: ID!, type: String!): String!
   deleteProducts(siteId: String!, type: String!): String!
+  deleteProductsById(ids: [String!]!, type: String!): String!
   createUser(input: CreateUser!): User!
   updateUser(id: ID!, input: UpdateUser!): User!
   deleteUser(id: ID!): String!

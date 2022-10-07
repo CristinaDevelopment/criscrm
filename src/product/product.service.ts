@@ -391,6 +391,35 @@ export class ProductService {
     }
     return 'deleted products';
   }
+  async deleteProductsById(ids: string[], type: string) {
+    switch (type) {
+      case 'clothing':
+        await this.productRepositoryClothing.deleteManyProducts(ids);
+        break;
+      case 'backpack':
+        await this.productRepositoryBackpack.deleteManyProducts(ids);
+        break;
+      case 'handbag':
+        await this.productRepositoryHandbag.deleteManyProducts(ids);
+        break;
+      case 'furniture':
+        await this.productRepositoryFurniture.deleteManyProducts(ids);
+        break;
+      case 'hardware-store':
+        await this.productRepositoryHardwareStore.deleteManyProducts(ids);
+        break;
+      case 'glasses':
+        await this.productRepositoryGlasses.deleteManyProducts(ids);
+        break;
+      case 'engine':
+        await this.productRepositoryEngine.deleteManyProducts(ids);
+        break;
+      default:
+        console.log(`Sorry, we are out of ${type}.`);
+        break;
+    }
+    return 'deleted products';
+  }
 
   findByParentId(parentUi: string, type: string) {
     let data;

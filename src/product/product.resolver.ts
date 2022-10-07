@@ -42,6 +42,13 @@ export class ProductResolver {
   deleteProducts(@Args() site: GetSite, @Args('type') type: string) {
     return this.productService.deleteProducts(site, type);
   }
+  @Mutation(() => String, { name: 'deleteProductsById' })
+  deleteProductsById(
+    @Args('ids', { type: () => [String] }) ids: string[],
+    @Args('type') type: string,
+  ) {
+    return this.productService.deleteProductsById(ids, type);
+  }
 
   @Query(() => Product, { name: 'findProduct' })
   findProduct(@Args() id: GetProductArgs, @Args('type') type: string) {
@@ -93,7 +100,7 @@ export class ProductResolver {
         offset,
       },
       type,
-      siteId, 
+      siteId,
     );
     const page = connectionFromArraySlice(data, args, {
       arrayLength: count,

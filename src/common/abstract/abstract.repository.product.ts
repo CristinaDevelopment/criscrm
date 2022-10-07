@@ -21,7 +21,6 @@ export abstract class AbstractRepositoryProduct<
 
   constructor(protected readonly model: Model<TDocument>) {}
 
-
   async findOne(filterQuery: FilterQuery<TDocument>): Promise<TDocument> {
     const document = await this.model.findOne(filterQuery, {}, { lean: true });
 
@@ -70,6 +69,9 @@ export abstract class AbstractRepositoryProduct<
   async deleteMany(filterQuery: FilterQuery<TDocument>) {
     return this.model.deleteMany(filterQuery);
   }
+  async deleteManyProducts(ids: string[]) {
+    return this.model.deleteMany({ _id: { $in: ids } });
+  }
 
   findAll(paginationQuery: ListInput, siteId: string) {
     const { limit, offset } = paginationQuery;
@@ -98,7 +100,6 @@ export abstract class AbstractRepositoryProduct<
     }
     return;
   }
-
 
   async add(input: CreateProduct, type: string): Promise<TDocument> {
     const product = await this.model.findOne(
