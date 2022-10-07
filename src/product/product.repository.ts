@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { AbstractRepository } from 'src/common/abstract';
+import { AbstractRepositoryProduct } from 'src/common/abstract';
 import {
   Backpack,
   Clothing,
@@ -14,7 +14,7 @@ import {
 import { ProductDocument } from './entities/product.schema';
 
 @Injectable()
-export class ProductRepositoryClothing extends AbstractRepository<ProductDocument> {
+export class ProductRepositoryClothing extends AbstractRepositoryProduct<ProductDocument> {
   protected readonly logger = new Logger(ProductRepositoryClothing.name);
   constructor(
     @InjectModel(Clothing.name, 'wearsDB')
@@ -24,7 +24,7 @@ export class ProductRepositoryClothing extends AbstractRepository<ProductDocumen
   }
 }
 @Injectable()
-export class ProductRepositoryBackpack extends AbstractRepository<ProductDocument> {
+export class ProductRepositoryBackpack extends AbstractRepositoryProduct<ProductDocument> {
   protected readonly logger = new Logger(ProductRepositoryBackpack.name);
   constructor(
     @InjectModel(Backpack.name, 'wearsDB')
@@ -34,7 +34,7 @@ export class ProductRepositoryBackpack extends AbstractRepository<ProductDocumen
   }
 }
 @Injectable()
-export class ProductRepositoryHandbag extends AbstractRepository<ProductDocument> {
+export class ProductRepositoryHandbag extends AbstractRepositoryProduct<ProductDocument> {
   protected readonly logger = new Logger(ProductRepositoryHandbag.name);
   constructor(
     @InjectModel(Handbag.name, 'wearsDB')
@@ -44,7 +44,7 @@ export class ProductRepositoryHandbag extends AbstractRepository<ProductDocument
   }
 }
 @Injectable()
-export class ProductRepositoryFurniture extends AbstractRepository<ProductDocument> {
+export class ProductRepositoryFurniture extends AbstractRepositoryProduct<ProductDocument> {
   protected readonly logger = new Logger(ProductRepositoryFurniture.name);
   constructor(
     @InjectModel(Furniture.name, 'furnituriesDB')
@@ -54,7 +54,7 @@ export class ProductRepositoryFurniture extends AbstractRepository<ProductDocume
   }
 }
 @Injectable()
-export class ProductRepositoryHardwareStore extends AbstractRepository<ProductDocument> {
+export class ProductRepositoryHardwareStore extends AbstractRepositoryProduct<ProductDocument> {
   protected readonly logger = new Logger(ProductRepositoryHardwareStore.name);
   constructor(
     @InjectModel(HardwareStore.name, 'toolsDB')
@@ -64,7 +64,7 @@ export class ProductRepositoryHardwareStore extends AbstractRepository<ProductDo
   }
 }
 @Injectable()
-export class ProductRepositoryGlasses extends AbstractRepository<ProductDocument> {
+export class ProductRepositoryGlasses extends AbstractRepositoryProduct<ProductDocument> {
   protected readonly logger = new Logger(ProductRepositoryGlasses.name);
   constructor(
     @InjectModel(Glasses.name, 'glassesDB')
@@ -74,7 +74,7 @@ export class ProductRepositoryGlasses extends AbstractRepository<ProductDocument
   }
 }
 @Injectable()
-export class ProductRepositoryEngine extends AbstractRepository<ProductDocument> {
+export class ProductRepositoryEngine extends AbstractRepositoryProduct<ProductDocument> {
   protected readonly logger = new Logger(ProductRepositoryEngine.name);
   constructor(
     @InjectModel(Engine.name, 'enginiesDB')

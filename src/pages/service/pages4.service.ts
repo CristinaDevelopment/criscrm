@@ -80,6 +80,8 @@ export class Pages4Service {
       site: site,
       updateDate: {
         createdAt: new Date(),
+        lastUpdatedAt: new Date(),
+
       },
       slug: slug(title),
       section: [],
@@ -90,12 +92,11 @@ export class Pages4Service {
     return {
       data: {
         type: type,
-        seo: {
-          title: capitalizar(title),
-          href: slug(title),
-          description: description,
-        },
+        'seo.title': capitalizar(title),
+        'seo.href': slug(title),
+        'seo.description': description,
       },
+      'updateData.lastUpdatedAt': new Date(),
       slug: slug(title),
     };
   }

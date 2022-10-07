@@ -378,7 +378,7 @@ type Query {
   findAllProducts: [Product!]!
   findProductsByParent(parentId: String!, type: String!): [Product!]!
   findAllProductsByParent(parentId: String!): [Product!]!
-  listProductWithCursor(args: ConnectionArgs!, type: String!): ListProductResponse!
+  listProductWithCursor(args: ConnectionArgs!, type: String!, siteId: String!): ListProductResponse!
   findUser(id: ID!): User!
   findUserByEmail(email: String!): User!
   findUsers: [User!]!

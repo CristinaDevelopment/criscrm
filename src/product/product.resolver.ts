@@ -84,6 +84,7 @@ export class ProductResolver {
   async findAllWithCursor(
     @Args('args') args: ConnectionArgs,
     @Args('type') type: string,
+    @Args('siteId') siteId: string,
   ): Promise<ListProductResponse> {
     const { limit, offset } = getPagingParameters(args);
     const { data, count } = await this.productService.all(
@@ -92,6 +93,7 @@ export class ProductResolver {
         offset,
       },
       type,
+      siteId, 
     );
     const page = connectionFromArraySlice(data, args, {
       arrayLength: count,
