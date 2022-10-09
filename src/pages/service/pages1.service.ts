@@ -52,13 +52,16 @@ export class Pages1Service {
     await this.pageRepository.deleteOne({ _id: id });
     return id;
   }
-
+  async deletePagesById(ids: string[]) {
+    await this.pageRepository.deleteManyPages(ids);
+    return 'deleted pages';
+  }
   findByParentId(parentId: string) {
     return this.pageRepository.find({ parent: parentId });
   }
 
-  all(pagination: ListInput) {
-    return this.pageRepository.All(pagination);
+  all(pagination: ListInput, parentId: string) {
+    return this.pageRepository.All(pagination, { parent: parentId });
   }
 
   private pageCreated({ type, title, description, parent, site }: CreatePage) {

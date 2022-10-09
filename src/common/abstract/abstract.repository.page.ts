@@ -4,17 +4,12 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { FilterQuery, Model, Types, UpdateQuery } from 'mongoose';
-import { capitalizar, slug } from 'src/utils/function';
 import { ListInput } from '../pagination/dto/list.input';
 import { AbstractDocument } from './abstract.schema';
-import {
-  CreateProduct,
-  UpdateImage,
-  UpdateProduct,
-} from '../../product/dto/product.input';
-import { uuidv3 } from 'src/utils';
 
-export abstract class AbstractRepository<TDocument extends AbstractDocument> {
+export abstract class AbstractRepositoryPage<
+  TDocument extends AbstractDocument,
+> {
   protected abstract readonly logger: Logger;
 
   constructor(protected readonly model: Model<TDocument>) {}
@@ -72,26 +67,28 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
   async deleteOne(filterQuery: FilterQuery<TDocument>) {
     return this.model.deleteOne(filterQuery);
   }
-  // async deleteMany(filterQuery: FilterQuery<TDocument>) {
-  //   return this.model.deleteMany(filterQuery);
-  // }
-  async deleteMany(ids: string[]) {
+  
+  async deleteMany(filterQuery: FilterQuery<TDocument>) {
+    return this.model.deleteMany(filterQuery);
+  }
+
+  async deleteManyPages(ids: string[]) {
     return this.model.deleteMany({ _id: { $in: ids } });
   }
 
-  findAll(paginationQuery: ListInput) {
+  findAll(paginationQuery: ListInput, filterQuery: FilterQuery<TDocument>) {
     const { limit, offset } = paginationQuery;
     return this.model
-      .find()
-      .sort({ 'updateDate.lastUpdatedAt': -1 })
+      .find(filterQuery, {}, { lean: true })
+      .sort({ 'updateDate.createdAt': 1 })
       .skip(offset)
       .limit(limit)
       .exec();
   }
 
-  async All(paginationQuery: ListInput) {
+  async All(paginationQuery: ListInput, filterQuery: FilterQuery<TDocument>) {
     const count = await this.model.count();
-    const data = await this.findAll(paginationQuery);
+    const data = await this.findAll(paginationQuery, filterQuery);
     return { data, count };
   }
 

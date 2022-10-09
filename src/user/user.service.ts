@@ -80,8 +80,8 @@ export class UserService {
     await this.userRepository.deleteOne({ _id: id });
     return id;
   }
-  async deleteUsers({ siteId }: GetSite) {
-    await this.userRepository.deleteMany({ site: siteId });
+  async deleteUsers(ids: string[]) {
+    await this.userRepository.deleteMany(ids);
     return 'users deleted';
   }
 

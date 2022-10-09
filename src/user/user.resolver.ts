@@ -23,8 +23,8 @@ export class UserResolver {
     return this.userService.deleteUser(id);
   }
   @Mutation(() => String, { name: 'deleteUsers' })
-  deletes(@Args() site: GetSite) {
-    return this.userService.deleteUsers(site);
+  deletes(@Args('ids', { type: () => [String] }) ids: string[]) {
+    return this.userService.deleteUsers(ids);
   }
 
   @Query(() => User, { name: 'findUser' })

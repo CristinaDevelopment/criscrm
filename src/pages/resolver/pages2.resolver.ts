@@ -72,7 +72,10 @@ export class Pages2Resolver {
   delete(@Args() id: GetPage) {
     return this.page2Service.deletePage(id);
   }
-
+  @Mutation(() => String, { name: 'deletePages2' })
+  deletePagesById(@Args('ids', { type: () => [String] }) ids: string[]) {
+    return this.page2Service.deletePagesById(ids);
+  }
   @Query(() => [Page2], { name: 'findPages2' })
   findPages() {
     return this.page2Service.findPages();
@@ -81,16 +84,21 @@ export class Pages2Resolver {
   @Query(() => ListPageResponse, { name: 'listPages2WithCursor' })
   async findAllWithCursor(
     @Args('args') args: ConnectionArgs,
+    @Args('parentId') parentId: string,
   ): Promise<ListPageResponse> {
     const { limit, offset } = getPagingParameters(args);
-    const { data, count } = await this.page2Service.all({
-      limit,
-      offset,
-    });
+    const { data, count } = await this.page2Service.all(
+      {
+        limit,
+        offset,
+      },
+      parentId,
+    );
     const page = connectionFromArraySlice(data, args, {
       arrayLength: count,
       sliceStart: offset || 0,
     });
+
     return { page, pageData: { count, limit, offset } };
   }
 
