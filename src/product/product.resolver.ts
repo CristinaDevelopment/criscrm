@@ -2,7 +2,11 @@ import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { ProductService } from './product.service';
 
 import { CreateProduct, UpdateProduct, UpdateImage } from './dto/product.input';
-import { ListProductResponse, Product } from './entities/product.model';
+import {
+  ListProductResponse,
+  Product,
+  DeleteProducts,
+} from './entities/product.model';
 import { GetParent, GetProductArgs, GetSite } from './dto/product.args';
 import ConnectionArgs, {
   getPagingParameters,
@@ -42,7 +46,7 @@ export class ProductResolver {
   deleteProducts(@Args() site: GetSite, @Args('type') type: string) {
     return this.productService.deleteProducts(site, type);
   }
-  @Mutation(() => String, { name: 'deleteProductsById' })
+  @Mutation(() => DeleteProducts, { name: 'deleteProductsById' })
   deleteProductsById(
     @Args('ids', { type: () => [String] }) ids: string[],
     @Args('type') type: string,

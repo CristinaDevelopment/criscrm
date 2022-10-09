@@ -75,7 +75,7 @@ export class SitesResolver {
     return this.siteService.deleteSite(id);
   }
 
-  @Mutation(() => String, { name: 'deleteSites' })
+  @Mutation(() => [String], { name: 'deleteSites' })
   deleteSites(@Args('ids', { type: () => [String] }) ids: string[]) {
     return this.siteService.deleteSites(ids);
   }

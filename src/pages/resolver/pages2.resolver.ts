@@ -72,7 +72,7 @@ export class Pages2Resolver {
   delete(@Args() id: GetPage) {
     return this.page2Service.deletePage(id);
   }
-  @Mutation(() => String, { name: 'deletePages2' })
+  @Mutation(() => [String], { name: 'deletePages2' })
   deletePagesById(@Args('ids', { type: () => [String] }) ids: string[]) {
     return this.page2Service.deletePagesById(ids);
   }

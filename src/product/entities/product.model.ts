@@ -68,6 +68,14 @@ export class Promotion {
   @Field()
   href: string;
 }
+
+@ObjectType()
+export class DeleteProducts {
+  @Field(() => [String])
+  ids: string[];
+  @Field()
+  type: string;
+}
 // @ObjectType()
 // export class Detail {
 //   @Field()

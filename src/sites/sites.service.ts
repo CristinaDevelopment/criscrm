@@ -81,7 +81,7 @@ export class SitesService {
 
   async deleteSites(ids: string[]) {
     await this.siteRepository.deleteMany(ids);
-    return 'sites deleted';
+    return ids;
   }
 
   async findSite({ id }: GetSite) {

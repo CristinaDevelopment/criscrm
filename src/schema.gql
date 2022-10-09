@@ -75,6 +75,11 @@ type Promotion {
   href: String!
 }
 
+type DeleteProducts {
+  ids: [String!]!
+  type: String!
+}
+
 type ListProductResponse {
   page: ProductConnection!
   pageData: PageDataDto
@@ -460,7 +465,7 @@ type Mutation {
   updateProductImage(id: ID!, input: [UpdateImage!]!, type: String!, uid: String!): Product!
   deleteProduct(id: ID!, type: String!): String!
   deleteProducts(siteId: String!, type: String!): String!
-  deleteProductsById(ids: [String!]!, type: String!): String!
+  deleteProductsById(ids: [String!]!, type: String!): DeleteProducts!
   createUser(input: CreateUser!): User!
   updateUser(id: ID!, input: UpdateUser!): User!
   deleteUser(id: ID!): String!
@@ -479,31 +484,31 @@ type Mutation {
   updateSiteImage(id: ID!, input: UpdateImageSite!, type: String!, uid: String!): Site!
   updateDataBase(id: ID!, input: [UpdateDataBase!]!): Site!
   deleteSite(id: ID!): String!
-  deleteSites(ids: [String!]!): String!
+  deleteSites(ids: [String!]!): [String!]!
   createPage0(input: CreatePage!): Page0!
   updatePage0(id: ID!, input: UpdatePage!): Page0!
   deletePage0(id: ID!): String!
-  deletePages0(ids: [String!]!): String!
+  deletePages0(ids: [String!]!): [String!]!
   createPage1(input: CreatePage!): Page1!
   updatePage1(id: ID!, input: UpdatePage!): Page1!
   deletePage1(id: ID!): String!
-  deletePages1(ids: [String!]!): String!
+  deletePages1(ids: [String!]!): [String!]!
   createPage2(input: CreatePage!): Page2!
   updatePage2(id: ID!, input: UpdatePage!): Page2!
   deletePage2(id: ID!): String!
-  deletePages2(ids: [String!]!): String!
+  deletePages2(ids: [String!]!): [String!]!
   createPage3(input: CreatePage!): Page3!
   updatePage3(id: ID!, input: UpdatePage!): Page3!
   deletePage3(id: ID!): String!
-  deletePages3(ids: [String!]!): String!
+  deletePages3(ids: [String!]!): [String!]!
   createPage4(input: CreatePage!): Page4!
   updatePage4(id: ID!, input: UpdatePage!): Page4!
   deletePage4(id: ID!): String!
-  deletePages4(ids: [String!]!): String!
+  deletePages4(ids: [String!]!): [String!]!
   createPage5(input: CreatePage!): Page5!
   updatePage5(id: ID!, input: UpdatePage!): Page5!
   deletePage5(id: ID!): String!
-  deletePages5(ids: [String!]!): String!
+  deletePages5(ids: [String!]!): [String!]!
   createArticle(input: CreateArticle!): Article!
   updateArticle(id: ID!, input: UpdateArticle!): Article!
   deleteArticle(id: ID!): String!
