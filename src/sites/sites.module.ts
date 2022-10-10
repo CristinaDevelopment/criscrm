@@ -6,7 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Site } from './entities/site.model';
 import { SiteSchema } from './entities/site.schema';
 import { PagesModule } from 'src/pages/pages.module';
-import { Pages0Repository } from '../pages/repository/pages.repository';
+import { TasksService } from './task.service';
 
 @Module({
   imports: [
@@ -18,6 +18,6 @@ import { Pages0Repository } from '../pages/repository/pages.repository';
       'sitesDB',
     ),
   ],
-  providers: [SitesResolver, SitesService, SitesRepository],
+  providers: [SitesResolver, SitesService, SitesRepository, TasksService],
 })
 export class SitesModule {}

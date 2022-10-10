@@ -50,6 +50,7 @@ import {
   Pages5Service,
   Pages6Service,
 } from './service';
+import { TasksService } from '../sites/task.service';
 
 @Module({
   imports: [
@@ -106,6 +107,15 @@ import {
     Pages6Repository,
     Pages6Service,
   ],
-  exports: [Pages0Service, Pages1Service, Pages2Service, Pages0Repository],
+  exports: [
+    Pages0Service,
+    Pages1Service,
+    Pages2Service,
+    Pages0Repository,
+    Pages1Repository,
+    Pages2Repository,
+    Pages3Repository,
+    Pages4Repository,
+  ],
 })
 export class PagesModule {}

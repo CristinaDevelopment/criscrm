@@ -31,7 +31,7 @@ export class Pages1Service {
     const document = await this.pageRepository.findOne({ _id: id });
     return this.toModel(document);
   }
-  
+
   async findPageBySlug(site: string, slug: string) {
     const document = await this.pageRepository.findOne({
       site: site,
@@ -51,6 +51,10 @@ export class Pages1Service {
     // await this.validateSite(id);
     await this.pageRepository.deleteOne({ _id: id });
     return id;
+  }
+  async deletePagesByParent(ids: string[]) {
+    await this.pageRepository.deleteManyPagesByParent(ids);
+    return ids;
   }
   async deletePagesById(ids: string[]) {
     await this.pageRepository.deleteManyPages(ids);
@@ -83,7 +87,6 @@ export class Pages1Service {
       updateDate: {
         createdAt: new Date(),
         lastUpdatedAt: new Date(),
-
       },
       slug: slug(title),
       section: [],

@@ -16,6 +16,8 @@ export const uuidv4 = () => {
   });
 };
 
+export const a = ['12345345', '1231234234']
+
 /**
  * Returns string by generateUID.
  *

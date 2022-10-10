@@ -77,6 +77,7 @@ export class SitesResolver {
 
   @Mutation(() => [String], { name: 'deleteSites' })
   deleteSites(@Args('ids', { type: () => [String] }) ids: string[]) {
+    console.log(this.page0Service.deletePagesByParent(ids));
     return this.siteService.deleteSites(ids);
   }
 
@@ -84,6 +85,7 @@ export class SitesResolver {
   findSite(@Args() id: GetSite) {
     return this.siteService.findSite(id);
   }
+
   @Query(() => [Site], { name: 'findSites' })
   findSites() {
     return this.siteService.findSites();

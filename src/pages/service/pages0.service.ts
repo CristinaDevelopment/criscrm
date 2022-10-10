@@ -2,17 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { slug } from 'src/utils/function';
 import { CreatePage, UpdatePage } from '../dto/page.input';
 import { PageDocument } from '../entities/page.schema';
-import { Pages0Repository } from '../repository/pages.repository';
+import {
+  Pages0Repository,
+  Pages1Repository,
+} from '../repository/pages.repository';
 import { capitalizar } from '../../utils/function';
 import { GetPage, GetSite } from '../dto/page.args';
 import { ListInput } from 'src/common/pagination/dto/list.input';
 import { Page0 } from '../entities/page.model';
+import { SchedulerRegistry } from '@nestjs/schedule';
 
 @Injectable()
 export class Pages0Service {
-  constructor(
-    private readonly pageRepository: Pages0Repository, // @Inject('PRODUCT_SERVICE') // private readonly communicationCliente: ClientProxy,
-  ) {}
+  constructor(private readonly pageRepository: Pages0Repository) {}
   async create(input: CreatePage) {
     const document = await this.pageRepository.create(this.pageCreated(input));
     return this.toModel(document);
@@ -50,10 +52,20 @@ export class Pages0Service {
   }
 
   async deletePage({ id }: GetPage) {
-    // await this.validateSite(id);
     await this.pageRepository.deleteOne({ _id: id });
     return id;
   }
+
+  async deletePagesByParent(ids: string[]) {
+    await this.pageRepository.deleteManyPagesByParent(ids);
+    return ids;
+  }
+
+  async deletePagesByParentCron(ids: string[]) {
+    await this.pageRepository.deleteManyPagesByParentCron(ids);
+    return ids;
+  }
+
   async deletePagesById(ids: string[]) {
     await this.pageRepository.deleteManyPages(ids);
     return ids;

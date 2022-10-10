@@ -16,9 +16,11 @@ import { APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { LoggingInterceptor } from './common/interceptors/logginf.interceptor';
 import { UsersModule } from './users/users.module';
 import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ProductModule,
     UserModule,
     CommentModule,

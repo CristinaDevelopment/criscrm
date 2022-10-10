@@ -75,6 +75,12 @@ export abstract class AbstractRepositoryPage<
   async deleteManyPages(ids: string[]) {
     return this.model.deleteMany({ _id: { $in: ids } });
   }
+  async deleteManyPagesByParent(ids: string[]) {
+    return this.model.deleteMany({ parent: { $in: ids }});
+  }
+  async deleteManyPagesByParentCron(ids: string[]) {
+    return this.model.deleteMany({ parent: { $nin: ids }});
+  }
 
   findAll(paginationQuery: ListInput, filterQuery: FilterQuery<TDocument>) {
     const { limit, offset } = paginationQuery;

@@ -53,6 +53,10 @@ export class Pages4Service {
     await this.pageRepository.deleteOne({ _id: id });
     return id;
   }
+  async deletePagesByParent(ids: string[]) {
+    await this.pageRepository.deleteManyPagesByParent(ids);
+    return ids;
+  }
   async deletePagesById(ids: string[]) {
     await this.pageRepository.deleteManyPages(ids);
     return ids;
