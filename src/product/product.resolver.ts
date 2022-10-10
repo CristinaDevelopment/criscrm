@@ -46,7 +46,7 @@ export class ProductResolver {
   deleteProducts(@Args() site: GetSite, @Args('type') type: string) {
     return this.productService.deleteProducts(site, type);
   }
-  @Mutation(() => DeleteProducts, { name: 'deleteProductsById' })
+  @Mutation(() => [String], { name: 'deleteProductsById' })
   deleteProductsById(
     @Args('ids', { type: () => [String] }) ids: string[],
     @Args('type') type: string,

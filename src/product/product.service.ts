@@ -418,7 +418,7 @@ export class ProductService {
         console.log(`Sorry, we are out of ${type}.`);
         break;
     }
-    return { ids: ids, type: type };
+    return ids;
   }
 
   findByParentId(parentUi: string, type: string) {
