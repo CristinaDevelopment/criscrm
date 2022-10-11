@@ -13,6 +13,7 @@ import { Article } from 'src/articles/entities/article.model';
 import ConnectionArgs, {
   getPagingParameters,
 } from 'src/common/pagination/relay/connection.args';
+import { UpdateImage } from 'src/product/dto/product.input';
 import { Product } from 'src/product/entities/product.model';
 import { ProductService } from 'src/product/product.service';
 import { GetPage, GetSite } from '../dto/page.args';
@@ -44,6 +45,14 @@ export class Pages0Resolver {
   @Mutation(() => Page0, { name: 'updatePage0' })
   update(@Args() id: GetPage, @Args('input') input: UpdatePage) {
     return this.page0Service.update(id, input);
+  }
+  @Mutation(() => Page0, { name: 'updateImagePage0' })
+  updateImage(
+    @Args() id: GetPage,
+    @Args('input') input: UpdateImage,
+    @Args('uid') uid: string,
+  ) {
+    return this.page0Service.updateImage(id, input, uid);
   }
 
   @Query(() => Page0, { name: 'findPage0' })
@@ -81,7 +90,7 @@ export class Pages0Resolver {
   // }
   @Mutation(() => [String], { name: 'deletePages0' })
   deletePagesById(@Args('ids', { type: () => [String] }) ids: string[]) {
-    this.page1Service.deletePagesByParent(ids)
+    this.page1Service.deletePagesByParent(ids);
     return this.page0Service.deletePagesById(ids);
   }
 

@@ -3,15 +3,10 @@ import { InputType, Field, PartialType, OmitType } from '@nestjs/graphql';
 @InputType()
 export class CreatePage {
   @Field()
+  
   readonly title: string;
   @Field()
   readonly description: string;
-  // @Field({ nullable: true })
-  // readonly icon?: string;
-  // @Field()
-  // readonly src: string;
-  // @Field()
-  // readonly alt: string;
   @Field()
   readonly type: string;
   @Field()
@@ -21,6 +16,5 @@ export class CreatePage {
 }
 @InputType()
 export class UpdatePage extends OmitType(CreatePage, [
-  'site',
-  'parent',
+
 ] as const) {}

@@ -12,6 +12,7 @@ import { Article } from 'src/articles/entities/article.model';
 import ConnectionArgs, {
   getPagingParameters,
 } from 'src/common/pagination/relay/connection.args';
+import { UpdateImage } from 'src/product/dto/product.input';
 import { Product } from 'src/product/entities/product.model';
 import { ProductService } from 'src/product/product.service';
 import { GetPage, GetSite } from '../dto/page.args';
@@ -44,6 +45,15 @@ export class Pages1Resolver {
   @Mutation(() => Page1, { name: 'updatePage1' })
   update(@Args() id: GetPage, @Args('input') input: UpdatePage) {
     return this.page1Service.update(id, input);
+  }
+
+  @Mutation(() => Page1, { name: 'updateImagePage1' })
+  updateImage(
+    @Args() id: GetPage,
+    @Args('input') input: UpdateImage,
+    @Args('uid') uid: string,
+  ) {
+    return this.page1Service.updateImage(id, input, uid);
   }
 
   @Query(() => Page1, { name: 'findPage1' })

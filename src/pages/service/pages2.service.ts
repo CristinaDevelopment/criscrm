@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ListInput } from 'src/common/pagination/dto/list.input';
+import { UpdateImage } from 'src/product/dto/product.input';
 import { capitalizar, slug } from 'src/utils/function';
 import { GetPage, GetSite } from '../dto/page.args';
 import { CreatePage, UpdatePage } from '../dto/page.input';
@@ -13,20 +14,17 @@ export class Pages2Service {
     private readonly pageRepository: Pages2Repository, // @Inject('PRODUCT_SERVICE') // private readonly communicationCliente: ClientProxy,
   ) {}
   async create(input: CreatePage) {
-    const document = await this.pageRepository.create(this.pageCreated(input));
+    const document = await this.pageRepository.add(input);
     return this.toModel(document);
   }
   async update({ id }: GetPage, input: UpdatePage) {
-    const document = await this.pageRepository.findOneAndUpdate(
-      { _id: id },
-      {
-        $set: this.pageUpdate(input),
-        $push: { 'updateDate.register': { updatedAt: new Date() } },
-      },
-    );
+    const document = await this.pageRepository.update(id, input);
     return this.toModel(document);
   }
-
+  async updateImage({ id }: GetPage, input: UpdateImage, uid: string) {
+    const document = await this.pageRepository.updateImage(id, input, uid);
+    return this.toModel(document);
+  }
   async findPage({ id }: GetPage) {
     const document = await this.pageRepository.findOne({ _id: id });
     return this.toModel(document);
@@ -67,46 +65,6 @@ export class Pages2Service {
 
   all(pagination: ListInput, parentId: string) {
     return this.pageRepository.All(pagination, { parent: parentId });
-  }
-
-
-  private pageCreated({ type, title, description, parent, site }: CreatePage) {
-    return {
-      data: {
-        type: type,
-        seo: {
-          title: capitalizar(title),
-          href: slug(title) === 'home' ? '' : slug(title),
-          description: description,
-          image: {
-            src: 'https://res.cloudinary.com/dqsbh2kn0/image/upload/v1663014890/zawkgpyjvvxrfwp9j7w1.jpg',
-            alt: description,
-          },
-        },
-      },
-      parent: parent,
-      site: site,
-      updateDate: {
-        createdAt: new Date(),
-        lastUpdatedAt: new Date(),
-
-      },
-      slug: slug(title),
-      section: [],
-    };
-  }
-
-  private pageUpdate({ type, title, description }: UpdatePage) {
-    return {
-      data: {
-        type: type,
-        'seo.title': capitalizar(title),
-        'seo.href': slug(title),
-        'seo.description': description,
-      },
-      'updateData.lastUpdatedAt': new Date(),
-      slug: slug(title),
-    };
   }
 
   private toModel(pageDocument: PageDocument): Page2 {

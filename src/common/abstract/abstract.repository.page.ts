@@ -6,6 +6,9 @@ import {
 import { FilterQuery, Model, Types, UpdateQuery } from 'mongoose';
 import { ListInput } from '../pagination/dto/list.input';
 import { AbstractDocument } from './abstract.schema';
+import { CreatePage, UpdatePage } from '../../pages/dto/page.input';
+import { capitalizar, slug } from 'src/utils/function';
+import { UpdateImage } from 'src/product/dto/product.input';
 
 export abstract class AbstractRepositoryPage<
   TDocument extends AbstractDocument,
@@ -21,7 +24,76 @@ export abstract class AbstractRepositoryPage<
     });
     return (await createdDocument.save()).toJSON() as unknown as TDocument;
   }
+  async add(input: CreatePage): Promise<TDocument> {
+    const page = await this.model.findOne(
+      {
+        slug: slug(input.title),
+        site: input.site,
+        parent: input.parent,
+      },
+      {},
+      { lean: true },
+    );
 
+    if (page) {
+      // this.logger.warn('Document not found with filterQuery', filterQuery);
+      throw new UnprocessableEntityException(
+        `You already have an item registered with that name "${input.title}"`,
+      );
+    }
+    const createdDocument = new this.model(this.pageCreated(input));
+    return (await createdDocument.save()).toJSON() as unknown as TDocument;
+  }
+
+  async update(
+    id: string,
+    input: UpdatePage,
+    options: Record<string, unknown> = { lean: true, new: true },
+  ) {
+    const page = await this.model.findOne(
+      {
+        _id: { $ne: id },
+        slug: slug(input.title),
+        site: input.site,
+        parent: input.parent,
+      },
+      {},
+      { lean: true },
+    );
+    if (page) {
+      // this.logger.warn('Document not found with filterQuery', filterQuery);
+      throw new UnprocessableEntityException(
+        `You already have an item registered with that name "${input.title}"`,
+      );
+    }
+    const document = await this.model.findOneAndUpdate(
+      { _id: id },
+      this.pageUpdate(input),
+      options,
+    );
+    if (!document) {
+      // this.logger.warn(`Document not found with filterQuery:`, filterQuery);
+      throw new NotFoundException('Document not found.');
+    }
+    return document;
+  }
+  async updateImage(
+    id: string,
+    input: UpdateImage,
+    uid: string,
+    options: Record<string, unknown> = { lean: true, new: true },
+  ) {
+    const document = await this.model.findOneAndUpdate(
+      { _id: id },
+      this.pageImage(input, uid),
+      options,
+    );
+    if (!document) {
+      // this.logger.warn(`Document not found with filterQuery:`, filterQuery);
+      throw new NotFoundException('Document not found.');
+    }
+    return document;
+  }
   async findOne(filterQuery: FilterQuery<TDocument>): Promise<TDocument> {
     const document = await this.model.findOne(filterQuery, {}, { lean: true });
 
@@ -108,5 +180,55 @@ export abstract class AbstractRepositoryPage<
       );
     }
     return;
+  }
+  private pageCreated({ type, title, description, parent, site }: CreatePage) {
+    return {
+      _id: new Types.ObjectId(),
+      data: {
+        type: type,
+        seo: {
+          title: capitalizar(title),
+          href: slug(title) === 'home' ? '' : slug(title),
+          description: description,
+        },
+      },
+      parent: parent,
+      site: site,
+      updateDate: {
+        createdAt: new Date(),
+        lastUpdatedAt: new Date(),
+      },
+      slug: slug(title),
+      section: [],
+    };
+  }
+  private pageUpdate({ type, title, description }: UpdatePage) {
+    return {
+      $set: {
+        'data.type': type,
+        'data.seo.title': capitalizar(title) ,
+        'data.seo.href': slug(title),
+        'data.seo.description': description,
+        'updateData.lastUpdatedAt': new Date(),
+        slug: slug(title),
+      },
+      $push: { 'updateDate.register': { updatedAt: new Date() } },
+    };
+  }
+  private pageImage(input: UpdateImage, uid: string) {
+    return {
+      $set: {
+        'data.seo.image.src': input.src,
+        'data.seo.image.alt': input.alt,
+        'updateDate.lastUpdatedAt': new Date(),
+      },
+      $push: {
+        'updateDate.register': {
+          uid: uid,
+          change: 'image update',
+          updatedAt: new Date(),
+        },
+      },
+    };
   }
 }

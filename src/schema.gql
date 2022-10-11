@@ -12,7 +12,7 @@ type Seo {
   title: String!
   href: String!
   description: String!
-  image: Image!
+  image: Image
 }
 
 type UpdateDate {
@@ -482,26 +482,32 @@ type Mutation {
   deleteSites(ids: [String!]!): [String!]!
   createPage0(input: CreatePage!): Page0!
   updatePage0(id: ID!, input: UpdatePage!): Page0!
+  updateImagePage0(id: ID!, input: UpdateImage!, uid: String!): Page0!
   deletePage0(id: ID!): String!
   deletePages0(ids: [String!]!): [String!]!
   createPage1(input: CreatePage!): Page1!
   updatePage1(id: ID!, input: UpdatePage!): Page1!
+  updateImagePage1(id: ID!, input: UpdateImage!, uid: String!): Page1!
   deletePage1(id: ID!): String!
   deletePages1(ids: [String!]!): [String!]!
   createPage2(input: CreatePage!): Page2!
   updatePage2(id: ID!, input: UpdatePage!): Page2!
+  updateImagePage2(id: ID!, input: UpdateImage!, uid: String!): Page2!
   deletePage2(id: ID!): String!
   deletePages2(ids: [String!]!): [String!]!
   createPage3(input: CreatePage!): Page3!
+  updateImagePage3(id: ID!, input: UpdateImage!, uid: String!): Page3!
   updatePage3(id: ID!, input: UpdatePage!): Page3!
   deletePage3(id: ID!): String!
   deletePages3(ids: [String!]!): [String!]!
   createPage4(input: CreatePage!): Page4!
   updatePage4(id: ID!, input: UpdatePage!): Page4!
+  updateImagePage4(id: ID!, input: UpdateImage!, uid: String!): Page4!
   deletePage4(id: ID!): String!
   deletePages4(ids: [String!]!): [String!]!
   createPage5(input: CreatePage!): Page5!
   updatePage5(id: ID!, input: UpdatePage!): Page5!
+  updateImagePage5(id: ID!, input: UpdateImage!, uid: String!): Page5!
   deletePage5(id: ID!): String!
   deletePages5(ids: [String!]!): [String!]!
   createArticle(input: CreateArticle!): Article!
@@ -634,6 +640,8 @@ input UpdatePage {
   title: String!
   description: String!
   type: String!
+  parent: String!
+  site: String!
 }
 
 input CreateArticle {

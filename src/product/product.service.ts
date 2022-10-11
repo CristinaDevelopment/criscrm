@@ -11,10 +11,7 @@ import {
   ProductRepositoryHardwareStore,
 } from './product.repository';
 import { GetProductArgs, GetSite } from './dto/product.args';
-import { capitalizar, slug } from 'src/utils/function';
-import { uuidv3 } from 'src/utils';
 import { ListInput } from 'src/common/pagination/dto/list.input';
-
 @Injectable()
 export class ProductService {
   constructor(

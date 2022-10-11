@@ -14,6 +14,7 @@ import { Article } from 'src/articles/entities/article.model';
 import ConnectionArgs, {
   getPagingParameters,
 } from 'src/common/pagination/relay/connection.args';
+import { UpdateImage } from 'src/product/dto/product.input';
 import { Product } from 'src/product/entities/product.model';
 import { ProductService } from 'src/product/product.service';
 import { GetPage, GetSite } from '../dto/page.args';
@@ -40,6 +41,15 @@ export class Pages3Resolver {
   @Mutation(() => Page3, { name: 'createPage3' })
   create(@Args('input') input: CreatePage) {
     return this.page3Service.create(input);
+  }
+
+  @Mutation(() => Page3, { name: 'updateImagePage3' })
+  updateImage(
+    @Args() id: GetPage,
+    @Args('input') input: UpdateImage,
+    @Args('uid') uid: string,
+  ) {
+    return this.page3Service.updateImage(id, input, uid);
   }
 
   @Mutation(() => Page3, { name: 'updatePage3' })

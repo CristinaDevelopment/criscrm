@@ -18,8 +18,8 @@ export class Seo {
   readonly href: string;
   @Field()
   readonly description: string;
-  @Field(() => Image)
-  readonly image: Image | string;
+  @Field(() => Image, { nullable: true })
+  readonly image?: Image | string;
 }
 
 @ObjectType()
