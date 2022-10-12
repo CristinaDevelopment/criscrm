@@ -124,10 +124,6 @@ export class SitesService {
           title: name,
           href: '#',
           description: description,
-          image: {
-            src: 'https://res.cloudinary.com/dqsbh2kn0/image/upload/v1663014890/zawkgpyjvvxrfwp9j7w1.jpg',
-            alt: description,
-          },
         },
       },
       client: client,
@@ -157,15 +153,9 @@ export class SitesService {
       },
       'data.description': description,
       'data.type': type,
-      'data.seo': {
-        title: name,
-        href: '#',
-        description: description,
-        image: {
-          src: 'https://res.cloudinary.com/dqsbh2kn0/image/upload/v1663014890/zawkgpyjvvxrfwp9j7w1.jpg',
-          alt: description,
-        },
-      },
+      'data.seo.title': name,
+      'data.seo.href': '',
+      'data.seo.description': description,
       url: domain,
     };
   }
