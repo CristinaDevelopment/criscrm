@@ -2,7 +2,11 @@ import * as dotenv from 'dotenv';
 import { v2 as cloudinary } from 'cloudinary';
 dotenv.config();
 
-export const uploadFile = async (file: any, site: string): Promise<string> => {
+export const uploadFile = async (
+  file: any,
+  site: string,
+  tag: string,
+): Promise<string> => {
   cloudinary.config({
     cloud_name: process.env.CLOUDINARY_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -17,7 +21,7 @@ export const uploadFile = async (file: any, site: string): Promise<string> => {
           folder: `criscrm/${site}`,
           public_id: uniqueFilename,
           format: 'JPEG',
-          // tags: 'rest',
+          tags: tag,
         }, // directory and tags are optional
         (err, image) => {
           if (err) {

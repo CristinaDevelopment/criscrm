@@ -1,12 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { slug } from 'src/utils/function';
 import { CreatePage, UpdatePage } from '../dto/page.input';
 import { PageDocument } from '../entities/page.schema';
-import {
-  Pages0Repository,
-  Pages1Repository,
-} from '../repository/pages.repository';
-import { capitalizar } from '../../utils/function';
+import { Pages0Repository } from '../repository/pages.repository';
 import { GetPage, GetSite } from '../dto/page.args';
 import { ListInput } from 'src/common/pagination/dto/list.input';
 import { Page0 } from '../entities/page.model';

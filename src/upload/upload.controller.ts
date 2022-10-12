@@ -32,7 +32,7 @@ export class UploadController {
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
-          fileType: 'png|jpg|jpeg|webp',
+          fileType: 'svg|png|jpg|jpeg|webp',
         })
         .addMaxSizeValidator({
           maxSize: 5000000,
@@ -43,7 +43,7 @@ export class UploadController {
     )
     file: Express.Multer.File,
   ) {
-    const url = await uploadFile(file, body.site);
+    const url = await uploadFile(file, body.siteId, body.parentId);
     return {
       url,
     };
