@@ -1,4 +1,8 @@
 export class ImageUploadDto {
-  siteId: string
+  site: string
+}
+
+export class ImageUpload {
   parentId: string
+  siteId: string
 }

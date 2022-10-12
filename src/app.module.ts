@@ -17,6 +17,7 @@ import { LoggingInterceptor } from './common/interceptors/logginf.interceptor';
 import { UsersModule } from './users/users.module';
 import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
 import { ScheduleModule } from '@nestjs/schedule';
+import { FoodModule } from './food/food.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     SitesModule,
     PagesModule,
     ArticlesModule,
+    FoodModule,
     // UsersModule,
   ],
   controllers: [],

@@ -2,11 +2,7 @@ import * as dotenv from 'dotenv';
 import { v2 as cloudinary } from 'cloudinary';
 dotenv.config();
 
-export const uploadFile = async (
-  file: any,
-  site: string,
-  tag: string,
-): Promise<string> => {
+export const uploadFile = async (file: any, site: string): Promise<string> => {
   cloudinary.config({
     cloud_name: process.env.CLOUDINARY_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -21,7 +17,7 @@ export const uploadFile = async (
           folder: `criscrm/${site}`,
           public_id: uniqueFilename,
           format: 'JPEG',
-          tags: tag,
+          // tags: ['1', '2'],
         }, // directory and tags are optional
         (err, image) => {
           if (err) {
@@ -55,6 +51,5 @@ export const deleteFile = async (name: string): Promise<string> => {
       },
     );
   });
-  // tslint:disable-next-line:no-string-literal
   return 'image delete';
 };

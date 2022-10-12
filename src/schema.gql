@@ -372,6 +372,54 @@ type SitePageInfo {
   hasNextPage: Boolean!
 }
 
+type Food {
+  _id: ID!
+  data: DataFood!
+  site: String!
+  type: String!
+  parent: String!
+  updateDate: UpdateDate!
+}
+
+type DataFood {
+  name: String!
+  slug: String!
+  price: Float!
+  discountPrice: Float!
+  description: String!
+  preparation: String
+  prescription: String
+  promotion: Promotion!
+  details: String
+  featured: String
+  specs: String
+  tags: [Tags!]!
+  image: [Image!]!
+  seo: Seo!
+}
+
+type ListFoodResponse {
+  page: FoodConnection!
+  pageData: PageDataDto
+}
+
+type FoodConnection {
+  edges: [FoodEdge!]
+  pageInfo: FoodPageInfo
+}
+
+type FoodEdge {
+  cursor: String
+  node: Food
+}
+
+type FoodPageInfo {
+  startCursor: String
+  endCursor: String
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
+}
+
 type Query {
   findProduct(id: ID!, type: String!): Product!
   findProducts(type: String!): [Product!]!
@@ -430,6 +478,12 @@ type Query {
   findArticle(id: ID!): Article!
   findArticles: [Article!]!
   listArticlesWithCursor(args: ConnectionArgs!): ListArticleResponse!
+  findFood(id: ID!, type: String!): Food!
+  findFoods(type: String!): [Food!]!
+  findAllFoods: [Food!]!
+  findFoodsByParent(parentId: String!, type: String!): [Food!]!
+  findAllFoodsByParent(parentId: String!): [Food!]!
+  listFoodWithCursor(args: ConnectionArgs!, type: String!, siteId: String!): ListFoodResponse!
 }
 
 input ConnectionArgs {
@@ -513,6 +567,12 @@ type Mutation {
   createArticle(input: CreateArticle!): Article!
   updateArticle(id: ID!, input: UpdateArticle!): Article!
   deleteArticle(id: ID!): String!
+  createFood(input: CreateFood!, type: String!): Food!
+  updateFood(id: ID!, input: UpdateFood!, type: String!): Food!
+  updateFoodImage(id: ID!, input: [UpdateImage!]!, type: String!, uid: String!): Food!
+  deleteFood(id: ID!, type: String!): String!
+  deleteFoods(siteId: String!, type: String!): String!
+  deleteFoodsById(ids: [String!]!, type: String!): [String!]!
 }
 
 input CreateProduct {
@@ -665,6 +725,32 @@ input UpdateArticle {
   content: String!
   meta: String!
   tags: [String!]!
+}
+
+input CreateFood {
+  name: String!
+  description: String!
+  promotion: String!
+  price: Float!
+  discountPrice: Float!
+  site: String!
+  parent: String!
+  change: String!
+  uid: String!
+}
+
+input UpdateFood {
+  name: String
+  description: String
+  promotion: String
+  price: Float
+  discountPrice: Float
+  site: String
+  parent: String
+  change: String
+  uid: String
+  prescription: String
+  preparation: String
 }
 
 type Subscription {
