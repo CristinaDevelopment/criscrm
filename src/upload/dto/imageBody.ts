@@ -5,4 +5,5 @@ export class ImageUploadDto {
 export class ImageUpload {
   parentId: string
   siteId: string
+  type: string
 }

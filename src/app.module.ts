@@ -26,7 +26,6 @@ import { FoodModule } from './food/food.module';
     UserModule,
     CommentModule,
     CommonModule,
-    // AuthModule,
     PubSubModule,
     BeveragesModule,
     UploadModule,
@@ -35,7 +34,6 @@ import { FoodModule } from './food/food.module';
     PagesModule,
     ArticlesModule,
     FoodModule,
-    // UsersModule,
   ],
   controllers: [],
   providers: [
