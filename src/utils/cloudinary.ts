@@ -20,7 +20,7 @@ export const cloudinaryEnviroments = [
     },
   },
   {
-    type: 'products-wear',
+    type: 'products-clothing',
     enviroment: {
       cloud_name: process.env.CLOUDINARY_NAME_PRODUCTS_WEAR,
       api_key: process.env.CLOUDINARY_API_KEY_PRODUCTS_WEAR,
@@ -36,7 +36,7 @@ export const cloudinaryEnviroments = [
     },
   },
   {
-    type: 'products-tool',
+    type: 'products-hardware-store',
     enviroment: {
       cloud_name: process.env.CLOUDINARY_NAME_PRODUCTS_TOOL,
       api_key: process.env.CLOUDINARY_API_KEY_PRODUCTS_TOOL,
