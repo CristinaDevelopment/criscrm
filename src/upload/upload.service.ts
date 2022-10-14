@@ -36,6 +36,40 @@ export class UploadService {
     });
     return result['secure_url'];
   }
+  async uploadFileUrl(
+    file: string,
+    siteId: string,
+    parentId: string,
+    type: string,
+  ): Promise<string> {
+    cloudinaryEnviroments.map((data) => {
+      if (type === data.type) return cloudinary.config(data.enviroment);
+    });
+
+    const result = await new Promise(async (resolve, reject) => {
+      cloudinary.uploader.upload(
+        file,
+        {
+          public_id: uuidv4(),
+          format: 'JPEG',
+          tags: [siteId, parentId],
+          responsive_breakpoints: {
+            create_derived: true,
+            bytes_step: 20000,
+            min_width: 200,
+            max_width: 1000,
+          },
+        },
+        (err, image) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(image);
+        },
+      );
+    });
+    return result['secure_url'];
+  }
   async deleteFile(name: string, type: string): Promise<string> {
     cloudinaryEnviroments.map((data) => {
       if (type === data.type) return cloudinary.config(data.enviroment);

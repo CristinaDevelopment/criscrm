@@ -1,6 +1,5 @@
 import * as dotenv from 'dotenv';
-import { v2 as cloudinary } from 'cloudinary';
-import { uuidv4 } from '.';
+
 dotenv.config();
 export const cloudinaryEnviroments = [
   {
@@ -68,56 +67,3 @@ export const cloudinaryEnviroments = [
     },
   },
 ];
-
-// export const uploadFile = async (
-//   file: any,
-//   siteId: string,
-//   parentId: string,
-//   type: string,
-// ): Promise<string> => {
-//   cloudinaryEnviroments.map((data) => {
-//     if (type === data.type) return cloudinary.config(data.enviroment);
-//   });
-
-//   const result = await new Promise(async (resolve, reject) => {
-//     cloudinary.uploader
-//       .upload_stream(
-//         {
-//           public_id: uuidv4(),
-//           format: 'JPEG',
-//           tags: [siteId, parentId],
-//         }, // directory and tags are optional
-//         (err, image) => {
-//           if (err) {
-//             reject(err);
-//           }
-//           resolve(image);
-//         },
-//       )
-//       .end(file.buffer);
-//   });
-
-//   // tslint:disable-next-line:no-string-literal
-//   return result['secure_url'];
-// };
-
-// export const deleteFile = async (
-//   name: string,
-//   type: string,
-// ): Promise<string> => {
-//   cloudinaryEnviroments.map((data) => {
-//     if (type === data.type) return cloudinary.config(data.enviroment);
-//   });
-//   await new Promise(async (resolve, reject) => {
-//     cloudinary.uploader.destroy(
-//       name, // directory and tags are optional
-//       (err, image) => {
-//         if (err) {
-//           reject(err);
-//         }
-//         resolve(image);
-//       },
-//     );
-//   });
-//   return 'image delete';
-// };

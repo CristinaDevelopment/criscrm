@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { UploadService } from './upload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ImageUpload } from './dto/imageBody';
+import { ImageUpload, ImageUploadURL } from './dto/imageBody';
 
 @Controller('upload')
 export class UploadController {
@@ -35,6 +35,18 @@ export class UploadController {
   ) {
     const url = await this.uploadService.uploadFile(
       file,
+      body.siteId,
+      body.parentId,
+      body.type,
+    );
+    return {
+      url,
+    };
+  }
+  @Post('file-url')
+  async uploadFileByUrl(@Body() body: ImageUploadURL) {
+    const url = await this.uploadService.uploadFileUrl(
+      body.file,
       body.siteId,
       body.parentId,
       body.type,
