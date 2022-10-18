@@ -12,6 +12,8 @@ import { Article } from 'src/articles/entities/article.model';
 import ConnectionArgs, {
   getPagingParameters,
 } from 'src/common/pagination/relay/connection.args';
+import { Food } from 'src/food/entities/food.model';
+import { FoodService } from 'src/food/food.service';
 import { UpdateImage } from 'src/product/dto/product.input';
 import { Product } from 'src/product/entities/product.model';
 import { ProductService } from 'src/product/product.service';
@@ -34,6 +36,7 @@ export class Pages1Resolver {
     private readonly page2Service: Pages2Service,
     private readonly productService: ProductService,
     private readonly articleService: ArticlesService,
+    private readonly foodService: FoodService,
 
   ) {}
 
@@ -123,6 +126,11 @@ export class Pages1Resolver {
   getProduct(@Parent() { _id, data }: Page1) {
     const { type } = data as DataPage;
     return this.productService.findByParentId(_id.toString(), type);
+  }
+  @ResolveField('food', () => [Food], { nullable: 'itemsAndList' })
+  getFood(@Parent() { _id, data }: Page1) {
+    const { type } = data as DataPage;
+    return this.foodService.findByParentId(_id.toString(), type);
   }
   // @ResolveField('product', () => [Product])
   // getProduct(@Parent() page: Page) {

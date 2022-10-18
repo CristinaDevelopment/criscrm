@@ -225,6 +225,7 @@ type Page1 {
   page: [Page2]
   product: [Product]
   article: [Article]
+  food: [Food]
 }
 
 type Page2 {

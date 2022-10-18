@@ -51,11 +51,13 @@ import {
   Pages6Service,
 } from './service';
 import { TasksService } from '../sites/task.service';
+import { FoodModule } from 'src/food/food.module';
 
 @Module({
   imports: [
     ProductModule,
     ArticlesModule,
+    FoodModule,
     MongooseModule.forFeature(
       [{ name: Page0.name, schema: Page0Schema }],
       'pagesDB',
